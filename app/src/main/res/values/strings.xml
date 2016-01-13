@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Home Solution</string>
     <string name="facebook_app_id">1681928755418939</string>
+    <string name="title_activity_panel">Panel de usuario</string>
+    <string name="action_settings">Opciones</string>
+    <string name="section_format">Sección: %1$d</string>
 </resources>

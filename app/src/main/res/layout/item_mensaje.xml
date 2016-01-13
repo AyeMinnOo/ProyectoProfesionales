@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="4dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/ivFoto"
+            android:src="@drawable/com_facebook_profile_picture_blank_square"
+            android:scaleType="centerCrop"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="left"/>
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tvNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:text="Roberto Prestador"/>
+
+            <TextView
+                android:id="@+id/tvDescripcion"
+                android:text="Albañil, Pintor"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textStyle="italic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="[05/05 13:30]"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_gravity="right"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/messenger_button_send_round_shadow"/>
+    </FrameLayout>
+
+
+</android.support.v7.widget.CardView>
