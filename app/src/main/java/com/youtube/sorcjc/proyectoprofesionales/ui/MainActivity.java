@@ -26,10 +26,18 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.youtube.sorcjc.proyectoprofesionales.R;
+import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
+import com.youtube.sorcjc.proyectoprofesionales.io.ZonasResponse;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -48,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int RC_SIGN_IN = 0;
 
     // Data from the webservice
-    private String[] zonas;
+    private ArrayList<String> zonas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnRegistrarme.setOnClickListener(this);
 
         setUpGoogleSignIn();
-
     }
 
     private void setUpGoogleSignIn() {
@@ -234,12 +241,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btnRegistrarme:
-                // Getting the list from the webservice
-                cargarZonas();
                 // Start the RegistroActivity
                 intent = new Intent(this, RegistroActivity.class);
                 // and send the info to the new activity
-                intent.putExtra("zonas", zonas);
+                // intent.putExtra("zonas", zonas);
                 break;
         }
 
@@ -252,17 +257,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void cargarZonas() {
-        // Here we will use retrofit
-        zonas = new String[3];
-        zonas[0] = "Zona A";
-        zonas[1] = "Zona B";
-        zonas[2] = "Zona C";
-    }
-
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        Toast.makeText(this, "Error de conexión.", Toast.LENGTH_SHORT).show();
     }
 
 }
