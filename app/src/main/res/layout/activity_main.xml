@@ -28,17 +28,7 @@
         android:layout_height="wrap_content"
         android:text="Iniciar sesión" />
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/btnIngresarFacebook"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp" />
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/btnIngresarGoogle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btnRegistrarme"

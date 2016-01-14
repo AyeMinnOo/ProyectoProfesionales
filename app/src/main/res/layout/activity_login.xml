@@ -3,25 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/activity_vertical_margin"
     android:orientation="vertical"
+    android:padding="@dimen/activity_vertical_margin"
     tools:context=".ui.LoginActivity">
 
     <TextView
-        android:layout_marginTop="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
         android:layout_marginBottom="12dp"
-        android:text="Formulario de ingreso"/>
+        android:layout_marginTop="8dp"
+        android:text="Formulario de ingreso"
+        android:textSize="22sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ingrese sus datos:"
-        android:textSize="18sp"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+        android:text="Ingrese sus datos:"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,17 +29,17 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="E-mail:"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="0dp"
-            android:inputType="textEmailAddress"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:inputType="textEmailAddress" />
 
     </LinearLayout>
 
@@ -49,17 +49,17 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Contraseña:"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="textPassword"
-            android:layout_height="wrap_content" />
+            android:inputType="textPassword" />
 
     </LinearLayout>
 
@@ -67,13 +67,42 @@
         android:id="@+id/btnRealizarLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar sesión"
-        android:layout_marginBottom="20dp"/>
+        android:text="Iniciar sesión" />
 
     <Button
         android:id="@+id/btnOlvidePassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:text="Olvidé mi contraseña" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ingresar usando redes sociales:"
+        android:textSize="16sp" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/btnIngresarFacebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/btnIngresarGoogle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¿Aún no seha registrado?"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnRegistrarme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrarme" />
 
 </LinearLayout>

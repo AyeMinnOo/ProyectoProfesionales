@@ -3,6 +3,7 @@ package com.youtube.sorcjc.proyectoprofesionales.ui;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,34 +40,15 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // Controls
     private Button btnIniciarSesion;
-    private LoginButton btnIngresarFacebook;
-    private SignInButton btnIngresarGoogle;
     private Button btnRegistrarme;
-
-    // Facebook SDK
-    private CallbackManager callbackManager;
-
-    // Google API Client
-    private GoogleApiClient mGoogleApiClient;
-    // Request code used to invoke sign in user interactions
-    private static final int RC_SIGN_IN = 0;
-
-    // Data from the webservice
-    private ArrayList<String> zonas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize the facebook sdk
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-
-        // The facebook sdk have to loaded before
         setContentView(R.layout.activity_main);
 
         // The next code was used to get the hash key (for the facebook login)
@@ -91,144 +73,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }*/
 
         btnIniciarSesion = (Button) findViewById(R.id.btnIniciarSesion);
-        btnIngresarFacebook = (LoginButton) findViewById(R.id.btnIngresarFacebook);
-        btnIngresarGoogle = (SignInButton) findViewById(R.id.btnIngresarGoogle);
         btnRegistrarme = (Button) findViewById(R.id.btnRegistrarme);
 
-        // To manage the login attempt
-        facebookLogin();
-
         btnIniciarSesion.setOnClickListener(this);
-        btnIngresarGoogle.setOnClickListener(this);
         btnRegistrarme.setOnClickListener(this);
 
-        setUpGoogleSignIn();
-    }
+        // Read from Shared Preferences
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String defaultActivity = getResources().getString(R.string.first_activity_default);
+        String firstActivity = sharedPref.getString(getString(R.string.first_activity), defaultActivity);
 
-    private void setUpGoogleSignIn() {
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-    }
-
-    private void facebookLogin() {
-        final Context context = this;
-
-        btnIngresarFacebook.setReadPermissions(Arrays.asList("email"));
-        btnIngresarFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            private ProgressDialog progressDialog;
-
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                // Credentials are correct, but we have to verify if the e-mail is registered
-
-                progressDialog = new ProgressDialog(MainActivity.this);
-                progressDialog.setMessage("Procesando datos ...");
-                progressDialog.show();
-
-                String accessToken = loginResult.getAccessToken().getToken();
-                Log.i("Test/Facebook", "accessToken: " + accessToken);
-
-                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.i("Test/Facebook", response.toString());
-                        progressDialog.dismiss(); // dismiss() is better than hide()
-                        // Get facebook data from login
-                        Bundle facebookData = getFacebookData(object);
-                        Log.i("Test/Facebook", "E-mail:" + facebookData.getString("email"));
-                        Log.i("Test/Facebook", "Nombres:" + facebookData.getString("first_name"));
-                        Log.i("Test/Facebook", "Apellidos:" + facebookData.getString("last_name"));
-                    }
-                });
-
-                Bundle parameters = new Bundle();
-                // Requested parameters
-                parameters.putString("fields", "id, first_name, last_name, email, gender, birthday, location");
-                request.setParameters(parameters);
-                request.executeAsync();
-            }
-
-            private Bundle getFacebookData(JSONObject object) {
-                try {
-                    Bundle bundle = new Bundle();
-
-                    String id = object.getString("id");
-                    bundle.putString("idFacebook", id);
-
-                    if (object.has("first_name"))
-                        bundle.putString("first_name", object.getString("first_name"));
-                    if (object.has("last_name"))
-                        bundle.putString("last_name", object.getString("last_name"));
-                    if (object.has("email"))
-                        bundle.putString("email", object.getString("email"));
-                    if (object.has("gender"))
-                        bundle.putString("gender", object.getString("gender"));
-                    if (object.has("birthday"))
-                        bundle.putString("birthday", object.getString("birthday"));
-                    if (object.has("location"))
-                        bundle.putString("location", object.getJSONObject("location").getString("name"));
-
-                    return bundle;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @Override
-            public void onCancel() {
-                // If the user cancel the login, just back to the main activity
-                Log.e("Test/Facebook", "Acceso cancelado por el usuario.");
-                Toast.makeText(context, "Acceso cancelado por el usuario.", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-                Toast.makeText(context, e.getCause().toString(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Facebook Login
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d("Test/Google", "handleSignInResult: " + result.isSuccess());
-        if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            Log.d("Test/Google", "getDisplayName(): " + acct.getDisplayName());
-            Log.d("Test/Google", "getEmail(): " + acct.getEmail());
-            // updateUI(true);
-        } else {
-            // Signed out, show unauthenticated UI.
-            // updateUI(false);
-        }
+        Log.d("Test/SharedPreferences", "packageName => " + this.getPackageName());
+        Log.d("Test/SharedPreferences", "fullClassName => " + this.getPackageName() + firstActivity);
+        Intent intent = new Intent();
+        intent.setClassName(this, this.getPackageName() + firstActivity);
+        startActivity(intent);
+        // finish(); // This prevent the user to use the "back" button
     }
 
     @Override
     public void onClick(View v) {
+        // If we use shared preferences, the next is not necessary
+        /*
         Intent intent = null;
 
         switch (v.getId()) {
@@ -236,30 +102,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent = new Intent(this, LoginActivity.class);
                 break;
 
-            case R.id.btnIngresarGoogle:
-                signInWithGoogle();
-                break;
-
             case R.id.btnRegistrarme:
-                // Start the RegistroActivity
                 intent = new Intent(this, RegistroActivity.class);
-                // and send the info to the new activity
-                // intent.putExtra("zonas", zonas);
                 break;
         }
 
         if (intent != null)
-            startActivity(intent);
-    }
-
-    private void signInWithGoogle() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Toast.makeText(this, "Error de conexión.", Toast.LENGTH_SHORT).show();
+            startActivity(intent);*/
     }
 
 }

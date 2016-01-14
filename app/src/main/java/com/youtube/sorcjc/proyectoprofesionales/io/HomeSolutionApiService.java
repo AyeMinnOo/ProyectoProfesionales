@@ -15,9 +15,7 @@ public interface HomeSolutionApiService {
     @GET("login")
     Call<LoginResponse> getLoginResponse(@Query("us") String email, @Query("ps") String password);
 
-/*
-    @FormUrlEncoded
-    @POST("/windpower/WebService_Write_APP.php")
-    Call<Respuesta> getRespuesta(@Field("energiaObjetivo") Float energiaObjetivo, @Field("horaSimulacion") int horas, @Field("planta1") boolean p1, @Field("planta2") boolean p2, @Field("planta3") boolean p3);
-*/
+    // http://homesolution.com.ar/api/register?us=Hamilton&email=matias@celani.com.pe&ps=lolcats&accept=1
+    @GET("register")
+    Call<RegistroResponse> getRegistroResponse(@Query("us") String nombre, @Query("email") String email, @Query("ps") String password, @Query("accept") int accept, @Query("area") String zona);
 }
