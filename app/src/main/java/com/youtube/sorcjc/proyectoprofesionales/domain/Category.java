@@ -2,7 +2,7 @@ package com.youtube.sorcjc.proyectoprofesionales.domain;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Categoria {
+public class Category {
 
     /*
     {

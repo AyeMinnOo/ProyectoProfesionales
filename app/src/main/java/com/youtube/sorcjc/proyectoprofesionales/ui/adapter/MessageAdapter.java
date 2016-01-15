@@ -11,16 +11,16 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
 
 import java.util.ArrayList;
 
-public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.CategoriaViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.CategoriaViewHolder> {
 
-    private ArrayList<Category> categories;
+    private ArrayList<Message> categories;
     private Context context;
 
-    public CategoriaAdapter(Context context) {
+    public MessageAdapter(Context context) {
         this.context = context;
         this.categories = new ArrayList<>();
     }
@@ -33,7 +33,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.Cate
 
     @Override
     public void onBindViewHolder(CategoriaViewHolder holder, int position) {
-        Category category = categories.get(position);
+        Message category = categories.get(position);
 
         holder.setName(category.getName());
         holder.setImage(category.getUrlImage());
@@ -44,7 +44,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.Cate
         return categories.size();
     }
 
-    public void addAll(@NonNull ArrayList<Category> categories) {
+    public void addAll(@NonNull ArrayList<Message> categories) {
         if (categories == null)
             throw new NullPointerException("The results cannot be null.");
 

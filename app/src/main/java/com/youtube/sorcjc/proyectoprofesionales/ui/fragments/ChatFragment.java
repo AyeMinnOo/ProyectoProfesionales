@@ -7,10 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Categoria;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.io.CategoriasResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.CategoriaAdapter;
@@ -24,7 +27,15 @@ import retrofit.Retrofit;
 
 public class ChatFragment extends Fragment implements Callback<CategoriasResponse> {
 
+    // Views and controls in fragment_chat.xml
+    private TextView tvNoMessages;
+    private FrameLayout layoutBuscar;
     private RecyclerView recyclerView;
+    private LinearLayout layoutIrBusqueda;
+
+    // Used to render the messages
+
+    // Used to render the categories
     private static CategoriaAdapter adapter;
 
     @Override
@@ -40,17 +51,22 @@ public class ChatFragment extends Fragment implements Callback<CategoriasRespons
 
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        // Setting the recycler view
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.rvCategorias);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
-        /*final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setAdapter(adapter);*/
+        // Get references to the views and controls
+        tvNoMessages = (TextView) rootView.findViewById(R.id.tvNoMessages);
+        layoutBuscar = (FrameLayout) rootView.findViewById(R.id.layoutBuscar);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewChat);
+        layoutIrBusqueda = (LinearLayout) rootView.findViewById(R.id.layoutIrBusqueda);
 
-        // Here we take the view controls
+        // Setting the recycler view
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // What adapter we will use?
+
+        // Try to load active chats
+        // Use the ChatAdapter if there are messages
+        // But use CategoriesAdapter if there aren't messages
+
+        recyclerView.setAdapter(adapter);
 
         return rootView;
     }
@@ -70,8 +86,8 @@ public class ChatFragment extends Fragment implements Callback<CategoriasRespons
 
     @Override
     public void onResponse(Response<CategoriasResponse> response, Retrofit retrofit) {
-        ArrayList<Categoria> categorias = response.body().getResponse();
-        adapter.addAll(categorias);
+        ArrayList<Category> categories = response.body().getResponse();
+        adapter.addAll(categories);
         // Toast.makeText(getActivity(), "Cargando resultados ...", Toast.LENGTH_SHORT).show();
     }
 

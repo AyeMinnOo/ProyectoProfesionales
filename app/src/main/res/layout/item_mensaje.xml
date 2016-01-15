@@ -12,7 +12,7 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/ivFoto"
+            android:id="@+id/ivPhoto"
             android:src="@drawable/com_facebook_profile_picture_blank_square"
             android:scaleType="centerCrop"
             android:layout_width="60dp"
@@ -27,7 +27,7 @@
             android:layout_height="60dp">
 
             <TextView
-                android:id="@+id/tvNombre"
+                android:id="@+id/tvName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="17sp"
