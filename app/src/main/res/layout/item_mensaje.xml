@@ -34,13 +34,14 @@
                 android:text="Roberto Prestador"/>
 
             <TextView
-                android:id="@+id/tvDescripcion"
+                android:id="@+id/tvDescription"
                 android:text="Albañil, Pintor"
                 android:textSize="16sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:id="@+id/tvDate"
                 android:textStyle="italic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

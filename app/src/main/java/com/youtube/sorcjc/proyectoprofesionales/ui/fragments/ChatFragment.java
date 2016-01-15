@@ -17,6 +17,7 @@ import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.io.CategoriasResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.CategoriaAdapter;
+import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,7 @@ public class ChatFragment extends Fragment implements Callback<CategoriasRespons
     private LinearLayout layoutIrBusqueda;
 
     // Used to render the messages
+    private static MessageAdapter messageAdapter;
 
     // Used to render the categories
     private static CategoriaAdapter adapter;

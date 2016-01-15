@@ -35,6 +35,9 @@ public class Message {
     @SerializedName("msg")
     private String msg;
 
+    @SerializedName("catstr")
+    private String description;
+
     public String getUid() {
         return uid;
     }
@@ -58,4 +61,13 @@ public class Message {
     public String getMsg() {
         return msg;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getUrlPhoto() {
+        return "http://homesolution.com.ar/res/avatar/min/" + uid + ".jpg";
+    }
+
 }

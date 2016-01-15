@@ -15,52 +15,59 @@ import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
 
 import java.util.ArrayList;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.CategoriaViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
 
-    private ArrayList<Message> categories;
+    private ArrayList<Message> messages;
     private Context context;
 
     public MessageAdapter(Context context) {
         this.context = context;
-        this.categories = new ArrayList<>();
+        this.messages = new ArrayList<>();
     }
 
     @Override
-    public CategoriaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.item_categoria, parent, false);
-        return new CategoriaViewHolder(itemView);
+    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(context).inflate(R.layout.item_mensaje, parent, false);
+        return new MessageViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(CategoriaViewHolder holder, int position) {
-        Message category = categories.get(position);
+    public void onBindViewHolder(MessageViewHolder holder, int position) {
+        Message message = messages.get(position);
 
-        holder.setName(category.getName());
-        holder.setImage(category.getUrlImage());
+        holder.setName(message.getName());
+        holder.setImage(message.getUrlPhoto());
+        holder.setDescription(message.getDescription());
+        holder.setDate(message.getActivity());
+
     }
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return messages.size();
     }
 
-    public void addAll(@NonNull ArrayList<Message> categories) {
-        if (categories == null)
+    public void addAll(@NonNull ArrayList<Message> messages) {
+        if (messages == null)
             throw new NullPointerException("The results cannot be null.");
 
-        this.categories.addAll(categories);
+        this.messages.addAll(messages);
         notifyDataSetChanged();
     }
 
-    public class CategoriaViewHolder extends RecyclerView.ViewHolder {
-        private ImageView ivCategoria;
+    public class MessageViewHolder extends RecyclerView.ViewHolder {
+        private ImageView ivPhoto;
         private TextView tvName;
+        private TextView tvDescription;
+        private TextView tvDate;
 
-        public CategoriaViewHolder(View itemView) {
+        public MessageViewHolder(View itemView) {
             super(itemView);
 
-            ivCategoria = (ImageView) itemView.findViewById(R.id.ivCategoria);
+            ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
+            tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
+            tvDate = (TextView) itemView.findViewById(R.id.tvDate);
         }
 
         public void setName(String name){
@@ -71,7 +78,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.Categori
             Picasso.with(context)
                     .load(urlImage)
                     .placeholder(R.drawable.ic_category_default)
-                    .into(ivCategoria);
+                    .into(ivPhoto);
+        }
+
+        public void setDescription(String description) {
+            tvDescription.setText(description);
+        }
+
+        public void setDate(String date) {
+            tvDate.setText(date);
         }
 
     }
