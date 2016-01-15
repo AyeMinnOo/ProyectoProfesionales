@@ -18,4 +18,8 @@ public interface HomeSolutionApiService {
     // http://homesolution.com.ar/api/register?us=Hamilton&email=matias@celani.com.pe&ps=lolcats&accept=1
     @GET("register")
     Call<RegistroResponse> getRegistroResponse(@Query("us") String nombre, @Query("email") String email, @Query("ps") String password, @Query("accept") int accept, @Query("area") String zona);
+
+    // http://homesolution.com.ar/api/categos
+    @GET("categos")
+    Call<CategoriasResponse> getCategoriasResponse();
 }

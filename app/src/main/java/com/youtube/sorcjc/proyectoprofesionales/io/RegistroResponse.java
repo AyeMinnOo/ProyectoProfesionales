@@ -1,7 +1,6 @@
 package com.youtube.sorcjc.proyectoprofesionales.io;
 
 import com.google.gson.annotations.SerializedName;
-import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 
 public class RegistroResponse {
 

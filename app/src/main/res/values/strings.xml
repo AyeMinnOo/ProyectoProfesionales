@@ -6,4 +6,7 @@
     <string name="section_format">Sección: %1$d</string>
     <string name="first_activity_default">.ui.RegistroActivity</string>
     <string name="first_activity">FirstActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

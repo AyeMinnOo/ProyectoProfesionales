@@ -1,9 +1,11 @@
 package com.youtube.sorcjc.proyectoprofesionales.io;
 
 import com.google.gson.annotations.SerializedName;
-import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Categoria;
 
-public class LoginResponse {
+import java.util.ArrayList;
+
+public class CategoriasResponse {
 
     @SerializedName("status")
     private int status;
@@ -12,7 +14,7 @@ public class LoginResponse {
     private String error;
 
     @SerializedName("response")
-    private UserAuthenticated response;
+    private ArrayList<Categoria> response;
 
     public int getStatus() {
         return status;
@@ -22,7 +24,7 @@ public class LoginResponse {
         return error;
     }
 
-    public UserAuthenticated getResponse() {
+    public ArrayList<Categoria> getResponse() {
         return response;
     }
 

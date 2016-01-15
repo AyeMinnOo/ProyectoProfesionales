@@ -13,14 +13,15 @@
         android:padding="16dp">
 
         <ImageView
+            android:id="@+id/ivCategoria"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/messenger_button_send_round_shadow"/>
+            android:background="@drawable/messenger_button_send_round_shadow" />
 
         <TextView
             android:layout_gravity="center"
-            android:id="@+id/tvCategoria"
+            android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
