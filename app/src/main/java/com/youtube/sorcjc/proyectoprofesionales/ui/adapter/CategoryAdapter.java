@@ -15,19 +15,19 @@ import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 
 import java.util.ArrayList;
 
-public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.CategoriaViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoriaViewHolder> {
 
     private ArrayList<Category> categories;
     private Context context;
 
-    public CategoriaAdapter(Context context) {
+    public CategoryAdapter(Context context) {
         this.context = context;
         this.categories = new ArrayList<>();
     }
 
     @Override
     public CategoriaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.item_categoria, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false);
         return new CategoriaViewHolder(itemView);
     }
 

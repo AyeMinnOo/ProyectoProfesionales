@@ -15,8 +15,9 @@ import android.widget.Toast;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.io.CategoriasResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.ChatResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.CategoriaAdapter;
+import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.CategoryAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
 
 import java.util.ArrayList;
@@ -38,13 +39,13 @@ public class ChatFragment extends Fragment implements Callback<CategoriasRespons
     private static MessageAdapter messageAdapter;
 
     // Used to render the categories
-    private static CategoriaAdapter adapter;
+    private static CategoryAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new CategoriaAdapter(getActivity());
+        adapter = new CategoryAdapter(getActivity());
     }
 
     @Override
@@ -79,6 +80,15 @@ public class ChatFragment extends Fragment implements Callback<CategoriasRespons
 
         // Load the categories (and images)
         loadCategories();
+    }
+
+    private void loadMessages() {
+        String testToken = "813abd218962ff966b54d26915388ecf"; // next, have to be modified
+        Call<ChatResponse> call = HomeSolutionApiAdapter.getApiService().getChatResponse(testToken);
+        // call.enqueue(this);
+        // this class can't implement double callback<T>
+        // we can use 2 anonymous functions
+        // right now, i will look for a better way
     }
 
     private void loadCategories() {

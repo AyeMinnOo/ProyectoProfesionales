@@ -22,4 +22,8 @@ public interface HomeSolutionApiService {
     // http://homesolution.com.ar/api/categos
     @GET("categos")
     Call<CategoriasResponse> getCategoriasResponse();
+
+    // http://homesolution.com.ar/api/getchats?tk=813abd218962ff966b54d26915388ecf
+    @GET("getchats")
+    Call<ChatResponse> getChatResponse(@Query("tk") String token);
 }
