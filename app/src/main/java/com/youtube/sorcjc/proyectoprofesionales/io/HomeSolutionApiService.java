@@ -26,4 +26,9 @@ public interface HomeSolutionApiService {
     // http://homesolution.com.ar/api/getchats?tk=813abd218962ff966b54d26915388ecf
     @GET("getchats")
     Call<ChatResponse> getChatResponse(@Query("tk") String token);
+
+    // http://homesolution.com.ar/api/getagenda?tk=813abd218962ff966b54d26915388ecf
+    @GET("getagenda")
+    Call<AgendaResponse> getAgendaResponse(@Query("tk") String token);
+
 }
