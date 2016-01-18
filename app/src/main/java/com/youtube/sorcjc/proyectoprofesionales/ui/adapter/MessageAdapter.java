@@ -3,6 +3,7 @@ package com.youtube.sorcjc.proyectoprofesionales.ui.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +36,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         Message message = messages.get(position);
 
-        holder.setName(message.getName());
-        holder.setImage(message.getUrlPhoto());
-        holder.setDescription(message.getDescription());
-        holder.setDate(message.getActivity());
-
+        holder.setMessage(message.getMessage());
+        holder.setTime(message.getTime());
     }
 
     @Override
@@ -56,37 +54,22 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     }
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
-        private ImageView ivPhoto;
-        private TextView tvName;
-        private TextView tvDescription;
-        private TextView tvDate;
+        private TextView tvMessage;
+        private TextView tvTime;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
 
-            ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
-            tvName = (TextView) itemView.findViewById(R.id.tvName);
-            tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
-            tvDate = (TextView) itemView.findViewById(R.id.tvDate);
+            tvMessage = (TextView) itemView.findViewById(R.id.tvMessage);
+            tvTime = (TextView) itemView.findViewById(R.id.tvTime);
         }
 
-        public void setName(String name){
-            tvName.setText(name);
+        public void setMessage(String message){
+            tvMessage.setText(Html.fromHtml(message + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;")); // 10 spaces
         }
 
-        public void setImage(String urlImage) {
-            Picasso.with(context)
-                    .load(urlImage)
-                    .placeholder(R.drawable.ic_category_default)
-                    .into(ivPhoto);
-        }
-
-        public void setDescription(String description) {
-            tvDescription.setText(description);
-        }
-
-        public void setDate(String date) {
-            tvDate.setText(date);
+        public void setTime(String time) {
+            tvTime.setText(time);
         }
 
     }

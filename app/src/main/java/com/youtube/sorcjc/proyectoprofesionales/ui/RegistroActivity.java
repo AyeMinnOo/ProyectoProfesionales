@@ -73,10 +73,12 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         call.enqueue(new Callback<ZonasResponse>() {
             @Override
             public void onResponse(Response<ZonasResponse> response, Retrofit retrofit) {
-                ArrayList<String> zonas = response.body().getResponse();
-
-                // Setting the options in the spinner
-                spinnerOptions(zonas);
+                if (response.body() != null)
+                {
+                    ArrayList<String> zonas = response.body().getResponse();
+                    // Setting the options in the spinner
+                    spinnerOptions(zonas);
+                }
 
                 progressDialog.dismiss();
             }

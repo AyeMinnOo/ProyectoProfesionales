@@ -16,12 +16,12 @@ import android.widget.Toast;
 
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Chat;
 import com.youtube.sorcjc.proyectoprofesionales.io.CategoriasResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.ChatResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.CategoryAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
+import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.ChatAdapter;
 
 import java.util.ArrayList;
 
@@ -40,7 +40,7 @@ public class ChatFragment extends Fragment {
     private LinearLayout layoutIrBusqueda;
 
     // Used to render the messages
-    private static MessageAdapter messageAdapter;
+    private static ChatAdapter chatAdapter;
 
     // Used to render the categories
     private static CategoryAdapter categoryAdapter;
@@ -49,7 +49,7 @@ public class ChatFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        messageAdapter = new MessageAdapter(getActivity());
+        chatAdapter = new ChatAdapter(getActivity());
         categoryAdapter = new CategoryAdapter(getActivity());
     }
 
@@ -116,10 +116,10 @@ public class ChatFragment extends Fragment {
         call.enqueue(new Callback<ChatResponse>() {
             @Override
             public void onResponse(Response<ChatResponse> response, Retrofit retrofit) {
-                ArrayList<Message> messages = response.body().getResponse();
-                if (messages.size() > 0) {
-                    recyclerView.setAdapter(messageAdapter);
-                    messageAdapter.addAll(messages);
+                ArrayList<Chat> chats = response.body().getResponse();
+                if (chats.size() > 0) {
+                    recyclerView.setAdapter(chatAdapter);
+                    chatAdapter.addAll(chats);
                     hideTopLayout();
                 } else {
                     hideBottomLayout();

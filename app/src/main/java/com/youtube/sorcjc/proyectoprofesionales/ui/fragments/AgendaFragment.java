@@ -7,20 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
 import com.youtube.sorcjc.proyectoprofesionales.io.AgendaResponse;
-import com.youtube.sorcjc.proyectoprofesionales.io.CategoriasResponse;
-import com.youtube.sorcjc.proyectoprofesionales.io.ChatResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.CategoryAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.WorkerAdapter;
 
 import java.util.ArrayList;

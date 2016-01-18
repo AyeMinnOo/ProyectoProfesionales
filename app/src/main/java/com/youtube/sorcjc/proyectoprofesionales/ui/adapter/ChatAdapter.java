@@ -11,56 +11,57 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Chat;
 
 import java.util.ArrayList;
 
-public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerViewHolder> {
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
 
-    private ArrayList<Worker> messages;
+    private ArrayList<Chat> chats;
     private Context context;
 
-    public WorkerAdapter(Context context) {
+    public ChatAdapter(Context context) {
         this.context = context;
-        this.messages = new ArrayList<>();
+        this.chats = new ArrayList<>();
     }
 
     @Override
-    public WorkerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(R.layout.item_chat, parent, false);
-        return new WorkerViewHolder(itemView);
+        return new MessageViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(WorkerViewHolder holder, int position) {
-        Worker message = messages.get(position);
+    public void onBindViewHolder(MessageViewHolder holder, int position) {
+        Chat chat = chats.get(position);
 
-        holder.setName(message.getName());
-        holder.setImage(message.getUrlPhoto());
-        holder.setDescription(message.getCatstr());
-        holder.setDate("");
+        holder.setName(chat.getName());
+        holder.setImage(chat.getUrlPhoto());
+        holder.setDescription(chat.getDescription());
+        holder.setDate(chat.getActivity());
+
     }
 
     @Override
     public int getItemCount() {
-        return messages.size();
+        return chats.size();
     }
 
-    public void addAll(@NonNull ArrayList<Worker> messages) {
-        if (messages == null)
+    public void addAll(@NonNull ArrayList<Chat> chats) {
+        if (chats == null)
             throw new NullPointerException("The results cannot be null.");
 
-        this.messages.addAll(messages);
+        this.chats.addAll(chats);
         notifyDataSetChanged();
     }
 
-    public class WorkerViewHolder extends RecyclerView.ViewHolder {
+    public class MessageViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivPhoto;
         private TextView tvName;
         private TextView tvDescription;
         private TextView tvDate;
 
-        public WorkerViewHolder(View itemView) {
+        public MessageViewHolder(View itemView) {
             super(itemView);
 
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
