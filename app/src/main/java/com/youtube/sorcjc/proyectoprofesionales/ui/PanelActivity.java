@@ -22,10 +22,9 @@ public class PanelActivity extends AppCompatActivity {
 
     private PagerAdapter pagerAdapter;
 
-    private ViewPager mViewPager;
-
     private Toolbar toolbar;
     private TabLayout tabLayout;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -47,9 +47,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     public void addAll(@NonNull ArrayList<Message> messages) {
         if (messages == null)
-            throw new NullPointerException("The results cannot be null.");
+            throw new NullPointerException("The message array cannot be null.");
 
         this.messages.addAll(messages);
+        notifyDataSetChanged();
+    }
+
+    public void addItem(Message message) {
+        if (message == null)
+            throw new NullPointerException("The message cannot be null.");
+
+        this.messages.add(message);
         notifyDataSetChanged();
     }
 

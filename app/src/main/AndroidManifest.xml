@@ -33,7 +33,8 @@
         <activity
             android:name=".ui.PanelActivity"
             android:label="@string/title_activity_panel"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.TalkActivity"></activity>
     </application>
 
 </manifest>
