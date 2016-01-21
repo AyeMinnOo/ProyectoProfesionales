@@ -77,7 +77,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         public void setImage(String urlImage) {
             Picasso.with(context)
                     .load(urlImage)
-                    .placeholder(R.drawable.ic_category_default)
+                    .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
                     .into(ivPhoto);
         }
 

@@ -122,22 +122,16 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
     private void postMessage() {
         String message = etMessage.getText().toString();
-        adapter.addItem(new Message(message, "8.00 PM"));
+        adapter.addItem(new Message(message, "8.00 PM", true));
         etMessage.setText("");
     }
 
     private void loadMessages() {
         ArrayList<Message> examples = new ArrayList<>();
-        examples.add(new Message("Hola, cómo estás?", "4.30 PM"));
-        examples.add(new Message("Estás ahí?", "4.45 PM"));
-        examples.add(new Message("Hola, cómo estás?", "4.30 PM"));
-        examples.add(new Message("Estás ahí?", "4.45 PM"));
-        examples.add(new Message("Hola, cómo estás?", "4.30 PM"));
-        examples.add(new Message("Estás ahí?", "4.45 PM"));
-        examples.add(new Message("Hola, cómo estás?", "4.30 PM"));
-        examples.add(new Message("Estás ahí?", "4.45 PM"));
-        examples.add(new Message("Hola, cómo estás?", "4.30 PM"));
-        examples.add(new Message("Estás ahí?", "4.45 PM"));
+        examples.add(new Message("Hola, cómo estás?", "4.30 PM", false));
+        examples.add(new Message("Estás ahí?", "4.45 PM", false));
+        examples.add(new Message("Sí, dime ...", "4.50 PM", true));
+        examples.add(new Message("Quería hacerte una consulta", "4.55 PM", false));
         adapter.addAll(examples);
     }
 

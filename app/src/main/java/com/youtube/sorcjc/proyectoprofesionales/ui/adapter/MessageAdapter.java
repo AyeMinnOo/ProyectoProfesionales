@@ -36,6 +36,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         Message message = messages.get(position);
 
+        holder.setSender(message.amISender());
         holder.setMessage(message.getMessage());
         holder.setTime(message.getTime());
     }
@@ -64,20 +65,32 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public class MessageViewHolder extends RecyclerView.ViewHolder {
         private TextView tvMessage;
         private TextView tvTime;
+        private ImageView ivLeft;
+        private ImageView ivRight;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
 
             tvMessage = (TextView) itemView.findViewById(R.id.tvMessage);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
+            ivLeft = (ImageView) itemView.findViewById(R.id.ivBubbleLeft);
+            ivRight = (ImageView) itemView.findViewById(R.id.ivBubbleRight);
         }
 
-        public void setMessage(String message){
+        public void setMessage(String message) {
             tvMessage.setText(Html.fromHtml(message + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;")); // 10 spaces
         }
 
         public void setTime(String time) {
             tvTime.setText(time);
+        }
+
+        public void setSender(boolean amISender) {
+            if (amISender) {
+                ivLeft.setVisibility(View.GONE);
+            } else {
+                ivRight.setVisibility(View.GONE);
+            }
         }
 
     }

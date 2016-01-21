@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,24 +86,11 @@ public class ChatFragment extends Fragment {
     }
 
     private void hideTopLayout() {
-        layoutTop.setVisibility(View.INVISIBLE);
-        // Fixing the marginTop
-        fixScrollMargins(0, convertToPx(92));
+        layoutTop.setVisibility(View.GONE);
     }
 
     private void hideBottomLayout() {
-        layoutIrBusqueda.setVisibility(View.INVISIBLE);
-        // Fixing the marginBottom
-        fixScrollMargins(convertToPx(109), 0);
-    }
-
-    private void fixScrollMargins(int top, int bottom) {
-        ScrollView.LayoutParams params = new ScrollView.LayoutParams(
-                LayoutParams.MATCH_PARENT,
-                LayoutParams.MATCH_PARENT
-        );
-        params.setMargins(0, top, 0, bottom);
-        scrollCentral.setLayoutParams(params);
+        layoutIrBusqueda.setVisibility(View.GONE);
     }
 
     private int convertToPx(int dp) {
@@ -119,6 +107,7 @@ public class ChatFragment extends Fragment {
                 ArrayList<Chat> chats = response.body().getResponse();
                 if (chats.size() > 0) {
                     recyclerView.setAdapter(chatAdapter);
+                    Log.d("Test/Chat", "# messages from WS => " + chats.size());
                     chatAdapter.addAll(chats);
                     hideTopLayout();
                 } else {

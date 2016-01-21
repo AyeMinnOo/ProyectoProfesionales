@@ -7,7 +7,7 @@
     android:layout_marginTop="1dp">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/ivBubbleLeft"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_alignParentLeft="true"
@@ -19,7 +19,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/imageView"
+        android:layout_toRightOf="@+id/ivBubbleLeft"
+        android:layout_toEndOf="@+id/ivBubbleLeft"
+        android:layout_toLeftOf="@+id/ivBubbleRight"
+        android:layout_toStartOf="@+id/ivBubbleRight"
         android:background="@drawable/bg_msg_from"
         android:orientation="horizontal">
 
@@ -27,27 +30,20 @@
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/tvMessage"
-            android:layout_alignRight="@+id/tvMessage"
-            android:layout_below="@+id/tvMessage"
             android:layout_gravity="bottom|right"
             android:paddingRight="5dp"
+            android:paddingEnd="5dp"
             android:text="4:13 PM"
             android:textColor="@android:color/darker_gray"
-            android:textSize="10dp"
+            android:textSize="10sp"
             android:textStyle="italic" />
 
         <TextView
             android:id="@+id/tvMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignTop="@+id/imageView"
             android:layout_gravity="left|center_vertical"
-            android:layout_marginLeft="0dp"
             android:layout_marginTop="1dp"
-            android:layout_toRightOf="@+id/imageView"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -57,4 +53,13 @@
             android:textSize="16sp" />
     </FrameLayout>
 
+    <ImageView
+        android:id="@+id/ivBubbleRight"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="-13dp"
+        android:src="@drawable/ic_bubble_right" />
+    
 </RelativeLayout>
