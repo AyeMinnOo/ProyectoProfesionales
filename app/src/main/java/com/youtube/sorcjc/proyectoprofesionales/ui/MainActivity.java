@@ -48,18 +48,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnIniciarSesion.setOnClickListener(this);
         btnRegistrarme.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         // Read from Shared Preferences
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
         String defaultActivity = getResources().getString(R.string.first_activity_default);
         String firstActivity = sharedPref.getString(getString(R.string.first_activity), defaultActivity);
 
-        Log.d("Test/SharedPreferences", "packageName => " + this.getPackageName());
-        Log.d("Test/SharedPreferences", "fullClassName => " + this.getPackageName() + firstActivity);
+        Log.d("Test/SharedPreferences", "firstActivity => " + firstActivity);
         Intent intent = new Intent();
         intent.setClassName(this, this.getPackageName() + firstActivity);
         startActivity(intent);
-        // finish(); // This prevent the user to use the "back" button
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Chat;
+import com.youtube.sorcjc.proyectoprofesionales.ui.TalkActivity;
 
 import java.util.ArrayList;
 
@@ -39,7 +42,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         holder.setImage(chat.getUrlPhoto());
         holder.setDescription(chat.getDescription());
         holder.setDate(chat.getActivity());
-
+        holder.setClickEvent(chat.getUid());
     }
 
     @Override
@@ -61,6 +64,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         private TextView tvDescription;
         private TextView tvDate;
 
+        private ImageView ivOpenChat;
+
         public MessageViewHolder(View itemView) {
             super(itemView);
 
@@ -68,6 +73,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
             tvName = (TextView) itemView.findViewById(R.id.tvName);
             tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
+
+            ivOpenChat = (ImageView) itemView.findViewById(R.id.ivOpenChat);
         }
 
         public void setName(String name){
@@ -87,6 +94,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
         public void setDate(String date) {
             tvDate.setText(date);
+        }
+
+        public void setClickEvent(final String uid) {
+            ivOpenChat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(view.getContext(), TalkActivity.class);
+                    Bundle b = new Bundle();
+                    b.putString("uid", uid);
+                    i.putExtras(b);
+                    view.getContext().startActivity(i);
+                }
+            });
         }
 
     }

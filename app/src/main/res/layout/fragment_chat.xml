@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_marginBottom="8dp"
         android:orientation="vertical">
 
         <TextView
@@ -23,30 +22,7 @@
             android:text="Ningún chat abierto en este momento."
             android:textSize="17sp" />
 
-        <FrameLayout
-            android:id="@+id/layoutBuscar"
-            android:layout_width="match_parent"
-            android:layout_height="76dp"
-            android:paddingBottom="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="8dp">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="50dp" />
-
-            <ImageView
-                android:id="@+id/ivBuscar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="right"
-                android:src="@drawable/ic_search"
-                android:background="@drawable/messenger_button_send_round_shadow"
-                android:textSize="20sp" />
-        </FrameLayout>
+        <include layout="@layout/search_category" />
 
     </LinearLayout>
 
@@ -56,17 +32,16 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
         android:fillViewport="true"
-        android:padding="5dp"
+        android:padding="4dp"
         android:id="@+id/scrollCentral">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewChat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="12dp" />
+            android:layout_height="match_parent" />
 
     </ScrollView>
 
@@ -86,6 +61,7 @@
         android:paddingLeft="16dp">
 
         <ImageView
+            android:id="@+id/ivIrBusqueda"
             android:src="@drawable/ic_search"
             android:layout_width="55dp"
             android:layout_height="55dp"
@@ -101,5 +77,4 @@
             android:text="Buscar"
             android:textSize="20sp" />
     </LinearLayout>
-
 </LinearLayout>

@@ -1,16 +1,14 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui.fragments;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
@@ -21,6 +19,7 @@ import com.youtube.sorcjc.proyectoprofesionales.domain.Chat;
 import com.youtube.sorcjc.proyectoprofesionales.io.CategoriasResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.ChatResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
+import com.youtube.sorcjc.proyectoprofesionales.ui.PanelActivity;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.CategoryAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.ChatAdapter;
 
@@ -31,14 +30,14 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class ChatFragment extends Fragment {
+public class ChatFragment extends Fragment implements View.OnClickListener {
 
 
     // Views and controls in fragment_chat.xml
     private LinearLayout layoutTop;
-    private ScrollView scrollCentral;
     private RecyclerView recyclerView;
     private LinearLayout layoutIrBusqueda;
+    private ImageView ivIrBusqueda;
 
     // Used to render the messages
     private static ChatAdapter chatAdapter;
@@ -61,14 +60,16 @@ public class ChatFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
 
         // Get references to the views and controls
-        scrollCentral = (ScrollView) rootView.findViewById(R.id.scrollCentral);
         layoutTop = (LinearLayout) rootView.findViewById(R.id.layoutTop);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewChat);
         layoutIrBusqueda = (LinearLayout) rootView.findViewById(R.id.layoutIrBusqueda);
+        ivIrBusqueda = (ImageView) rootView.findViewById(R.id.ivIrBusqueda);
 
         // Setting the recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(chatAdapter);
+
+        ivIrBusqueda.setOnClickListener(this);
 
         return rootView;
     }
@@ -77,25 +78,10 @@ public class ChatFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // What adapter we will use?
-
         // Try to load active chats
-        loadMessages();
         // Use the ChatAdapter if there are messages
         // But use CategoriesAdapter if there aren't messages
-    }
-
-    private void hideTopLayout() {
-        layoutTop.setVisibility(View.GONE);
-    }
-
-    private void hideBottomLayout() {
-        layoutIrBusqueda.setVisibility(View.GONE);
-    }
-
-    private int convertToPx(int dp) {
-        Resources r = getResources();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+        loadMessages();
     }
 
     private void loadMessages() {
@@ -105,15 +91,12 @@ public class ChatFragment extends Fragment {
             @Override
             public void onResponse(Response<ChatResponse> response, Retrofit retrofit) {
                 ArrayList<Chat> chats = response.body().getResponse();
+                Log.d("Test/Chat", "# messages from WS => " + chats.size());
+
                 if (chats.size() > 0) {
-                    recyclerView.setAdapter(chatAdapter);
-                    Log.d("Test/Chat", "# messages from WS => " + chats.size());
-                    chatAdapter.addAll(chats);
-                    hideTopLayout();
+                    showMessages(chats);
                 } else {
-                    hideBottomLayout();
-                    recyclerView.setAdapter(categoryAdapter);
-                    loadCategories();
+                    showCategories();
                 }
             }
 
@@ -124,20 +107,27 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    private void loadCategories() {
-        Call<CategoriasResponse> call = HomeSolutionApiAdapter.getApiService().getCategoriasResponse();
-        call.enqueue(new Callback<CategoriasResponse>() {
-            @Override
-            public void onResponse(Response<CategoriasResponse> response, Retrofit retrofit) {
-                ArrayList<Category> categories = response.body().getResponse();
-                categoryAdapter.addAll(categories);
-            }
+    private void showMessages(ArrayList<Chat> chats) {
+        // Hide top layout
+        layoutTop.setVisibility(View.GONE);
 
-            @Override
-            public void onFailure(Throwable t) {
-                Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        if (recyclerView.getAdapter() == null)
+//            recyclerView.setAdapter(chatAdapter);
+
+        chatAdapter.addAll(chats);
     }
 
+    private void showCategories() {
+        // Hide bottom layout
+        layoutIrBusqueda.setVisibility(View.GONE);
+
+        recyclerView.setAdapter(categoryAdapter);
+
+        categoryAdapter.addAll(PanelActivity.categoryList);
+    }
+
+    @Override
+    public void onClick(View view) {
+        PanelActivity.viewPager.setCurrentItem(2, true);
+    }
 }

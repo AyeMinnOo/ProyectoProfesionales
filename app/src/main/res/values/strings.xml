@@ -4,9 +4,11 @@
     <string name="title_activity_panel">Panel de usuario</string>
     <string name="action_settings">Opciones</string>
     <string name="section_format">Sección: %1$d</string>
-    <string name="first_activity_default">.ui.RegistroActivity</string>
-    <string name="first_activity">FirstActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="preference_file">Preferences</string>
+    <string name="first_activity">FirstActivity</string>
+    <string name="first_activity_default">.ui.RegistroActivity</string>
+
+
+
 </resources>

@@ -1,8 +1,10 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -37,8 +39,24 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
-        // To disable the back button
-        moveTaskToBack(false);
+        confirmExit().show();
+    }
+
+    public AlertDialog confirmExit() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Confirmar")
+                .setMessage("¿Está seguro que desea salir?")
+                .setPositiveButton("Sí",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finishAffinity();
+                            }
+                        })
+                .setNegativeButton("No", null);
+
+        return builder.create();
     }
 
     @Override
@@ -150,6 +168,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
     private void goToLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }

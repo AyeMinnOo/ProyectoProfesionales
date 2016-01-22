@@ -2,9 +2,11 @@ package com.youtube.sorcjc.proyectoprofesionales.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -64,8 +66,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-        // To disable the back button
-        moveTaskToBack(false);
+        confirmExit().show();
+    }
+
+    public AlertDialog confirmExit() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Confirmar")
+                .setMessage("¿Está seguro que desea salir?")
+                .setPositiveButton("Sí",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finishAffinity();
+                            }
+                        })
+                .setNegativeButton("No", null);
+
+        return builder.create();
     }
 
     @Override
@@ -285,10 +303,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void setNewFirstActivity() {
         // Write to Shared Preferences
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(getString(R.string.first_activity), ".ui.LoginActivity");
-        editor.commit();
+        Log.i("Test/Login", "SharedPreferences to => .ui.LoginActivity");
+        editor.apply();
     }
 
     private void goToActivity(Class activity) {

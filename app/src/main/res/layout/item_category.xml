@@ -11,14 +11,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp">
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
 
         <ImageView
             android:id="@+id/ivCategoria"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_marginRight="16dp"
+            android:scaleType="fitXY"
             android:background="@drawable/messenger_button_send_round_shadow" />
 
         <TextView

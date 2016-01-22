@@ -1,30 +1,68 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.youtube.sorcjc.proyectoprofesionales.R;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
+import com.youtube.sorcjc.proyectoprofesionales.io.CategoriasResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.AgendaFragment;
 import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.BusquedaFragment;
 import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.ChatFragment;
 
 import java.util.ArrayList;
 
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
+
 public class PanelActivity extends AppCompatActivity {
 
     private PagerAdapter pagerAdapter;
-
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager mViewPager;
+    public static ViewPager viewPager;
+
+    // Just one load of categories
+    public static ArrayList<Category> categoryList;
+    private ProgressDialog progressDialog;
+
+    @Override
+    public void onBackPressed() {
+        confirmExit().show();
+    }
+
+    public AlertDialog confirmExit() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Confirmar")
+                .setMessage("¿Está seguro que desea cerrar sesión?")
+                .setPositiveButton("Sí",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+                .setNegativeButton("No", null);
+
+        return builder.create();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +71,44 @@ public class PanelActivity extends AppCompatActivity {
 
         // Views
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        viewPager = (ViewPager) findViewById(R.id.container);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         // Setting the view pager
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), buildFragments(), buildTabTitles());
-        mViewPager.setAdapter(pagerAdapter);
+        viewPager.setAdapter(pagerAdapter);
 
         // Some delay to prevent empty titles
-        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setupWithViewPager(viewPager);
 
         // Setting the toolbar
         if (toolbar != null)
             setSupportActionBar(toolbar);
+    }
+
+    private void loadCategories() {
+        Log.d("Test/Panel", "Categories are loading ...");
+        Call<CategoriasResponse> call = HomeSolutionApiAdapter.getApiService().getCategoriasResponse();
+        call.enqueue(new Callback<CategoriasResponse>() {
+            @Override
+            public void onResponse(Response<CategoriasResponse> response, Retrofit retrofit) {
+                progressDialog.dismiss();
+                ArrayList<Category> categories = response.body().getResponse();
+                categoryList = categories;
+                Log.d("Test/Panel", "Categories are ready => " + categories.size());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(PanelActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Meanwhile ...
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Cargando datos ...");
+        progressDialog.show();
     }
 
     @Override
@@ -71,6 +134,9 @@ public class PanelActivity extends AppCompatActivity {
     }
 
     private ArrayList<Fragment> buildFragments() {
+        // Data required by the fragments
+        loadCategories();
+
         ArrayList<Fragment> fragments = new ArrayList<>();
 
         fragments.add(new ChatFragment());

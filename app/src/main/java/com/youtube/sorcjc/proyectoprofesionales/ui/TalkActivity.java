@@ -21,8 +21,6 @@ import java.util.ArrayList;
 
 public class TalkActivity extends AppCompatActivity implements View.OnClickListener {
 
-    /*private TabHost host;*/
-
     private Button btnPerfil;
     private Button btnCalificar;
     private Button btnLlamar;
@@ -41,6 +39,11 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_talk);
+
+        Bundle b = getIntent().getExtras();
+        String uid = b.getString("uid");
+
+        Toast.makeText(TalkActivity.this, uid, Toast.LENGTH_LONG).show();
 
         adapter = new MessageAdapter(this);
 
@@ -70,26 +73,6 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setUpTabs() {
-        /*host = (TabHost)findViewById(R.id.tab_host);
-        host.setup();
-
-        TabHost.TabSpec spec = host.newTabSpec("Tab One");
-        spec.setContent(R.id.tab_one_container);
-        spec.setIndicator("Tab One");
-        host.addTab(spec);
-
-        spec = host.newTabSpec("Tab Two");
-        spec.setContent(R.id.tab_two_container);
-        spec.setIndicator("Tab Two");
-        host.addTab(spec);
-
-        spec = host.newTabSpec("Tab Three");
-        spec.setContent(R.id.tab_three_container);
-        spec.setIndicator("Tab Three");
-        host.addTab(spec);
-
-        host.setOnTabChangedListener(this);*/
-
         btnPerfil = (Button) findViewById(R.id.btnPerfil);
         btnCalificar = (Button) findViewById(R.id.btnCalificar);
         btnLlamar = (Button) findViewById(R.id.btnLlamar);
@@ -135,10 +118,4 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         adapter.addAll(examples);
     }
 
-/*
-    @Override
-    public void onTabChanged(String s) {
-        int i = host.getCurrentTab();
-        Log.i("Test/TabHost", "Tab clicked =>" + i);
-    }*/
 }
