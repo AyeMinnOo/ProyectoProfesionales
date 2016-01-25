@@ -36,7 +36,10 @@ public class Chat {
     private String msg;
 
     @SerializedName("catstr")
-    private String description;
+    private String catstr;
+
+    @SerializedName("picture")
+    private String picture;
 
     public String getUid() {
         return uid;
@@ -62,12 +65,12 @@ public class Chat {
         return msg;
     }
 
-    public String getDescription() {
-        return description;
+    public String getCatstr() {
+        return catstr;
     }
 
     public String getUrlPhoto() {
-        return "http://homesolution.com.ar/res/avatar/min/" + uid + ".jpg";
+        return picture;
     }
 
 }

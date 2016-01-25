@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
 import com.youtube.sorcjc.proyectoprofesionales.io.AgendaResponse;
@@ -29,6 +30,9 @@ public class AgendaFragment extends Fragment implements Callback<AgendaResponse>
 
     // Used to render the messages
     private static WorkerAdapter adapter;
+
+    // Authenticated user data
+    private static String token;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,8 +67,12 @@ public class AgendaFragment extends Fragment implements Callback<AgendaResponse>
     }
 
     private void loadContacts() {
-        String testToken = "813abd218962ff966b54d26915388ecf";
-        Call<AgendaResponse> call = HomeSolutionApiAdapter.getApiService().getAgendaResponse(testToken);
+        if (token == null) {
+            final Global global = (Global) getActivity().getApplicationContext();
+            token = global.getToken();
+        }
+
+        Call<AgendaResponse> call = HomeSolutionApiAdapter.getApiService().getAgendaResponse(token);
         call.enqueue(this);
     }
 

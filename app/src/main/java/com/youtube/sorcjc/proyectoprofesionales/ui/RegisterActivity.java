@@ -25,7 +25,7 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class RegistroActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ProgressDialog progressDialog;
 
@@ -107,13 +107,13 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
                 progressDialog.dismiss();
             }
         });
-        progressDialog = new ProgressDialog(RegistroActivity.this);
+        progressDialog = new ProgressDialog(RegisterActivity.this);
         progressDialog.setMessage("Cargando datos ...");
         progressDialog.show();
     }
 
     private void spinnerOptions(ArrayList<String> zonas) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, zonas);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, zonas);
         spinnerZona.setAdapter(adapter);
     }
 
@@ -161,7 +161,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
                 progressDialog.dismiss();
             }
         });
-        progressDialog = new ProgressDialog(RegistroActivity.this);
+        progressDialog = new ProgressDialog(RegisterActivity.this);
         progressDialog.setMessage("Procesando registro ...");
         progressDialog.show();
     }

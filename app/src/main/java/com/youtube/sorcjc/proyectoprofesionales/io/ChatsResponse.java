@@ -5,7 +5,7 @@ import com.youtube.sorcjc.proyectoprofesionales.domain.Chat;
 
 import java.util.ArrayList;
 
-public class ChatResponse {
+public class ChatsResponse {
 
     @SerializedName("status")
     private int status;
@@ -14,7 +14,7 @@ public class ChatResponse {
     private String error;
 
     @SerializedName("response")
-    private Talk response;
+    private ArrayList<Chat> response;
 
     public int getStatus() {
         return status;
@@ -24,7 +24,7 @@ public class ChatResponse {
         return error;
     }
 
-    public Talk getResponse() {
+    public ArrayList<Chat> getResponse() {
         return response;
     }
 

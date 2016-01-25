@@ -40,7 +40,7 @@ public class PanelActivity extends AppCompatActivity {
 
     // Just one load of categories
     public static ArrayList<Category> categoryList;
-    private ProgressDialog progressDialog;
+    public static ProgressDialog progressDialog;
 
     @Override
     public void onBackPressed() {
@@ -87,12 +87,16 @@ public class PanelActivity extends AppCompatActivity {
     }
 
     private void loadCategories() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Cargando datos ...");
+        progressDialog.show();
+
         Log.d("Test/Panel", "Categories are loading ...");
+
         Call<CategoriasResponse> call = HomeSolutionApiAdapter.getApiService().getCategoriasResponse();
         call.enqueue(new Callback<CategoriasResponse>() {
             @Override
             public void onResponse(Response<CategoriasResponse> response, Retrofit retrofit) {
-                progressDialog.dismiss();
                 ArrayList<Category> categories = response.body().getResponse();
                 categoryList = categories;
                 Log.d("Test/Panel", "Categories are ready => " + categories.size());
@@ -100,15 +104,10 @@ public class PanelActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                progressDialog.dismiss();
                 Toast.makeText(PanelActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Meanwhile ...
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Cargando datos ...");
-        progressDialog.show();
     }
 
     @Override

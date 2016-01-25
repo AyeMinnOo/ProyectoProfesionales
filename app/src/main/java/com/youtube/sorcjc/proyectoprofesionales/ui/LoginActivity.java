@@ -29,6 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
@@ -254,7 +255,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 signInWithGoogle();
                 break;
             case R.id.btnRegistrarme:
-                goToActivity(RegistroActivity.class);
+                goToActivity(RegisterActivity.class);
                 break;
         }
     }
@@ -289,9 +290,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, response.body().getError(), Toast.LENGTH_SHORT).show();
         } else {
             UserAuthenticated userAuthenticated = response.body().getResponse();
-            Log.i("Test/Login", "token => " + userAuthenticated.getToken());
-            setNewFirstActivity();
+            saveUserData(userAuthenticated);
             goToActivity(PanelActivity.class);
+            clearCredentials();
         }
     }
 
@@ -299,6 +300,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onFailure(Throwable t) {
         progressDialog.dismiss();
         Toast.makeText(this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveUserData(UserAuthenticated userAuthenticated) {
+        // Save the session
+        final Global global = (Global) getApplicationContext();
+        global.setUserAuthenticated(userAuthenticated);
+        // Save the sharedPreference
+        setNewFirstActivity();
+
+        Log.i("Test/Login", "token => " + userAuthenticated.getToken());
     }
 
     private void setNewFirstActivity() {
@@ -315,5 +326,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         intent = new Intent(this, activity);
         if (intent != null)
             startActivity(intent);
+    }
+
+    private void clearCredentials() {
+        etPassword.setText("");
     }
 }

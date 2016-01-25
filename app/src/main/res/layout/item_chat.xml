@@ -12,7 +12,7 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <com.youtube.sorcjc.proyectoprofesionales.ui.custom.RoundedImageView
+        <ImageView
             android:id="@+id/ivPhoto"
             android:src="@drawable/com_facebook_profile_picture_blank_square"
             android:scaleType="centerCrop"
@@ -21,6 +21,7 @@
             android:layout_gravity="left"/>
 
         <LinearLayout
+            android:id="@+id/contact_info"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
             android:layout_gravity="center"

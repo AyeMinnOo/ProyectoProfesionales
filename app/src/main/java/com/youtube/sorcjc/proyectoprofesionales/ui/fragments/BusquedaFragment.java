@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.youtube.sorcjc.proyectoprofesionales.R;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 public class BusquedaFragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView recyclerView;
+    private EditText etFilter;
     private ImageView ivBuscar;
 
     // Used to render the categories
@@ -49,6 +51,8 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
+        etFilter = (EditText) rootView.findViewById(R.id.etFilter);
+
         ivBuscar = (ImageView) rootView.findViewById(R.id.ivBuscar);
         ivBuscar.setOnClickListener(this);
 
@@ -67,6 +71,13 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         // Filter categories
+        String queryText = etFilter.getText().toString();
+        Log.d("Test/Busqueda", "Applying filter to categories => " + queryText);
+        if (queryText.isEmpty()) {
+            adapter.flushFilter();
+        } else {
+            adapter.setFilter(queryText);
+        }
     }
 
 }

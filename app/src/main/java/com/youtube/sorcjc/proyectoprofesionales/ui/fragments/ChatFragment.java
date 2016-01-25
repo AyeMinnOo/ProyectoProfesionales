@@ -10,14 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Chat;
-import com.youtube.sorcjc.proyectoprofesionales.io.CategoriasResponse;
-import com.youtube.sorcjc.proyectoprofesionales.io.ChatResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.ChatsResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.PanelActivity;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.CategoryAdapter;
@@ -44,6 +42,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
     // Used to render the categories
     private static CategoryAdapter categoryAdapter;
+
+    // User authenticated data
+    private static String token;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,22 +83,33 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         // Use the ChatAdapter if there are messages
         // But use CategoriesAdapter if there aren't messages
         loadMessages();
+
+        setAuthenticatedUser();
+        Log.d("Test/Chat", "onViewCreated fired !");
+    }
+
+    private void setAuthenticatedUser() {
+        if (token == null) {
+            final Global global = (Global) getActivity().getApplicationContext();
+            token = global.getToken();
+        }
     }
 
     private void loadMessages() {
-        String testToken = "813abd218962ff966b54d26915388ecf"; // next, have to be modified
-        Call<ChatResponse> call = HomeSolutionApiAdapter.getApiService().getChatResponse(testToken);
-        call.enqueue(new Callback<ChatResponse>() {
+        Call<ChatsResponse> call = HomeSolutionApiAdapter.getApiService().getChatsResponse(token);
+        call.enqueue(new Callback<ChatsResponse>() {
             @Override
-            public void onResponse(Response<ChatResponse> response, Retrofit retrofit) {
+            public void onResponse(Response<ChatsResponse> response, Retrofit retrofit) {
                 ArrayList<Chat> chats = response.body().getResponse();
-                Log.d("Test/Chat", "# messages from WS => " + chats.size());
 
                 if (chats.size() > 0) {
+                    Log.d("Test/Chat", "Active chats from WS => " + chats.size());
                     showMessages(chats);
                 } else {
                     showCategories();
                 }
+
+                PanelActivity.progressDialog.dismiss();
             }
 
             @Override
@@ -114,7 +126,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 //        if (recyclerView.getAdapter() == null)
 //            recyclerView.setAdapter(chatAdapter);
 
-        chatAdapter.addAll(chats);
+        chatAdapter.setAll(chats);
     }
 
     private void showCategories() {
@@ -122,7 +134,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         layoutIrBusqueda.setVisibility(View.GONE);
 
         recyclerView.setAdapter(categoryAdapter);
-
         categoryAdapter.addAll(PanelActivity.categoryList);
     }
 

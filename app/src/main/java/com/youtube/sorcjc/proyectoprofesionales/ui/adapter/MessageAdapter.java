@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
 
@@ -36,8 +35,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         Message message = messages.get(position);
 
-        holder.setSender(message.amISender());
-        holder.setMessage(message.getMessage());
+        holder.setSender(message.amISender(context.getApplicationContext()));
+        holder.setMessage(message.getContent());
         holder.setTime(message.getTime());
     }
 

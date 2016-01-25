@@ -17,12 +17,34 @@ import java.util.ArrayList;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoriaViewHolder> {
 
-    private ArrayList<Category> categories;
+    private ArrayList<Category> allCategories;
+    private ArrayList<Category> filteredCategories;
     private Context context;
 
     public CategoryAdapter(Context context) {
         this.context = context;
-        this.categories = new ArrayList<>();
+        this.allCategories = new ArrayList<>();
+        this.filteredCategories = new ArrayList<>();
+    }
+
+    // Undo the filter
+    public void flushFilter(){
+        filteredCategories = new ArrayList<>();
+        filteredCategories.addAll(allCategories);
+        notifyDataSetChanged();
+    }
+
+    // Apply a filter text
+    public void setFilter(String queryText) {
+        filteredCategories = new ArrayList<>();
+        queryText = queryText.toLowerCase();
+
+        for (Category category : allCategories) {
+            if (category.getName().toLowerCase().contains(queryText))
+                filteredCategories.add(category);
+        }
+
+        notifyDataSetChanged();
     }
 
     @Override
@@ -33,7 +55,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(CategoriaViewHolder holder, int position) {
-        Category category = categories.get(position);
+        Category category = filteredCategories.get(position);
 
         holder.setName(category.getName());
         holder.setImage(category.getUrlImage());
@@ -41,14 +63,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return filteredCategories.size();
     }
 
     public void addAll(@NonNull ArrayList<Category> categories) {
         if (categories == null)
             throw new NullPointerException("The results cannot be null.");
 
-        this.categories.addAll(categories);
+        this.allCategories.addAll(categories);
+
+        if (this.filteredCategories.size() == 0)
+            this.filteredCategories.addAll(categories);
+
         notifyDataSetChanged();
     }
 

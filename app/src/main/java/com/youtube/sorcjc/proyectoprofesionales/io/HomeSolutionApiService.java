@@ -25,11 +25,17 @@ public interface HomeSolutionApiService {
 
     // http://dev.homesolution.com.ar/api/getchats?tk=813abd218962ff966b54d26915388ecf
     @GET("getchats")
-    Call<ChatResponse> getChatResponse(@Query("tk") String token);
+    Call<ChatsResponse> getChatsResponse(@Query("tk") String token);
 
     // http://dev.homesolution.com.ar/api/getagenda?tk=813abd218962ff966b54d26915388ecf
     @GET("getagenda")
     Call<AgendaResponse> getAgendaResponse(@Query("tk") String token);
 
     // http://dev.homesolution.com.ar/api/getchat/?tk=813abd218962ff966b54d26915388ecf&touid=3
+    @GET("getchat")
+    Call<ChatResponse> getChatResponse(@Query("tk") String token, @Query("touid") String touid);
+
+    // http://dev.homesolution.com.ar/api/sendmsg?tk={token}&touid=3&replyto=2521&msg=Puede%20ser
+    @GET("sendmsg")
+    Call<EnviarMsjeResponse> getEnviarMensaje(@Query("tk") String token, @Query("touid") String toUid, @Query("replyto") String replyTo, @Query("msg") String message);
 }

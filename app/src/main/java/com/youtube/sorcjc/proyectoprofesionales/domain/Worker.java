@@ -47,6 +47,9 @@ public class Worker {
     @SerializedName("catstr")
     private String catstr;
 
+    @SerializedName("picture")
+    private String picture;
+
     public String getUid() {
         return uid;
     }
@@ -76,6 +79,6 @@ public class Worker {
     }
 
     public String getUrlPhoto() {
-        return "http://homesolution.com.ar/res/avatar/min/" + uid + ".jpg";
+        return picture;
     }
 }
