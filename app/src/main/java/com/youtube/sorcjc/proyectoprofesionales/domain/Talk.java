@@ -1,4 +1,4 @@
-package com.youtube.sorcjc.proyectoprofesionales.io;
+package com.youtube.sorcjc.proyectoprofesionales.domain;
 
 import com.google.gson.annotations.SerializedName;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Message;

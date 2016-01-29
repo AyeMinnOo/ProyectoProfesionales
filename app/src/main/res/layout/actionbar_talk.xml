@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:background="@color/colorPrimary"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="horizontal">
 
     <!-- Contact info -->
     <com.youtube.sorcjc.proyectoprofesionales.ui.custom.RoundedImageView
         android:id="@+id/ivPhoto"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginEnd="5dp"
         android:layout_gravity="left|center_vertical"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
         android:scaleType="centerCrop"
         android:src="@drawable/com_facebook_profile_picture_blank_square" />
 
@@ -31,16 +31,17 @@
             android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre del contacto"
-            android:textSize="17sp"
-            android:textColor="#fff"/>
+            android:singleLine="true"
+            android:text=""
+            android:textColor="#fff"
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/tvDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="Categorías"
+            android:text=""
             android:textColor="#fff"
             android:textSize="15sp" />
     </LinearLayout>

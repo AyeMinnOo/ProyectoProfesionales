@@ -37,7 +37,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         holder.setSender(message.amISender(context.getApplicationContext()));
         holder.setMessage(message.getContent());
-        holder.setTime(message.getTime());
+        holder.setTime(message.getCreated());
     }
 
     @Override
@@ -59,6 +59,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         this.messages.add(message);
         notifyDataSetChanged();
+    }
+
+    public String getParentMid() {
+        if (this.messages == null || this.messages.size() == 0)
+            return "0";
+
+        final int lastPosition = this.messages.size() - 1;
+        return this.messages.get(lastPosition).getParentMid();
     }
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {

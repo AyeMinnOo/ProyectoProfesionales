@@ -122,7 +122,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.btnRealizarRegistro:
                 realizarRegistro();
-                Toast.makeText(this, "Registro realizado con éxito !", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btnIrLogin:

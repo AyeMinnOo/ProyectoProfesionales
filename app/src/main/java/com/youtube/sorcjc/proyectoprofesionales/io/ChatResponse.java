@@ -1,9 +1,7 @@
 package com.youtube.sorcjc.proyectoprofesionales.io;
 
 import com.google.gson.annotations.SerializedName;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Chat;
-
-import java.util.ArrayList;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Talk;
 
 public class ChatResponse {
 

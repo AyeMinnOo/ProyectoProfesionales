@@ -23,11 +23,11 @@ public interface HomeSolutionApiService {
     @GET("categos")
     Call<CategoriasResponse> getCategoriasResponse();
 
-    // http://dev.homesolution.com.ar/api/getchats?tk=813abd218962ff966b54d26915388ecf
+    // http://dev.homesolution.com.ar/api/getchats?tk={token}
     @GET("getchats")
     Call<ChatsResponse> getChatsResponse(@Query("tk") String token);
 
-    // http://dev.homesolution.com.ar/api/getagenda?tk=813abd218962ff966b54d26915388ecf
+    // http://dev.homesolution.com.ar/api/getagenda?tk={token}
     @GET("getagenda")
     Call<AgendaResponse> getAgendaResponse(@Query("tk") String token);
 
@@ -38,4 +38,16 @@ public interface HomeSolutionApiService {
     // http://dev.homesolution.com.ar/api/sendmsg?tk={token}&touid=3&replyto=2521&msg=Puede%20ser
     @GET("sendmsg")
     Call<EnviarMsjeResponse> getEnviarMensaje(@Query("tk") String token, @Query("touid") String toUid, @Query("replyto") String replyTo, @Query("msg") String message);
+
+    // http://dev.homesolution.com.ar/api/getprestadores?cid=36&tk={token}
+    @GET("getprestadores")
+    Call<AgendaResponse> getPrestadores(@Query("cid") String categoryId, @Query("tk") String token);
+
+    // http://dev.homesolution.com.ar/api/getprestador?tk={token}&pid=26
+    @GET("getprestador")
+    Call<PrestadorResponse> getPrestador(@Query("tk") String token, @Query("pid") String prestadorId);
+
+    // http://dev.homesolution.com.ar/api/agendar?tk={token}&pid=26
+    @GET("agendar")
+    Call<AgendarResponse> getAgendar(@Query("tk") String token, @Query("pid") String pid);
 }

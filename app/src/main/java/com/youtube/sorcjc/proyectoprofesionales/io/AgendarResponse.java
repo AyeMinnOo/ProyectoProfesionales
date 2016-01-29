@@ -1,9 +1,8 @@
 package com.youtube.sorcjc.proyectoprofesionales.io;
 
 import com.google.gson.annotations.SerializedName;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
 
-public class EnviarMsjeResponse {
+public class AgendarResponse {
 
     @SerializedName("status")
     private int status;
@@ -12,7 +11,7 @@ public class EnviarMsjeResponse {
     private String error;
 
     @SerializedName("response")
-    private Message message;
+    private Boolean response;
 
     public int getStatus() {
         return status;
@@ -22,8 +21,8 @@ public class EnviarMsjeResponse {
         return error;
     }
 
-    public Message getResponse() {
-        return message;
+    public Boolean getResponse() {
+        return response;
     }
 
 }

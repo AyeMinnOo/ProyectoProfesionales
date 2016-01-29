@@ -1,6 +1,7 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,8 +23,9 @@ import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
 import com.youtube.sorcjc.proyectoprofesionales.io.ChatResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.EnviarMsjeResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.io.Talk;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Talk;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
 
 import java.util.ArrayList;
@@ -57,9 +59,11 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
     // User destination data
     private String toUid;
+    private String pid;
     private String catstr;
-    // private String username;
+    private String name;
 
+    // Custom action bar
     private ImageView ivPhoto;
     private TextView tvName;
     private TextView tvDescription;
@@ -80,13 +84,6 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
         // Setting the recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                // call smooth scroll
-                recyclerView.smoothScrollToPosition(adapter.getItemCount());
-            }
-        });
         recyclerView.setAdapter(adapter);
 
         etMessage = (EditText) findViewById(R.id.etMessage);
@@ -97,7 +94,9 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         if (toUid == null) {
             Bundle b = getIntent().getExtras();
             toUid = b.getString("uid");
+            pid = b.getString("pid");
             catstr = b.getString("catstr");
+            name = b.getString("name");
         }
 
         loadAuthenticatedUser();
@@ -157,7 +156,11 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnPerfil:
-                Toast.makeText(this, "Perfil", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(view.getContext(), ProfileActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putString("pid", pid);
+                i.putExtras(mBundle);
+                startActivity(i);
                 break;
 
             case R.id.btnCalificar:
@@ -175,9 +178,14 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void postMessage() {
-        final String message = etMessage.getText().toString();
-/*
-        Call<EnviarMsjeResponse> call = HomeSolutionApiAdapter.getApiService().getEnviarMensaje(token, uid, replyTo, message);
+        final String content = etMessage.getText().toString().trim();
+
+        if (content.isEmpty())
+            return;
+
+        final String replyTo = adapter.getParentMid();
+
+        Call<EnviarMsjeResponse> call = HomeSolutionApiAdapter.getApiService().getEnviarMensaje(token, toUid, replyTo, content);
         call.enqueue(new Callback<EnviarMsjeResponse>() {
             @Override
             public void onResponse(Response<EnviarMsjeResponse> response, Retrofit retrofit) {
@@ -187,9 +195,9 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                 if (response.body().getStatus() == 0) {
                     Toast.makeText(TalkActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Boolean sent = response.body().getResponse();
-                    if (sent) {
-                        adapter.addItem(new Message(message, "8.00 PM", true));
+                    Message message = response.body().getResponse();
+                    if (message!=null) {
+                        adapter.addItem(message);
                         etMessage.setText("");
                     } else {
                         Toast.makeText(TalkActivity.this, "No se ha enviado el mensaje", Toast.LENGTH_SHORT).show();
@@ -202,7 +210,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(TalkActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-*/
+
     }
 
     private void loadDummyMessages() {
@@ -233,7 +241,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                     Talk talk = response.body().getResponse();
 
                     // Set contact data
-                    tvName.setText(talk.getUsername());
+                    tvName.setText(name);
                     Picasso.with(getBaseContext())
                             .load(talk.getPicture())
                             .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)

@@ -46,7 +46,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         holder.setImageClick(chat.getPid());
         holder.setDescription(chat.getCatstr());
         holder.setDate(chat.getActivity());
-        holder.setChatClick(chat.getUid(), chat.getCatstr());
+        holder.setChatClick(chat.getUid(), chat.getPid(),  chat.getCatstr(), chat.getName());
     }
 
     @Override
@@ -117,9 +117,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
             tvDate.setText(date);
         }
 
-        public void setChatClick(final String uid, final String catstr) {
+        public void setChatClick(final String uid, final String pid, final String catstr, final String name) {
             // Set event click for the message icon and contact info
-            ChatClickListener chatClickListener = new ChatClickListener(uid, catstr);
+            ChatClickListener chatClickListener = new ChatClickListener(uid, pid, catstr, name);
 
             ivOpenChat.setOnClickListener(chatClickListener);
             contact_info.setOnClickListener(chatClickListener);
@@ -127,11 +127,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
         class ChatClickListener implements View.OnClickListener {
             private final String uid;
+            private final String pid;
             private final String catstr;
+            private final String name;
 
-            public ChatClickListener(String uid, String catstr) {
+            public ChatClickListener(String uid, String pid, String catstr, String name) {
                 this.uid = uid;
+                this.pid = pid;
                 this.catstr = catstr;
+                this.name = name;
             }
 
             @Override
@@ -139,7 +143,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
                 Intent i = new Intent(view.getContext(), TalkActivity.class);
                 Bundle b = new Bundle();
                 b.putString("uid", uid);
+                b.putString("pid", pid);
                 b.putString("catstr", catstr);
+                b.putString("name", name);
                 i.putExtras(b);
                 view.getContext().startActivity(i);
             }

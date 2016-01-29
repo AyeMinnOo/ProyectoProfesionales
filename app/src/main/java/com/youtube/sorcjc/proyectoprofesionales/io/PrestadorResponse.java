@@ -1,9 +1,12 @@
 package com.youtube.sorcjc.proyectoprofesionales.io;
 
 import com.google.gson.annotations.SerializedName;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
+import com.youtube.sorcjc.proyectoprofesionales.domain.WorkerProfile;
 
-public class EnviarMsjeResponse {
+import java.util.ArrayList;
+
+public class PrestadorResponse {
 
     @SerializedName("status")
     private int status;
@@ -12,7 +15,7 @@ public class EnviarMsjeResponse {
     private String error;
 
     @SerializedName("response")
-    private Message message;
+    private WorkerProfile response;
 
     public int getStatus() {
         return status;
@@ -22,8 +25,8 @@ public class EnviarMsjeResponse {
         return error;
     }
 
-    public Message getResponse() {
-        return message;
+    public WorkerProfile getResponse() {
+        return response;
     }
 
 }

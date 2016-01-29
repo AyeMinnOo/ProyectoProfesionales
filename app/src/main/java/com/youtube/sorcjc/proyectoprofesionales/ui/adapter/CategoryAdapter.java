@@ -1,17 +1,22 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
+import com.youtube.sorcjc.proyectoprofesionales.ui.ProfileActivity;
+import com.youtube.sorcjc.proyectoprofesionales.ui.WorkersListActivity;
 
 import java.util.ArrayList;
 
@@ -59,6 +64,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         holder.setName(category.getName());
         holder.setImage(category.getUrlImage());
+        holder.setClickEvent(category.getCid(), category.getName(), category.getUrlImage());
     }
 
     @Override
@@ -79,14 +85,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public class CategoriaViewHolder extends RecyclerView.ViewHolder {
+        // Category data
         private ImageView ivCategoria;
         private TextView tvName;
+        // To cover the event click
+        private LinearLayout layout_category;
 
         public CategoriaViewHolder(View itemView) {
             super(itemView);
 
             ivCategoria = (ImageView) itemView.findViewById(R.id.ivCategoria);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
+            layout_category = (LinearLayout) itemView.findViewById(R.id.layout_category);
         }
 
         public void setName(String name){
@@ -98,6 +108,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     .load(urlImage)
                     .placeholder(R.drawable.ic_category_default)
                     .into(ivCategoria);
+        }
+
+        public void setClickEvent(final String categoryId, final String name, final String picture) {
+            layout_category.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(view.getContext(), WorkersListActivity.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putString("categoryId", categoryId);
+                    mBundle.putString("categoryName", name);
+                    mBundle.putString("categoryPicture", picture);
+                    i.putExtras(mBundle);
+                    context.startActivity(i);
+                }
+            });
         }
 
     }

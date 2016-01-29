@@ -300,6 +300,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onFailure(Throwable t) {
         progressDialog.dismiss();
         Toast.makeText(this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        Log.d("Test/Login", "LoginResponse onFailure => " + t.getLocalizedMessage());
     }
 
     private void saveUserData(UserAuthenticated userAuthenticated) {

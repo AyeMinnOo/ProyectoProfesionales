@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -36,6 +37,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private RecyclerView recyclerView;
     private LinearLayout layoutIrBusqueda;
     private ImageView ivIrBusqueda;
+
+    // The search will be performed in the third tab
+    private ImageView ivBuscar;
+    private EditText etFilter;
 
     // Used to render the messages
     private static ChatAdapter chatAdapter;
@@ -66,11 +71,15 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         layoutIrBusqueda = (LinearLayout) rootView.findViewById(R.id.layoutIrBusqueda);
         ivIrBusqueda = (ImageView) rootView.findViewById(R.id.ivIrBusqueda);
 
+        ivBuscar = (ImageView) rootView.findViewById(R.id.ivBuscar);
+        etFilter = (EditText) rootView.findViewById(R.id.etFilter);
+
         // Setting the recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(chatAdapter);
 
         ivIrBusqueda.setOnClickListener(this);
+        ivBuscar.setOnClickListener(this);
 
         return rootView;
     }
@@ -78,14 +87,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setAuthenticatedUser();
 
         // Try to load active chats
         // Use the ChatAdapter if there are messages
         // But use CategoriesAdapter if there aren't messages
         loadMessages();
-
-        setAuthenticatedUser();
-        Log.d("Test/Chat", "onViewCreated fired !");
     }
 
     private void setAuthenticatedUser() {
@@ -115,6 +122,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onFailure(Throwable t) {
                 Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Log.d("Test/Chat", "ChatsResponse onFailure => " + t.getLocalizedMessage());
+                PanelActivity.progressDialog.dismiss();
             }
         });
     }
@@ -122,10 +131,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private void showMessages(ArrayList<Chat> chats) {
         // Hide top layout
         layoutTop.setVisibility(View.GONE);
-
-//        if (recyclerView.getAdapter() == null)
-//            recyclerView.setAdapter(chatAdapter);
-
         chatAdapter.setAll(chats);
     }
 
@@ -139,6 +144,21 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        PanelActivity.viewPager.setCurrentItem(2, true);
+        switch (view.getId()) {
+
+            case R.id.ivBuscar:
+                String queryText = etFilter.getText().toString().trim();
+                if (queryText.isEmpty()) // nothing happens
+                    break;
+                PanelActivity.viewPager.setTag(queryText);
+                Log.d("Test/Chat", "Defining a new tag value => " + queryText);
+                // break; isn't necessary
+
+            case R.id.ivIrBusqueda:
+                PanelActivity.viewPager.setCurrentItem(2, true);
+                break;
+        }
+
+
     }
 }

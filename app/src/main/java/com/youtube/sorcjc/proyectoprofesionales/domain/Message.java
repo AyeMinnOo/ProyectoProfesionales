@@ -32,10 +32,13 @@ public class Message {
     private String content;
 
     @SerializedName("created")
-    private String time;
+    private String created;
 
     @SerializedName("read")
     private String read;
+
+    @SerializedName("parent_mid")
+    private String parent_mid;
 
     @SerializedName("readed")
     private boolean readed;
@@ -43,9 +46,9 @@ public class Message {
     // Custom attribute
     private boolean amISender;
 
-    public Message(String content, String time, boolean amISender) {
+    public Message(String content, String created, boolean amISender) {
         this.content = content;
-        this.time = time;
+        this.created = created;
         this.amISender = amISender;
     }
 
@@ -53,8 +56,10 @@ public class Message {
         return content;
     }
 
-    public String getTime() {
-        return time;
+    public String getCreated() {
+        final String time = created.split(" ")[1];
+        final String time_parts[] = time.split(":");
+        return time_parts[0] + ":" + time_parts[1];
     }
 
     public boolean amISender(Context context) {
@@ -68,11 +73,11 @@ public class Message {
         return mid;
     }
 
-    public String getFrom_uid() {
+    public String getFromUid() {
         return from_uid;
     }
 
-    public String getTo_uid() {
+    public String getToUid() {
         return to_uid;
     }
 
@@ -82,5 +87,9 @@ public class Message {
 
     public boolean isReaded() {
         return readed;
+    }
+
+    public String getParentMid() {
+        return parent_mid;
     }
 }

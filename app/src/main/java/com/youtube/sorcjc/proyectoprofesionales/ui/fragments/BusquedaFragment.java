@@ -34,6 +34,10 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener {
     private static CategoryAdapter adapter;
     private ArrayList<Category> categoryList;
 
+    // To manage requested search
+    private static String requestedQuery = "";
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,15 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener {
         ivBuscar = (ImageView) rootView.findViewById(R.id.ivBuscar);
         ivBuscar.setOnClickListener(this);
 
+        // A search was requested?
+        if (container.getTag() != null) {
+            String queryText = container.getTag().toString();
+            Log.d("Test/Busqueda", "Reading the tag value => " + queryText);
+            container.setTag(null);
+            requestedQuery = queryText;
+        }
+
+
         return rootView;
     }
 
@@ -63,15 +76,25 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        categoryList = ((PanelActivity) getActivity()).categoryList;
-        Log.d("Test/Busqueda", "categoryList in BusquedaFragment => " + categoryList.size());
-        adapter.addAll(categoryList);
+        Log.d("Test/Busqueda", "Loading the full list of categories");
+        if (adapter.getItemCount() == 0) {
+            categoryList = ((PanelActivity) getActivity()).categoryList;
+            adapter.addAll(categoryList);
+        }
+
+        Log.d("Test/Busqueda", "requestedQuery => " + requestedQuery);
+        if (! requestedQuery.isEmpty()) {
+            adapter.setFilter(requestedQuery);
+            Log.d("Test/Busqueda", "New filter for categories => " + requestedQuery);
+            requestedQuery = "";
+        }
     }
 
     @Override
     public void onClick(View view) {
         // Filter categories
-        String queryText = etFilter.getText().toString();
+        String queryText = etFilter.getText().toString().trim();
+
         Log.d("Test/Busqueda", "Applying filter to categories => " + queryText);
         if (queryText.isEmpty()) {
             adapter.flushFilter();
@@ -79,5 +102,6 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener {
             adapter.setFilter(queryText);
         }
     }
+
 
 }
