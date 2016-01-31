@@ -34,6 +34,7 @@ import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.io.LoginResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.RecuperarResponse;
 
 import org.json.JSONObject;
 
@@ -56,6 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private LoginButton btnIngresarFacebook;
     private SignInButton btnIngresarGoogle;
     private Button btnRegistrarme;
+    private Button btnOlvidePassword;
 
     // Facebook SDK
     private CallbackManager callbackManager;
@@ -103,6 +105,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         etPassword = (EditText) findViewById(R.id.etPassword);
         btnRegistrarme = (Button) findViewById(R.id.btnRegistrarme);
         btnRealizarLogin = (Button) findViewById(R.id.btnRealizarLogin);
+        btnOlvidePassword = (Button) findViewById(R.id.btnOlvidePassword);
 
         btnIngresarFacebook = (LoginButton) findViewById(R.id.btnIngresarFacebook);
         btnIngresarGoogle = (SignInButton) findViewById(R.id.btnIngresarGoogle);
@@ -115,6 +118,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btnRegistrarme.setOnClickListener(this);
         btnRealizarLogin.setOnClickListener(this);
+        btnOlvidePassword.setOnClickListener(this);
     }
 
     @Override
@@ -257,7 +261,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btnRegistrarme:
                 goToActivity(RegisterActivity.class);
                 break;
+            case R.id.btnOlvidePassword:
+                recoverPassword();
+                break;
         }
+    }
+
+    private void recoverPassword() {
+        String email = etEmail.getText().toString();
+        if (isValidEmail(email)) {
+            Call<RecuperarResponse> call = HomeSolutionApiAdapter.getApiService().getRecuperarContra(email);
+            call.enqueue(new Callback<RecuperarResponse>() {
+                @Override
+                public void onResponse(Response<RecuperarResponse> response, Retrofit retrofit) {
+                    if (response.body() == null) return;
+
+                    if (response.body().getStatus() == 0)
+                        Toast.makeText(LoginActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(LoginActivity.this, "Se han enviado las instrucciones a su correo", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    Toast.makeText(LoginActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(this, "Ingrese un e-mail con formato válido", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        if (target == null)
+            return false;
+
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
     private void signInWithGoogle() {

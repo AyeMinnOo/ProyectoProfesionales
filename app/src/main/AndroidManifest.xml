@@ -36,9 +36,11 @@
             android:label="@string/title_activity_panel"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.TalkActivity" />
-        <activity android:name=".ui.ProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.WorkersListActivity"></activity>
+        <activity
+            android:name=".ui.ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.WorkersListActivity" />
+        <activity android:name=".ui.SettingsActivity"></activity>
     </application>
 
 </manifest>

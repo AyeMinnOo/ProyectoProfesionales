@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_vertical_margin"
+    tools:context="com.youtube.sorcjc.proyectoprofesionales.ui.SettingsActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        android:text="Modificar datos"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        android:text="Ver términos y condiciones"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        android:text="Cerrar sesión"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </LinearLayout>
+
+</LinearLayout>

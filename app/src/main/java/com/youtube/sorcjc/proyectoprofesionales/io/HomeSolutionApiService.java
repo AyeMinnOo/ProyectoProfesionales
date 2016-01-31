@@ -50,4 +50,8 @@ public interface HomeSolutionApiService {
     // http://dev.homesolution.com.ar/api/agendar?tk={token}&pid=26
     @GET("agendar")
     Call<AgendarResponse> getAgendar(@Query("tk") String token, @Query("pid") String pid);
+
+    // http://dev.homesolution.com.ar/api/forgot?email={email}
+    @GET("forgot")
+    Call<RecuperarResponse> getRecuperarContra(@Query("email") String email);
 }
