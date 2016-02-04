@@ -64,6 +64,7 @@ public class RoundedImageView extends ImageView {
     }
 
     public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
+        if (bmp == null) return null;
         Bitmap sbmp;
         if(bmp.getWidth() != radius || bmp.getHeight() != radius)
             sbmp = Bitmap.createScaledBitmap(bmp, radius, radius, false);

@@ -97,6 +97,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             pid = b.getString("pid");
             catstr = b.getString("catstr");
             name = b.getString("name");
+            Log.d("Test/Talk", "Loading chat with uid => " + toUid);
         }
 
         loadAuthenticatedUser();
@@ -156,15 +157,17 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnPerfil:
-                Intent i = new Intent(view.getContext(), ProfileActivity.class);
+                Intent iProfile = new Intent(view.getContext(), ProfileActivity.class);
                 Bundle mBundle = new Bundle();
                 mBundle.putString("pid", pid);
-                i.putExtras(mBundle);
-                startActivity(i);
+                iProfile.putExtras(mBundle);
+                startActivity(iProfile);
                 break;
 
             case R.id.btnCalificar:
-                Toast.makeText(this, "Calificar", Toast.LENGTH_SHORT).show();
+                Intent iScore = new Intent(view.getContext(), ScoreActivity.class);
+                // falta enviar PID
+                startActivity(iScore);
                 break;
 
             case R.id.btnLlamar:

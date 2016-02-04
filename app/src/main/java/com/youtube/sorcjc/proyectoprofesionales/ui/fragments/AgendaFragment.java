@@ -1,5 +1,6 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,7 +29,9 @@ public class AgendaFragment extends Fragment implements Callback<AgendaResponse>
     // Views in fragment_agenda.xml
     private RecyclerView recyclerView;
 
-    // Used to render the messages
+    // Used to render the contacts
+    private static AgendaFragment agendaFragment;
+    private static Activity activity;
     private static WorkerAdapter adapter;
 
     // Authenticated user data
@@ -38,6 +41,8 @@ public class AgendaFragment extends Fragment implements Callback<AgendaResponse>
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        agendaFragment = this;
+        activity = getActivity();
         adapter = new WorkerAdapter(getActivity());
     }
 
@@ -66,20 +71,20 @@ public class AgendaFragment extends Fragment implements Callback<AgendaResponse>
         loadContacts();
     }
 
-    private void loadContacts() {
+    public static void loadContacts() {
         if (token == null) {
-            final Global global = (Global) getActivity().getApplicationContext();
+            final Global global = (Global) activity.getApplicationContext();
             token = global.getToken();
         }
 
         Call<AgendaResponse> call = HomeSolutionApiAdapter.getApiService().getAgendaResponse(token);
-        call.enqueue(this);
+        call.enqueue(agendaFragment);
     }
 
     @Override
     public void onResponse(Response<AgendaResponse> response, Retrofit retrofit) {
         ArrayList<Worker> workers = response.body().getResponse();
-        adapter.addAll(workers);
+        adapter.setAll(workers);
     }
 
     @Override

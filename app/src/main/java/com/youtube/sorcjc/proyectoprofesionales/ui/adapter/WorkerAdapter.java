@@ -62,6 +62,14 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
         notifyDataSetChanged();
     }
 
+    public void setAll(@NonNull ArrayList<Worker> workers) {
+        if (workers == null)
+            throw new NullPointerException("The results cannot be null.");
+
+        this.workers = workers;
+        notifyDataSetChanged();
+    }
+
     public class WorkerViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivPhoto;
         private TextView tvName;

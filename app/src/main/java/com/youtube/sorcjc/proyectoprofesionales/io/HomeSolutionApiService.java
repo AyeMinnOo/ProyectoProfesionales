@@ -54,4 +54,8 @@ public interface HomeSolutionApiService {
     // http://dev.homesolution.com.ar/api/forgot?email={email}
     @GET("forgot")
     Call<RecuperarResponse> getRecuperarContra(@Query("email") String email);
+
+    // http://dev.homesolution.com.ar/api/calificar?tk={token}&pid=26&puntualidad=2&profesionalismo=3&cumplimiento=3&recomendaria=3&precio=2&catego=28&comentarios={comentarios}
+    @GET("calificar")
+    Call<CalificarResponse> getCalificar(@Query("tk") String token, @Query("pid") String pId, @Query("puntualidad") int puntualidad, @Query("profesionalismo") int profesionalismo, @Query("cumplimiento") int cumplimiento, @Query("recomendaria") int recomendaria, @Query("precio") int precio, @Query("catego") String catego, @Query("comentarios") String comentarios);
 }

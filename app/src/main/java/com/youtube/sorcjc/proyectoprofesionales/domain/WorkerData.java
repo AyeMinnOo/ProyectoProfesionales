@@ -22,6 +22,9 @@ public class WorkerData {
     @SerializedName("skills")
     private ArrayList<Skill> skills;
 
+    @SerializedName("categos")
+    private ArrayList<Category> categos;
+
     @SerializedName("ratings")
     private ArrayList<Rating> ratings;
 
@@ -37,6 +40,10 @@ public class WorkerData {
 
     public ArrayList<Skill> getSkills() {
         return skills;
+    }
+
+    public ArrayList<Category> getCategories() {
+        return categos;
     }
 
     public ArrayList<Rating> getRatings() {

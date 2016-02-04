@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Rating;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Skill;
 import com.youtube.sorcjc.proyectoprofesionales.domain.WorkerBasic;
@@ -27,6 +28,7 @@ import com.youtube.sorcjc.proyectoprofesionales.domain.WorkerProfile;
 import com.youtube.sorcjc.proyectoprofesionales.io.AgendarResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.io.PrestadorResponse;
+import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.AgendaFragment;
 
 import java.util.ArrayList;
 
@@ -57,10 +59,13 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     private TextView tvContenido3;
     private TextView tvContenido4;
 
-    // Worker parameter data (start chat)
+    // Worker parameter data (to start TalkActivity)
     private String uid;
     private String catstr;
     private String name;
+
+    // Worker parameter data (to start ScoreActivity)
+    public static ArrayList<Category> categories;
 
     // Actions
     private Button btnCalificar;
@@ -167,6 +172,8 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
             WorkerData workerData = workerProfile.getPrestador();
             WorkerBasic workerBasic = workerData.getBasico();
 
+            categories = workerData.getCategories();
+
             tvTitulo.setText(workerBasic.getName());
             tvSubtitulo.setText(workerData.getEstrellitas() + " estrellas");
 
@@ -205,6 +212,9 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnCalificar:
+                Intent iScore = new Intent(view.getContext(), ScoreActivity.class);
+                // falta enviar PID
+                startActivity(iScore);
                 break;
 
             case R.id.btnAgendar:
@@ -218,26 +228,28 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
                         if (response.body().getStatus() == 0) {
                             Toast.makeText(ProfileActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
                         } else {
-                            if (response.body().getResponse())
+                            if (response.body().getResponse()) {
                                 Toast.makeText(ProfileActivity.this, "Contacto agregado exitosamente", Toast.LENGTH_SHORT).show();
+                                AgendaFragment.loadContacts();
+                            }
                         }
                     }
 
                     @Override
                     public void onFailure(Throwable t) {
-
+                        Toast.makeText(ProfileActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
 
             case R.id.btnChat:
-                Intent i = new Intent(view.getContext(), TalkActivity.class);
+                Intent iTalk = new Intent(view.getContext(), TalkActivity.class);
                 Bundle b = new Bundle();
                 b.putString("uid", uid);
                 b.putString("catstr", catstr);
                 b.putString("name", name);
-                i.putExtras(b);
-                startActivity(i);
+                iTalk.putExtras(b);
+                startActivity(iTalk);
                 break;
         }
     }

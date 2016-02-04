@@ -1,21 +1,33 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.youtube.sorcjc.proyectoprofesionales.R;
+import com.youtube.sorcjc.proyectoprofesionales.io.gcm.QuickstartPreferences;
+import com.youtube.sorcjc.proyectoprofesionales.io.gcm.RegistrationIntentService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // Controls
     private Button btnIniciarSesion;
     private Button btnRegistrarme;
+
+    // GCM Management
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +60,69 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnIniciarSesion.setOnClickListener(this);
         btnRegistrarme.setOnClickListener(this);
+
+        setupGCM();
     }
+
+    private void setupGCM() {
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("Test/Main", "Event onReceive fired !");
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                if (sentToken) {
+                    Log.d("Test/Main", getString(R.string.gcm_send_message));
+                } else {
+                    Log.d("Test/Main", getString(R.string.token_error_message));
+                }
+            }
+        };
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Log.d("Test/Main", "Start IntentService to register this application with GCM");
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.d("Test/Main", "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
 
     @Override
     protected void onStart() {
@@ -67,22 +141,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        // If we use shared preferences, the next is not necessary
-        /*
-        Intent intent = null;
+        // We are using shared preferences,
+        // and redirect to other activity
 
-        switch (v.getId()) {
-            case R.id.btnIniciarSesion:
-                intent = new Intent(this, LoginActivity.class);
-                break;
-
-            case R.id.btnRegistrarme:
-                intent = new Intent(this, RegistroActivity.class);
-                break;
-        }
-
-        if (intent != null)
-            startActivity(intent);*/
     }
 
 }

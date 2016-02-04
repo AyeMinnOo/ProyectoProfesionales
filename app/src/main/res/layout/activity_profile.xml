@@ -31,7 +31,7 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
-                android:theme="@style/CustomNoActionBar"
+                android:theme="@style/AppTheme.NoActionBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"

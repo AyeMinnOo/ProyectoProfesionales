@@ -1,6 +1,8 @@
 package com.youtube.sorcjc.proyectoprofesionales;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 
@@ -16,7 +18,7 @@ public class Global extends Application {
         return userAuthenticated.getUser().getUid();
     }
 
-    public String getPictura() {
+    public String getPicture() {
         return userAuthenticated.getUser().getPicture();
     }
 
@@ -24,4 +26,10 @@ public class Global extends Application {
         this.userAuthenticated = userAuthenticated;
     }
 
+    // Used for enabling multidex
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 }

@@ -10,4 +10,23 @@
     <string name="first_activity">FirstActivity</string>
     <string name="first_activity_default">.ui.RegisterActivity</string>
 
+    <string name="next">Siguiente</string>
+    <string name="prev">Anterior</string>
+    <string name="finish">Calificar</string>
+
+    <string name="submit_confirm_message">¿Está seguro de enviar esta calificación?</string>
+    <string name="submit_confirm_button">Confirmar</string>
+
+    <string name="label_your_name">Nombre</string>
+    <string name="hint_your_name">e.g. Juan</string>
+    <string name="label_spinner_category">Categoría de trabajo</string>
+
+    <!-- Just for debug GCM -->
+    <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
+        send downstream messages to this app.</string>
+    <string name="registering_message">Generating InstanceID token...</string>
+    <string name="token_error_message">An error occurred while either fetching the InstanceID token,
+        sending the fetched token to the server or subscribing to the PubSub topic. Please try
+        running the sample again.</string>
+
 </resources>
