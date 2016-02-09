@@ -338,8 +338,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onFailure(Throwable t) {
         progressDialog.dismiss();
-        Toast.makeText(this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-        Log.d("Test/Login", "LoginResponse onFailure => " + t.getLocalizedMessage());
+        // The parser fails when the credentials are incorrect
+        // It happens because the WS doesn't return a valid object
+        Toast.makeText(this, "Sus datos no son correctos", Toast.LENGTH_SHORT).show();
     }
 
     private void saveUserData(UserAuthenticated userAuthenticated) {
