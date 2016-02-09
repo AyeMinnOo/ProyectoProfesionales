@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
-import com.youtube.sorcjc.proyectoprofesionales.io.AgendaResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.AgendaResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.WorkerAdapter;
 

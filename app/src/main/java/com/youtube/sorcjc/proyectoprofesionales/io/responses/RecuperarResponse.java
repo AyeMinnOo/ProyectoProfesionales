@@ -1,11 +1,8 @@
-package com.youtube.sorcjc.proyectoprofesionales.io;
+package com.youtube.sorcjc.proyectoprofesionales.io.responses;
 
 import com.google.gson.annotations.SerializedName;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
 
-import java.util.ArrayList;
-
-public class AgendaResponse {
+public class RecuperarResponse {
 
     @SerializedName("status")
     private int status;
@@ -14,7 +11,7 @@ public class AgendaResponse {
     private String error;
 
     @SerializedName("response")
-    private ArrayList<Worker> response;
+    private Boolean response;
 
     public int getStatus() {
         return status;
@@ -24,7 +21,7 @@ public class AgendaResponse {
         return error;
     }
 
-    public ArrayList<Worker> getResponse() {
+    public Boolean getResponse() {
         return response;
     }
 

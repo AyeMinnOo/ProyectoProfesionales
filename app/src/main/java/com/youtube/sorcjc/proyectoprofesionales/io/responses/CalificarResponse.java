@@ -1,8 +1,8 @@
-package com.youtube.sorcjc.proyectoprofesionales.io;
+package com.youtube.sorcjc.proyectoprofesionales.io.responses;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RecuperarResponse {
+public class CalificarResponse {
 
     @SerializedName("status")
     private int status;
@@ -11,7 +11,7 @@ public class RecuperarResponse {
     private String error;
 
     @SerializedName("response")
-    private Boolean response;
+    private int response;
 
     public int getStatus() {
         return status;
@@ -21,7 +21,7 @@ public class RecuperarResponse {
         return error;
     }
 
-    public Boolean getResponse() {
+    public int getResponse() {
         return response;
     }
 

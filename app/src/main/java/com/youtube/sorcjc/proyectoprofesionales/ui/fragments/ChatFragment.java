@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Chat;
-import com.youtube.sorcjc.proyectoprofesionales.io.ChatsResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.ChatsResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.PanelActivity;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.CategoryAdapter;
@@ -92,7 +92,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         // Try to load active chats
         // Use the ChatAdapter if there are messages
         // But use CategoriesAdapter if there aren't messages
-        loadMessages();
+        loadActiveChats();
     }
 
     private void setAuthenticatedUser() {
@@ -102,7 +102,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void loadMessages() {
+    private void loadActiveChats() {
         Call<ChatsResponse> call = HomeSolutionApiAdapter.getApiService().getChatsResponse(token);
         call.enqueue(new Callback<ChatsResponse>() {
             @Override

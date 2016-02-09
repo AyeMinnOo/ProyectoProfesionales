@@ -1,11 +1,9 @@
-package com.youtube.sorcjc.proyectoprofesionales.io;
+package com.youtube.sorcjc.proyectoprofesionales.io.responses;
 
 import com.google.gson.annotations.SerializedName;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Talk;
 
-import java.util.ArrayList;
-
-public class CategoriasResponse {
+public class ChatResponse {
 
     @SerializedName("status")
     private int status;
@@ -14,7 +12,7 @@ public class CategoriasResponse {
     private String error;
 
     @SerializedName("response")
-    private ArrayList<Category> response;
+    private Talk response;
 
     public int getStatus() {
         return status;
@@ -24,7 +22,7 @@ public class CategoriasResponse {
         return error;
     }
 
-    public ArrayList<Category> getResponse() {
+    public Talk getResponse() {
         return response;
     }
 

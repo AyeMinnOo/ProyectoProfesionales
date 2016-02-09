@@ -1,8 +1,8 @@
-package com.youtube.sorcjc.proyectoprofesionales.io;
+package com.youtube.sorcjc.proyectoprofesionales.io.responses;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RegistroResponse {
+public class AgendarResponse {
 
     @SerializedName("status")
     private int status;
@@ -10,8 +10,8 @@ public class RegistroResponse {
     @SerializedName("error")
     private String error;
 
-    /*@SerializedName("response")
-    private UserRegistered response;*/
+    @SerializedName("response")
+    private Boolean response;
 
     public int getStatus() {
         return status;
@@ -21,8 +21,8 @@ public class RegistroResponse {
         return error;
     }
 
-    /*public UserRegistered getResponse() {
+    public Boolean getResponse() {
         return response;
-    }*/
+    }
 
 }

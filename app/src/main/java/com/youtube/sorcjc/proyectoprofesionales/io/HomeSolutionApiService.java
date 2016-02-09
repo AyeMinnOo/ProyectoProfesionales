@@ -1,5 +1,18 @@
 package com.youtube.sorcjc.proyectoprofesionales.io;
 
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.AgendaResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.AgendarResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.CalificarResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.CategoriasResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.ChatResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.ChatsResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.EnviarMsjeResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.LoginResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.PrestadorResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.RecuperarResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.RegistroResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.ZonasResponse;
+
 import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -17,7 +30,7 @@ public interface HomeSolutionApiService {
 
     // http://dev.homesolution.com.ar/api/register?us=Hamilton&email=matias@celani.com.pe&ps=lolcats&accept=1
     @GET("register")
-    Call<RegistroResponse> getRegistroResponse(@Query("us") String nombre, @Query("email") String email, @Query("ps") String password, @Query("accept") int accept, @Query("area") String zona);
+    Call<RegistroResponse> getRegistroResponse(@Query("us") String nombre, @Query("email") String email, @Query("ps") String password, @Query("accept") int accept, @Query("area") String zona, @Query("gcm_id") String gcm_id);
 
     // http://dev.homesolution.com.ar/api/categos
     @GET("categos")

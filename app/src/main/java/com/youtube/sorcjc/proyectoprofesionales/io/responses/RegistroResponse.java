@@ -1,9 +1,8 @@
-package com.youtube.sorcjc.proyectoprofesionales.io;
+package com.youtube.sorcjc.proyectoprofesionales.io.responses;
 
 import com.google.gson.annotations.SerializedName;
-import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 
-public class LoginResponse {
+public class RegistroResponse {
 
     @SerializedName("status")
     private int status;
@@ -11,8 +10,8 @@ public class LoginResponse {
     @SerializedName("error")
     private String error;
 
-    @SerializedName("response")
-    private UserAuthenticated response;
+    /*@SerializedName("response")
+    private UserRegistered response;*/
 
     public int getStatus() {
         return status;
@@ -22,8 +21,8 @@ public class LoginResponse {
         return error;
     }
 
-    public UserAuthenticated getResponse() {
+    /*public UserRegistered getResponse() {
         return response;
-    }
+    }*/
 
 }

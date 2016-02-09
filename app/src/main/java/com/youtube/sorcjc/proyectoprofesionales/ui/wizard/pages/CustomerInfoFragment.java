@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
+import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.ui.ProfileActivity;
@@ -55,8 +56,10 @@ public class CustomerInfoFragment extends Fragment {
         ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
 
         mCategoryView = (Spinner) rootView.findViewById(R.id.spinner_category);
-        ArrayList<String> categories = takeCategoryNames(ProfileActivity.categories);
-        loadCategoOptions(categories);
+
+        // The categories are stored as a global variable
+        final Global global = (Global) rootView.getContext().getApplicationContext();
+        loadCategoOptions(global.getCategories());
 
         return rootView;
     }

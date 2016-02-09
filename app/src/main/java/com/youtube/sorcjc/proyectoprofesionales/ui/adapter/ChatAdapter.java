@@ -43,9 +43,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
         holder.setName(chat.getName());
         holder.setImage(chat.getUrlPhoto());
-        holder.setImageClick(chat.getPid());
         holder.setDescription(chat.getCatstr());
         holder.setDate(chat.getActivity());
+        holder.setImageClick(chat.getPid());
         holder.setChatClick(chat.getUid(), chat.getPid(),  chat.getCatstr(), chat.getName());
     }
 

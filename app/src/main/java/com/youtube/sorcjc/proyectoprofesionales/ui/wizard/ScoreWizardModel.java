@@ -11,8 +11,8 @@ import com.tech.freak.wizardpager.model.SingleFixedChoicePage;
 import com.tech.freak.wizardpager.model.TextPage;
 import com.youtube.sorcjc.proyectoprofesionales.ui.wizard.pages.CustomerInfoPage;
 
-public class SandwichWizardModel extends AbstractWizardModel {
-    public SandwichWizardModel(Context context) {
+public class ScoreWizardModel extends AbstractWizardModel {
+    public ScoreWizardModel(Context context) {
         super(context);
     }
 
@@ -45,8 +45,7 @@ public class SandwichWizardModel extends AbstractWizardModel {
                         .setChoices("Pepperoni", "Turkey", "Ham", "Pastrami"),*/
 
                 new BranchPage(this, "Desea añadir un comentario?")
-                        .addBranch("Sí",
-                                new TextPage(this, "Comentarios").setRequired(true).setRequired(true))
+                        .addBranch("Sí", new TextPage(this, "Comentarios").setRequired(true).setRequired(true))
                         .addBranch("No").setValue("No")
         );
     }

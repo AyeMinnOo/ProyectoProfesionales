@@ -1,12 +1,11 @@
-package com.youtube.sorcjc.proyectoprofesionales.io;
+package com.youtube.sorcjc.proyectoprofesionales.io.responses;
 
 import com.google.gson.annotations.SerializedName;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
-import com.youtube.sorcjc.proyectoprofesionales.domain.WorkerProfile;
 
 import java.util.ArrayList;
 
-public class PrestadorResponse {
+public class AgendaResponse {
 
     @SerializedName("status")
     private int status;
@@ -15,7 +14,7 @@ public class PrestadorResponse {
     private String error;
 
     @SerializedName("response")
-    private WorkerProfile response;
+    private ArrayList<Worker> response;
 
     public int getStatus() {
         return status;
@@ -25,7 +24,7 @@ public class PrestadorResponse {
         return error;
     }
 
-    public WorkerProfile getResponse() {
+    public ArrayList<Worker> getResponse() {
         return response;
     }
 

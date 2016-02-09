@@ -21,9 +21,10 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
-import com.youtube.sorcjc.proyectoprofesionales.io.ChatResponse;
-import com.youtube.sorcjc.proyectoprofesionales.io.EnviarMsjeResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.ChatResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.EnviarMsjeResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Talk;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
@@ -158,15 +159,17 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.btnPerfil:
                 Intent iProfile = new Intent(view.getContext(), ProfileActivity.class);
-                Bundle mBundle = new Bundle();
-                mBundle.putString("pid", pid);
-                iProfile.putExtras(mBundle);
+                Bundle bProfile = new Bundle();
+                bProfile.putString("pid", pid);
+                iProfile.putExtras(bProfile);
                 startActivity(iProfile);
                 break;
 
             case R.id.btnCalificar:
                 Intent iScore = new Intent(view.getContext(), ScoreActivity.class);
-                // falta enviar PID
+                Bundle bScore = new Bundle();
+                bScore.putString("pid", pid);
+                iScore.putExtras(bScore);
                 startActivity(iScore);
                 break;
 
@@ -242,6 +245,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(TalkActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
                 } else {
                     Talk talk = response.body().getResponse();
+                    saveCategoriesGlobal(talk.getPrestador().getCategories());
 
                     // Set contact data
                     tvName.setText(name);
@@ -267,6 +271,12 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Cargando mensajes ...");
         progressDialog.show();
+    }
+
+    private void saveCategoriesGlobal(ArrayList<Category> categories) {
+        // Save the categories for the last selected worker
+        final Global global = (Global) getApplicationContext();
+        global.setCategories(categories);
     }
 
 }

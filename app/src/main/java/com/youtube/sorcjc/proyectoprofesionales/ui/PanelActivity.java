@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
-import com.youtube.sorcjc.proyectoprofesionales.io.CategoriasResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.CategoriasResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.AgendaFragment;
 import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.BusquedaFragment;

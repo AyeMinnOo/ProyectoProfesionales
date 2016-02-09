@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public class Talk {
 
+    @SerializedName("prestador")
+    private SimpleWorkerData prestador;
+
     @SerializedName("username")
     private String username;
 
@@ -15,6 +18,10 @@ public class Talk {
 
     @SerializedName("chat")
     private ArrayList<Message> chat;
+
+    public SimpleWorkerData getPrestador() {
+        return prestador;
+    }
 
     public String getUsername() {
         return username;

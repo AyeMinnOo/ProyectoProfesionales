@@ -33,8 +33,8 @@ import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.io.LoginResponse;
-import com.youtube.sorcjc.proyectoprofesionales.io.RecuperarResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.LoginResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.RecuperarResponse;
 
 import org.json.JSONObject;
 

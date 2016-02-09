@@ -1,13 +1,11 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui;
 
 import android.content.Intent;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,9 +23,9 @@ import com.youtube.sorcjc.proyectoprofesionales.domain.Skill;
 import com.youtube.sorcjc.proyectoprofesionales.domain.WorkerBasic;
 import com.youtube.sorcjc.proyectoprofesionales.domain.WorkerData;
 import com.youtube.sorcjc.proyectoprofesionales.domain.WorkerProfile;
-import com.youtube.sorcjc.proyectoprofesionales.io.AgendarResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.AgendarResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.io.PrestadorResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.PrestadorResponse;
 import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.AgendaFragment;
 
 import java.util.ArrayList;
@@ -65,7 +63,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     private String name;
 
     // Worker parameter data (to start ScoreActivity)
-    public static ArrayList<Category> categories;
+    private ArrayList<Category> categories;
 
     // Actions
     private Button btnCalificar;
@@ -173,6 +171,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
             WorkerBasic workerBasic = workerData.getBasico();
 
             categories = workerData.getCategories();
+            saveCategoriesGlobal(categories);
 
             tvTitulo.setText(workerBasic.getName());
             tvSubtitulo.setText(workerData.getEstrellitas() + " estrellas");
@@ -203,6 +202,12 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
         }
     }
 
+    private void saveCategoriesGlobal(ArrayList<Category> categories) {
+        // Save the categories for the last selected worker
+        final Global global = (Global) getApplicationContext();
+        global.setCategories(categories);
+    }
+
     @Override
     public void onFailure(Throwable t) {
         Toast.makeText(this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -213,7 +218,9 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
         switch (view.getId()) {
             case R.id.btnCalificar:
                 Intent iScore = new Intent(view.getContext(), ScoreActivity.class);
-                // falta enviar PID
+                Bundle bScore = new Bundle();
+                bScore.putString("pid", pid);
+                iScore.putExtras(bScore);
                 startActivity(iScore);
                 break;
 
@@ -244,11 +251,11 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
 
             case R.id.btnChat:
                 Intent iTalk = new Intent(view.getContext(), TalkActivity.class);
-                Bundle b = new Bundle();
-                b.putString("uid", uid);
-                b.putString("catstr", catstr);
-                b.putString("name", name);
-                iTalk.putExtras(b);
+                Bundle bTalk = new Bundle();
+                bTalk.putString("uid", uid);
+                bTalk.putString("catstr", catstr);
+                bTalk.putString("name", name);
+                iTalk.putExtras(bTalk);
                 startActivity(iTalk);
                 break;
         }

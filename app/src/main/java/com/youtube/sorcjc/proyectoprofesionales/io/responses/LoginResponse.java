@@ -1,8 +1,9 @@
-package com.youtube.sorcjc.proyectoprofesionales.io;
+package com.youtube.sorcjc.proyectoprofesionales.io.responses;
 
 import com.google.gson.annotations.SerializedName;
+import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 
-public class CalificarResponse {
+public class LoginResponse {
 
     @SerializedName("status")
     private int status;
@@ -11,7 +12,7 @@ public class CalificarResponse {
     private String error;
 
     @SerializedName("response")
-    private int response;
+    private UserAuthenticated response;
 
     public int getStatus() {
         return status;
@@ -21,7 +22,7 @@ public class CalificarResponse {
         return error;
     }
 
-    public int getResponse() {
+    public UserAuthenticated getResponse() {
         return response;
     }
 

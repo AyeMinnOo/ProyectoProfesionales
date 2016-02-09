@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,10 +14,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.io.RegistroResponse;
-import com.youtube.sorcjc.proyectoprofesionales.io.ZonasResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.RegistroResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.ZonasResponse;
 
 import java.util.ArrayList;
 
@@ -64,9 +66,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
 
-        // Getting info from the previous activity
-        // Bundle extras = getIntent().getExtras();
-        // String zonas[] = extras.getStringArray("zonas");
 
         // Get request to load the list
         cargarZonas();
@@ -130,14 +129,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private String getGcmId() {
+        final Global global = (Global) getApplicationContext();
+        return global.getGcmId();
+    }
+
     private void realizarRegistro() {
         // User data
         String nombre = etNombre.getText().toString();
         String zona = spinnerZona.getSelectedItem().toString();
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
+        String registrationToken = getGcmId();
+        Log.d("Test/Register", "registrationToken at register => " + registrationToken);
 
-        Call<RegistroResponse> call = HomeSolutionApiAdapter.getApiService().getRegistroResponse(nombre, email, password, 1, zona);
+        Call<RegistroResponse> call = HomeSolutionApiAdapter.getApiService().getRegistroResponse(nombre, email, password, 1, zona, registrationToken);
         call.enqueue(new Callback<RegistroResponse>() {
             @Override
             public void onResponse(Response<RegistroResponse> response, Retrofit retrofit) {
