@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.io.responses.RegistroResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.ZonasResponse;
 
 import java.util.ArrayList;
@@ -68,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
         // Get request to load the list
-        cargarZonas();
+        loadAreasFromWS();
 
         // View controls
         spinnerZona = (Spinner) findViewById(R.id.spinnerZona);
@@ -84,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         btnIrLogin.setOnClickListener(this);
     }
 
-    private void cargarZonas() {
+    private void loadAreasFromWS() {
         // We will use retrofit to get the list
         Call<ZonasResponse> call = HomeSolutionApiAdapter.getApiService().getZonasResponse();
         call.enqueue(new Callback<ZonasResponse>() {
@@ -136,39 +134,31 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void realizarRegistro() {
         // User data
-        String nombre = etNombre.getText().toString();
-        String zona = spinnerZona.getSelectedItem().toString();
-        String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
-        String registrationToken = getGcmId();
-        Log.d("Test/Register", "registrationToken at register => " + registrationToken);
+        final String nombre = etNombre.getText().toString();
+        final String zona = spinnerZona.getSelectedItem().toString();
+        final String email = etEmail.getText().toString();
+        final String password = etPassword.getText().toString();
+        final String gcm_id = getGcmId();
 
-        Call<RegistroResponse> call = HomeSolutionApiAdapter.getApiService().getRegistroResponse(nombre, email, password, 1, zona, registrationToken);
-        call.enqueue(new Callback<RegistroResponse>() {
-            @Override
-            public void onResponse(Response<RegistroResponse> response, Retrofit retrofit) {
-                if (response.body() != null) {
-                    int status = response.body().getStatus();
-                    if (status == 0) {
-                        Toast.makeText(getBaseContext(), response.body().getError(), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getBaseContext(), "Registro satisfactorio !", Toast.LENGTH_SHORT).show();
-                        goToLoginActivity();
-                    }
-                }
+        if (nombre.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty()) {
+            Toast.makeText(this, "Por favor rellene todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                progressDialog.dismiss();
-            }
+        Bundle data = new Bundle();
+        data.putString("nombre", nombre);
+        data.putString("zona", zona);
+        data.putString("email", email);
+        data.putString("password", password);
+        data.putString("gcm_id", gcm_id);
 
-            @Override
-            public void onFailure(Throwable t) {
-                Toast.makeText(getBaseContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-            }
-        });
-        progressDialog = new ProgressDialog(RegisterActivity.this);
-        progressDialog.setMessage("Procesando registro ...");
-        progressDialog.show();
+        showTermsAndConditions(data);
+    }
+
+    private void showTermsAndConditions(Bundle parameters) {
+        Intent i = new Intent(this, ConfirmRegisterActivity.class);
+        i.putExtras(parameters);
+        startActivity(i);
     }
 
     private void goToLoginActivity() {
