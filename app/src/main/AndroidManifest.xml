@@ -9,7 +9,6 @@
     <permission
         android:name=".permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-
     <uses-permission android:name=".permission.C2D_MESSAGE" />
 
     <application
@@ -27,30 +26,35 @@
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.ConfirmRegisterActivity" />
+
         <activity android:name=".ui.LoginActivity" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <activity
             android:name=".ui.PanelActivity"
             android:label="@string/title_activity_panel"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.SettingsActivity" />
+        <activity android:name=".ui.TermsConditionsActivity" />
         <activity android:name=".ui.TalkActivity" />
         <activity
             android:name=".ui.ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.WorkersListActivity" />
-        <activity android:name=".ui.SettingsActivity" />
         <activity
             android:name=".ui.ScoreActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -63,7 +67,6 @@
                 <category android:name="com.youtube.sorcjc.proyectoprofesionales" />
             </intent-filter>
         </receiver>
-
         <service
             android:name=".io.gcm.MyGcmListenerService"
             android:exported="false">
@@ -82,7 +85,6 @@
             android:name=".io.gcm.RegistrationIntentService"
             android:exported="false"></service>
 
-        <activity android:name=".ui.ConfirmRegisterActivity"></activity>
     </application>
 
 </manifest>

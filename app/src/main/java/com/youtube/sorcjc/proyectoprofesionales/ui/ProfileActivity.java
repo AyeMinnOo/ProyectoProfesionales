@@ -23,7 +23,7 @@ import com.youtube.sorcjc.proyectoprofesionales.domain.Skill;
 import com.youtube.sorcjc.proyectoprofesionales.domain.WorkerBasic;
 import com.youtube.sorcjc.proyectoprofesionales.domain.WorkerData;
 import com.youtube.sorcjc.proyectoprofesionales.domain.WorkerProfile;
-import com.youtube.sorcjc.proyectoprofesionales.io.responses.AgendarResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.SimpleResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.PrestadorResponse;
 import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.AgendaFragment;
@@ -235,7 +235,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
                 break;
 
             case R.id.btnAgendar:
-                final Call<AgendarResponse> call;
+                final Call<SimpleResponse> call;
                 final String successMessage;
 
                 if (isContact) {
@@ -246,9 +246,9 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
                     call = HomeSolutionApiAdapter.getApiService().getAgendar(token, pid);
                 }
 
-                call.enqueue(new Callback<AgendarResponse>() {
+                call.enqueue(new Callback<SimpleResponse>() {
                     @Override
-                    public void onResponse(Response<AgendarResponse> response, Retrofit retrofit) {
+                    public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
                         if (response.body() == null)
                             return;
 

@@ -2,7 +2,7 @@ package com.youtube.sorcjc.proyectoprofesionales.io.responses;
 
 import com.google.gson.annotations.SerializedName;
 
-public class AgendarResponse {
+public class SimpleResponse {
 
     @SerializedName("status")
     private int status;

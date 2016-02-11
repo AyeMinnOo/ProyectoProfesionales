@@ -1,7 +1,7 @@
 package com.youtube.sorcjc.proyectoprofesionales.io;
 
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.AgendaResponse;
-import com.youtube.sorcjc.proyectoprofesionales.io.responses.AgendarResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.SimpleResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.CalificarResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.CategoriasResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.ChatResponse;
@@ -62,11 +62,11 @@ public interface HomeSolutionApiService {
 
     // http://dev.homesolution.com.ar/api/agendar?tk={token}&pid={pid}
     @GET("agendar")
-    Call<AgendarResponse> getAgendar(@Query("tk") String token, @Query("pid") String pid);
+    Call<SimpleResponse> getAgendar(@Query("tk") String token, @Query("pid") String pid);
 
     // http://dev.homesolution.com.ar/api/desagendar?tk={token}&pid={pid}
     @GET("desagendar")
-    Call<AgendarResponse> getDesagendar(@Query("tk") String token, @Query("pid") String pid);
+    Call<SimpleResponse> getDesagendar(@Query("tk") String token, @Query("pid") String pid);
 
     // http://dev.homesolution.com.ar/api/forgot?email={email}
     @GET("forgot")
@@ -75,4 +75,8 @@ public interface HomeSolutionApiService {
     // http://dev.homesolution.com.ar/api/calificar?tk={token}&pid=26&puntualidad=2&profesionalismo=3&cumplimiento=3&recomendaria=3&precio=2&catego=28&comentarios={comentarios}
     @GET("calificar")
     Call<CalificarResponse> getCalificar(@Query("tk") String token, @Query("pid") String pId, @Query("puntualidad") int puntualidad, @Query("profesionalismo") int profesionalismo, @Query("cumplimiento") int cumplimiento, @Query("recomendaria") int recomendaria, @Query("precio") int precio, @Query("catego") String catego, @Query("comentarios") String comentarios);
+
+    // http://dev.homesolution.com.ar/api/updateuser
+    @GET("updateuser")
+    Call<SimpleResponse> getModificarDatos(@Query("tk") String token, @Query("area") String area, @Query("gcm_id") String gcm_id, @Query("password") String password, @Query("username") String username, @Query("email") String email);
 }

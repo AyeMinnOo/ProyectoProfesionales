@@ -8,6 +8,7 @@
     tools:context="com.youtube.sorcjc.proyectoprofesionales.ui.SettingsActivity">
 
     <TextView
+        android:id="@+id/tvUpdateUserData"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_margin="10dp"
@@ -21,6 +22,7 @@
         android:background="@android:color/darker_gray" />
 
     <TextView
+        android:id="@+id/tvTermsAndConditions"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_margin="10dp"
@@ -34,6 +36,7 @@
         android:background="@android:color/darker_gray" />
 
     <TextView
+        android:id="@+id/tvLogout"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_margin="10dp"

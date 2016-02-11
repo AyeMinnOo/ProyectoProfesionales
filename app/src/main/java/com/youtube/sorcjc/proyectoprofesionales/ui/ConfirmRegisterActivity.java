@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +36,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_confirm_register);
+        setContentView(R.layout.activity_terms_conditions);
 
         // Getting an action bar instance
         ActionBar actionBar = getSupportActionBar();
@@ -58,7 +57,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
 
     private void setTermsAndConditions() {
         tvTermsAndConditions = (TextView) findViewById(R.id.tvTermsAndConditions);
-        tvTermsAndConditions.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id dolor pellentesque, sollicitudin risus eget, eleifend ante. Fusce lacinia mi quis arcu accumsan elementum. Phasellus tempus mi nec ligula mollis, sed luctus diam tincidunt. Nam iaculis vulputate nunc vel aliquet. Vivamus molestie convallis dapibus. Duis eu blandit nulla. Donec luctus tellus sit amet iaculis interdum. Sed porta tellus ac massa fermentum, at pellentesque diam aliquam. Phasellus dignissim, leo ac dignissim placerat, libero sapien scelerisque libero, venenatis dapibus ipsum tellus ut orci. Mauris tempus erat sit amet metus finibus fringilla. Vestibulum ante dolor, eleifend et mauris vitae, ornare semper tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Integer convallis neque id finibus pulvinar. Integer efficitur auctor ex, sit amet malesuada ante tincidunt malesuada. Aliquam consectetur, neque id blandit congue, leo magna fermentum leo, vel maximus lorem est eget purus. Aenean laoreet at tortor nec porttitor.");
+        tvTermsAndConditions.setText(R.string.terms_conditions);
     }
 
     @Override
