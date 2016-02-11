@@ -26,7 +26,7 @@ import retrofit.Retrofit;
 
 public class AgendaFragment extends Fragment implements Callback<AgendaResponse> {
 
-    // Views in fragment_agenda.xml
+    // RecyclerView to list the contacts
     private RecyclerView recyclerView;
 
     // Used to render the contacts
@@ -85,6 +85,9 @@ public class AgendaFragment extends Fragment implements Callback<AgendaResponse>
     public void onResponse(Response<AgendaResponse> response, Retrofit retrofit) {
         ArrayList<Worker> workers = response.body().getResponse();
         adapter.setAll(workers);
+
+        final Global global = (Global) activity.getApplicationContext();
+        global.setContacts(workers);
     }
 
     @Override

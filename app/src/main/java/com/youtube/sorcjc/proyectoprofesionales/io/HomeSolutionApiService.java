@@ -60,9 +60,13 @@ public interface HomeSolutionApiService {
     @GET("getprestador")
     Call<PrestadorResponse> getPrestador(@Query("tk") String token, @Query("pid") String prestadorId);
 
-    // http://dev.homesolution.com.ar/api/agendar?tk={token}&pid=26
+    // http://dev.homesolution.com.ar/api/agendar?tk={token}&pid={pid}
     @GET("agendar")
     Call<AgendarResponse> getAgendar(@Query("tk") String token, @Query("pid") String pid);
+
+    // http://dev.homesolution.com.ar/api/desagendar?tk={token}&pid={pid}
+    @GET("desagendar")
+    Call<AgendarResponse> getDesagendar(@Query("tk") String token, @Query("pid") String pid);
 
     // http://dev.homesolution.com.ar/api/forgot?email={email}
     @GET("forgot")

@@ -6,13 +6,15 @@ import android.support.multidex.MultiDex;
 
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
 
 import java.util.ArrayList;
 
 public class Global extends Application {
 
-    // User authenticated data
-
+    /*
+    * User authenticated data
+    */
     private UserAuthenticated userAuthenticated;
 
     public String getToken() {
@@ -31,7 +33,10 @@ public class Global extends Application {
         this.userAuthenticated = userAuthenticated;
     }
 
-    // Registration token (GCM Id)
+
+    /*
+    * Registration token (GCM Id)
+    */
     private static String gcmId;
 
     public void setGcmId(String registrationToken) {
@@ -43,8 +48,9 @@ public class Global extends Application {
     }
 
 
-    // Categories for the selected worker
-    // for a Talk or Profile activity
+    /*
+    * Categories of the selected worker
+    */
     private ArrayList<Category> categories;
 
     // This will be used to score
@@ -73,7 +79,27 @@ public class Global extends Application {
     }
 
 
-    // Enabling multidex
+    /*
+    * Contacts list
+    */
+    private static ArrayList<Worker> contacts;
+
+    public void setContacts(ArrayList<Worker> contacts) {
+        this.contacts = contacts;
+    }
+
+    public boolean isContact(String pId) {
+        for (Worker contact : contacts)
+            if (contact.getPid().equals(pId))
+                return true;
+
+        return false;
+    }
+
+
+    /*
+    * Enabling multi-dex
+    */
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);

@@ -70,12 +70,23 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     private Button btnAgendar;
     private Button btnChat;
 
+    // Add or remove contact?
+    private boolean isContact;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
         setUpActionBar();
+
+        // Button references
+        btnCalificar = (Button) findViewById(R.id.btnCalificar);
+        btnCalificar.setOnClickListener(this);
+        btnAgendar = (Button) findViewById(R.id.btnAgendar);
+        btnAgendar.setOnClickListener(this);
+        btnChat = (Button) findViewById(R.id.btnChat);
+        btnChat.setOnClickListener(this);
 
         if (pid == null) {
             Bundle b = getIntent().getExtras();
@@ -85,13 +96,6 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
             loadAuthenticatedUser();
             loadProfile();
         }
-
-        btnCalificar = (Button) findViewById(R.id.btnCalificar);
-        btnCalificar.setOnClickListener(this);
-        btnAgendar = (Button) findViewById(R.id.btnAgendar);
-        btnAgendar.setOnClickListener(this);
-        btnChat = (Button) findViewById(R.id.btnChat);
-        btnChat.setOnClickListener(this);
 
         ivBigPhoto = (ImageView) findViewById(R.id.ivBigPhoto);
         tvContenido1 = (TextView) findViewById(R.id.card_basic).findViewById(R.id.tvContenido);
@@ -149,6 +153,12 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     private void loadProfile() {
         Call<PrestadorResponse> call = HomeSolutionApiAdapter.getApiService().getPrestador(token, pid);
         call.enqueue(this);
+
+        // If this user is a contact, change the text of button
+        final Global global = (Global) getApplicationContext();
+        isContact = global.isContact(pid);
+        if (isContact)
+            btnAgendar.setText("Desagendar");
     }
 
     @Override
@@ -225,7 +235,17 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
                 break;
 
             case R.id.btnAgendar:
-                Call<AgendarResponse> call = HomeSolutionApiAdapter.getApiService().getAgendar(token, pid);
+                final Call<AgendarResponse> call;
+                final String successMessage;
+
+                if (isContact) {
+                    successMessage = "Contacto eliminado exitosamente";
+                    call = HomeSolutionApiAdapter.getApiService().getDesagendar(token, pid);
+                } else {
+                    successMessage = "Contacto agregado exitosamente";
+                    call = HomeSolutionApiAdapter.getApiService().getAgendar(token, pid);
+                }
+
                 call.enqueue(new Callback<AgendarResponse>() {
                     @Override
                     public void onResponse(Response<AgendarResponse> response, Retrofit retrofit) {
@@ -236,8 +256,16 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
                             Toast.makeText(ProfileActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
                         } else {
                             if (response.body().getResponse()) {
-                                Toast.makeText(ProfileActivity.this, "Contacto agregado exitosamente", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this, successMessage, Toast.LENGTH_SHORT).show();
                                 AgendaFragment.loadContacts();
+
+                                if (isContact) {
+                                    btnAgendar.setText("Agendar");
+                                    isContact = false;
+                                } else {
+                                    btnAgendar.setText("Desagendar");
+                                    isContact = true;
+                                }
                             }
                         }
                     }
