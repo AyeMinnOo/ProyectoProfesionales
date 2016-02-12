@@ -183,10 +183,8 @@ public class ScoreActivity extends AppCompatActivity implements
     }
 
     private void loadAuthenticatedUser() {
-        if (token == null) {
-            final Global global = (Global) getApplicationContext();
-            token = global.getToken();
-        }
+        final Global global = (Global) getApplicationContext();
+        token = global.getToken();
     }
 
     class confirmButtonHandler implements DialogInterface.OnClickListener, Callback<CalificarResponse> {

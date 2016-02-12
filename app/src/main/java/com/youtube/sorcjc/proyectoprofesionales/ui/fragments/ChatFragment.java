@@ -96,10 +96,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setAuthenticatedUser() {
-        if (token == null) {
-            final Global global = (Global) getActivity().getApplicationContext();
-            token = global.getToken();
-        }
+        final Global global = (Global) getActivity().getApplicationContext();
+        token = global.getToken();
     }
 
     private void loadActiveChats() {

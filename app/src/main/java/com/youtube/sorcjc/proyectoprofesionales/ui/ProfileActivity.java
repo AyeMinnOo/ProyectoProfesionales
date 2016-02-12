@@ -130,10 +130,8 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     }
 
     private void loadAuthenticatedUser() {
-        if (token == null) {
-            final Global global = (Global) getApplicationContext();
-            token = global.getToken();
-        }
+        final Global global = (Global) getApplicationContext();
+        token = global.getToken();
     }
 
     @Override

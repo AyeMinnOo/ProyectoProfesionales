@@ -62,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro);
+        setContentView(R.layout.activity_register);
 
 
         // Get request to load the list
@@ -88,11 +88,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         call.enqueue(new Callback<ZonasResponse>() {
             @Override
             public void onResponse(Response<ZonasResponse> response, Retrofit retrofit) {
-                if (response.body() != null)
+                if (response.body() != null && response.body().getStatus() == 1)
                 {
-                    ArrayList<String> zonas = response.body().getResponse();
                     // Setting the options in the spinner
-                    spinnerOptions(zonas);
+                    ArrayList<String> areas = response.body().getResponse();
+                    spinnerOptions(areas);
                 }
 
                 progressDialog.dismiss();
@@ -109,8 +109,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         progressDialog.show();
     }
 
-    private void spinnerOptions(ArrayList<String> zonas) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, zonas);
+    private void spinnerOptions(ArrayList<String> areas) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, areas);
         spinnerZona.setAdapter(adapter);
     }
 

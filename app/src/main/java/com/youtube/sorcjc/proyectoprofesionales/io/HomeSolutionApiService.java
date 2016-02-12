@@ -78,5 +78,5 @@ public interface HomeSolutionApiService {
 
     // http://dev.homesolution.com.ar/api/updateuser
     @GET("updateuser")
-    Call<SimpleResponse> getModificarDatos(@Query("tk") String token, @Query("area") String area, @Query("gcm_id") String gcm_id, @Query("password") String password, @Query("username") String username, @Query("email") String email);
+    Call<SimpleResponse> getModificarDatos(@Query("tk") String token, @Query("area") String area, @Query("gcm_id") String gcm_id, @Query("pass") String password, @Query("username") String username, @Query("email") String email);
 }

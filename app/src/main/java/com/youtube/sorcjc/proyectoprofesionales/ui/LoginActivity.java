@@ -307,8 +307,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void validarLogin() {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
-        Log.d("Test/Login", "email => " + email);
-        Log.d("Test/Login", "password => " + password);
+        Log.d("Test/Login", "Credentials => " + email + " / " + password);
 
         Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getLoginResponse(email, password);
         call.enqueue(this);

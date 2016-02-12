@@ -25,8 +25,28 @@ public class Global extends Application {
         return userAuthenticated.getUser().getUid();
     }
 
-    public String getPicture() {
-        return userAuthenticated.getUser().getPicture();
+    public String getArea() {
+        return userAuthenticated.getUser().getExtras().getArea();
+    }
+
+    public void setArea(String area) {
+        userAuthenticated.getUser().getExtras().setArea(area);
+    }
+
+    public String getEmail() {
+        return userAuthenticated.getUser().getEmail();
+    }
+
+    public void setEmail(String email) {
+        userAuthenticated.getUser().setEmail(email);
+    }
+
+    public String getUsername() {
+        return userAuthenticated.getUser().getUsername();
+    }
+
+    public void setUsername(String username) {
+        userAuthenticated.getUser().setUsername(username);
     }
 
     public void setUserAuthenticated(UserAuthenticated userAuthenticated) {

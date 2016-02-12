@@ -13,6 +13,9 @@ public class User {
     @SerializedName("username")
     private String username;
 
+    @SerializedName("extras")
+    private Extras extras;
+
     @SerializedName("prestador")
     private boolean prestador;
 
@@ -30,8 +33,20 @@ public class User {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Extras getExtras() {
+        return extras;
     }
 
     public boolean isPrestador() {
@@ -45,4 +60,8 @@ public class User {
     public String getPicture() {
         return picture;
     }
+
+
+
+
 }
