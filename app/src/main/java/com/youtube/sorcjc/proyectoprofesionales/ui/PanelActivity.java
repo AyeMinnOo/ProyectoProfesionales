@@ -24,6 +24,7 @@ import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.AgendaFragment;
 import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.BusquedaFragment;
 import com.youtube.sorcjc.proyectoprofesionales.ui.fragments.ChatFragment;
+import com.youtube.sorcjc.proyectoprofesionales.ui.settings.SettingsActivity;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.youtube.sorcjc.proyectoprofesionales.ui;
+package com.youtube.sorcjc.proyectoprofesionales.ui.settings;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;

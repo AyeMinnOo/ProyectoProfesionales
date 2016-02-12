@@ -1,4 +1,4 @@
-package com.youtube.sorcjc.proyectoprofesionales.ui;
+package com.youtube.sorcjc.proyectoprofesionales.ui.settings;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.youtube.sorcjc.proyectoprofesionales.R;
+import com.youtube.sorcjc.proyectoprofesionales.ui.settings.TermsConditionsActivity;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,11 +59,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvUpdateUserData:
+                Intent iUpdateUser = new Intent(this, UpdateUserActivity.class);
+                startActivity(iUpdateUser);
                 break;
 
             case R.id.tvTermsAndConditions:
-                Intent i = new Intent(this, TermsConditionsActivity.class);
-                startActivity(i);
+                Intent iTermsConditions = new Intent(this, TermsConditionsActivity.class);
+                startActivity(iTermsConditions);
                 break;
 
             case R.id.tvLogout:
