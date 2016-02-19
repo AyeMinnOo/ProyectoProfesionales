@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -44,26 +45,22 @@ public class PanelActivity extends AppCompatActivity {
     public static ArrayList<Category> categoryList;
     public static ProgressDialog progressDialog;
 
+    /*
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        switch(keyCode)
+        {
+            case KeyEvent.KEYCODE_BACK:
+                moveTaskToBack(true);
+                return true;
+        }
+        return false;
+    }*/
+
     @Override
     public void onBackPressed() {
-        confirmExit().show();
-    }
-
-    public AlertDialog confirmExit() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Confirmar")
-                .setMessage("¿Está seguro que desea cerrar sesión?")
-                .setPositiveButton("Sí",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        })
-                .setNegativeButton("No", null);
-
-        return builder.create();
+        finishAffinity();
     }
 
     @Override

@@ -11,8 +11,8 @@ public class LoginResponse {
     @SerializedName("error")
     private String error;
 
-    @SerializedName("response")
-    private UserAuthenticated response;
+    // This field will be parsed using a custom deserializer
+    private UserAuthenticated userAuthenticated;
 
     public int getStatus() {
         return status;
@@ -23,7 +23,10 @@ public class LoginResponse {
     }
 
     public UserAuthenticated getResponse() {
-        return response;
+        return userAuthenticated;
     }
 
+    public void setResponse(UserAuthenticated response) {
+        this.userAuthenticated = response;
+    }
 }

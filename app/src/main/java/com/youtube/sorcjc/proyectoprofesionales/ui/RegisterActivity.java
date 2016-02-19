@@ -39,31 +39,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
-        confirmExit().show();
-    }
-
-    public AlertDialog confirmExit() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Confirmar")
-                .setMessage("¿Está seguro que desea salir?")
-                .setPositiveButton("Sí",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finishAffinity();
-                            }
-                        })
-                .setNegativeButton("No", null);
-
-        return builder.create();
+        finishAffinity();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
 
         // Get request to load the list
         loadAreasFromWS();

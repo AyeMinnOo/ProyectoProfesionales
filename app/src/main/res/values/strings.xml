@@ -10,6 +10,7 @@
     <!-- Define the first screen when the app starts -->
     <string name="preference_file">Preferences</string>
     <string name="first_activity">FirstActivity</string>
+    <string name="user_data">UserData</string>
     <string name="first_activity_default">.ui.RegisterActivity</string>
 
     <!-- ScoreActivity -->

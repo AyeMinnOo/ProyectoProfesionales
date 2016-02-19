@@ -2,11 +2,9 @@ package com.youtube.sorcjc.proyectoprofesionales.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
@@ -59,6 +58,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button btnRegistrarme;
     private Button btnOlvidePassword;
 
+    // Global variables
+    private Global global;
+
     // Facebook SDK
     private CallbackManager callbackManager;
 
@@ -69,24 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-        confirmExit().show();
-    }
-
-    public AlertDialog confirmExit() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Confirmar")
-                .setMessage("¿Está seguro que desea salir?")
-                .setPositiveButton("Sí",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finishAffinity();
-                            }
-                        })
-                .setNegativeButton("No", null);
-
-        return builder.create();
+        finishAffinity();
     }
 
     @Override
@@ -109,6 +94,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         btnIngresarFacebook = (LoginButton) findViewById(R.id.btnIngresarFacebook);
         btnIngresarGoogle = (SignInButton) findViewById(R.id.btnIngresarGoogle);
+
+        // Global variables instance
+        global = (Global) getApplicationContext();
 
         // To manage the login using facebook
         facebookLogin();
@@ -253,7 +241,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnRealizarLogin:
-                validarLogin();
+                validateLogin();
                 break;
             case R.id.btnIngresarGoogle:
                 signInWithGoogle();
@@ -304,12 +292,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void validarLogin() {
+    private void validateLogin() {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
+        String gcm_id = global.getGcmId();
+
         Log.d("Test/Login", "Credentials => " + email + " / " + password);
 
-        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getLoginResponse(email, password);
+        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getLoginResponse(email, password, gcm_id);
         call.enqueue(this);
 
         progressDialog = new ProgressDialog(this);
@@ -337,27 +327,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onFailure(Throwable t) {
         progressDialog.dismiss();
-        // The parser fails when the credentials are incorrect
-        // It happens because the WS doesn't return a valid object
-        Toast.makeText(this, "Sus datos no son correctos", Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        Log.d("Test/Login", "Login WS onFailure => " + t.getLocalizedMessage());
     }
 
     private void saveUserData(UserAuthenticated userAuthenticated) {
-        // Save the session
-        final Global global = (Global) getApplicationContext();
+        // Save the session in a global variable
         global.setUserAuthenticated(userAuthenticated);
-        // Save the sharedPreference
-        setNewFirstActivity();
 
-        Log.i("Test/Login", "token => " + userAuthenticated.getToken());
+        updateSharedPreferences(userAuthenticated);
     }
 
-    private void setNewFirstActivity() {
-        // Write to Shared Preferences
+    private void updateSharedPreferences(UserAuthenticated userAuthenticated) {
+        // Using Shared Preferences to avoid exceptions when memory is clean
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
+
+        // Start app with this activity
         editor.putString(getString(R.string.first_activity), ".ui.LoginActivity");
-        Log.i("Test/Login", "SharedPreferences to => .ui.LoginActivity");
+
+        // Save the user data in json format
+        String userData = new Gson().toJson(userAuthenticated);
+        editor.putString(getString(R.string.user_data), userData);
+
         editor.apply();
     }
 

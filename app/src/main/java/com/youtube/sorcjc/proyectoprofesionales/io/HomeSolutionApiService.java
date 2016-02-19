@@ -24,13 +24,16 @@ public interface HomeSolutionApiService {
     Call<ZonasResponse> getZonasResponse();
 
     // http://dev.homesolution.com.ar/api/login?us=info@latrampera.com&ps=lolcats
-    // @GET("login?us={email}&ps={password}") I was using @Path, but @Query is better
     @GET("login")
-    Call<LoginResponse> getLoginResponse(@Query("us") String email, @Query("ps") String password);
+    Call<LoginResponse> getLoginResponse(@Query("us") String email, @Query("ps") String password, @Query("gcm_id") String gcm_id);
+
+    // http://dev.homesolution.com.ar/api/logout?tk=813abd218962ff966b54d26915388ecf
+    @GET("logout")
+    Call<SimpleResponse> getLogoutResponse(@Query("tk") String token);
 
     // http://dev.homesolution.com.ar/api/register?us=Hamilton&email=matias@celani.com.pe&ps=lolcats&accept=1
     @GET("register")
-    Call<RegistroResponse> getRegistroResponse(@Query("us") String nombre, @Query("email") String email, @Query("ps") String password, @Query("accept") int accept, @Query("area") String zona, @Query("gcm_id") String gcm_id);
+    Call<LoginResponse> getRegistroResponse(@Query("us") String nombre, @Query("email") String email, @Query("ps") String password, @Query("accept") int accept, @Query("area") String zona, @Query("gcm_id") String gcm_id);
 
     // http://dev.homesolution.com.ar/api/categos
     @GET("categos")

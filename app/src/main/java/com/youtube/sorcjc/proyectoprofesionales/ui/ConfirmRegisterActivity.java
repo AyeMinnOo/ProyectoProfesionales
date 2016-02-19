@@ -1,7 +1,9 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,8 +13,12 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
+import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.LoginResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.RegistroResponse;
 
 import retrofit.Call;
@@ -85,10 +91,11 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
     }
 
     private void callRegisterWS() {
-        Call<RegistroResponse> call = HomeSolutionApiAdapter.getApiService().getRegistroResponse(nombre, email, password, 1, zona, gcm_id);
-        call.enqueue(new Callback<RegistroResponse>() {
+        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getRegistroResponse(nombre, email, password, 1, zona, gcm_id);
+
+        call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Response<RegistroResponse> response, Retrofit retrofit) {
+            public void onResponse(Response<LoginResponse> response, Retrofit retrofit) {
                 if (response.body() != null) {
                     int status = response.body().getStatus();
                     if (status == 0) {
@@ -96,7 +103,8 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
                         onBackPressed();
                     } else {
                         Toast.makeText(getBaseContext(), "Registro satisfactorio !", Toast.LENGTH_SHORT).show();
-                        goToLoginActivity();
+                        UserAuthenticated userAuthenticated = response.body().getResponse();
+                        autoLogin(userAuthenticated);
                     }
                 }
 
@@ -115,9 +123,31 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         progressDialog.show();
     }
 
-    private void goToLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
+    private void autoLogin(UserAuthenticated userAuthenticated) {
+        // Save the session in a global variable
+        final Global global = (Global) getApplicationContext();
+        global.setUserAuthenticated(userAuthenticated);
+
+        updateSharedPreferences(userAuthenticated);
+
+        // Go to PanelActivity
+        Intent intent = new Intent(this, PanelActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    private void updateSharedPreferences(UserAuthenticated userAuthenticated) {
+        // Using SharedPreferences
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        // Start app with this activity
+        editor.putString(getString(R.string.first_activity), ".ui.LoginActivity");
+
+        // Save the user data in json format
+        String userData = new Gson().toJson(userAuthenticated);
+        editor.putString(getString(R.string.user_data), userData);
+
+        editor.apply();
     }
 }

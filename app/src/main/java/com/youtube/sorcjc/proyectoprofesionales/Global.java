@@ -3,6 +3,7 @@ package com.youtube.sorcjc.proyectoprofesionales;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
@@ -16,6 +17,11 @@ public class Global extends Application {
     * User authenticated data
     */
     private UserAuthenticated userAuthenticated;
+
+    public boolean isAuthenticated() {
+        Log.d("Test/Global", "userAuthenticated is null => " + (userAuthenticated == null));
+        return userAuthenticated != null;
+    }
 
     public String getToken() {
         return userAuthenticated.getToken();

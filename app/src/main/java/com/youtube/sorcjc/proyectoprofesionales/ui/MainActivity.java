@@ -15,15 +15,17 @@ import android.widget.Button;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.gson.Gson;
+import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
+import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 import com.youtube.sorcjc.proyectoprofesionales.io.gcm.QuickstartPreferences;
 import com.youtube.sorcjc.proyectoprofesionales.io.gcm.RegistrationIntentService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // Controls
-    private Button btnIniciarSesion;
-    private Button btnRegistrarme;
+    private Button btnTryAgain;
 
     // GCM Management
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -55,11 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e("exception", e.toString());
         }*/
 
-        btnIniciarSesion = (Button) findViewById(R.id.btnIniciarSesion);
-        btnRegistrarme = (Button) findViewById(R.id.btnRegistrarme);
-
-        btnIniciarSesion.setOnClickListener(this);
-        btnRegistrarme.setOnClickListener(this);
+        // When the internet is not available
+        btnTryAgain = (Button) findViewById(R.id.btnTryAgain);
+        btnTryAgain.setOnClickListener(this);
 
         setupGCM();
     }
@@ -128,22 +128,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
 
-        // Read from Shared Preferences
+        // SharedPreferences instance
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+
+        // Read the user authentication data from SharedPreferences
+        String userData = sharedPref.getString(getString(R.string.user_data), "");
+
+        // Global variables instance
+        final Global global = (Global) getApplicationContext();
+
+        if (! userData.equals("")) {
+            global.setUserAuthenticated(new Gson().fromJson(userData, UserAuthenticated.class));
+        }
+
+        // There is a session active?
+        if (global.isAuthenticated()) {
+            Intent iPanel = new Intent(this, PanelActivity.class);
+            startActivity(iPanel);
+            return;
+        }
+
+        // If not, read the default activity from SharedPreferences
         String defaultActivity = getResources().getString(R.string.first_activity_default);
         String firstActivity = sharedPref.getString(getString(R.string.first_activity), defaultActivity);
 
-        Log.d("Test/SharedPreferences", "firstActivity => " + firstActivity);
+        // Start activity
         Intent intent = new Intent();
         intent.setClassName(this, this.getPackageName() + firstActivity);
         startActivity(intent);
     }
 
+
     @Override
-    public void onClick(View v) {
-        // We are using shared preferences,
-        // and redirect to other activity
-
+    public void onClick(View view) {
+        // Test internet connection
     }
-
 }

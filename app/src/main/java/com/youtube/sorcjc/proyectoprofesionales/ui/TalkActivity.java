@@ -1,7 +1,9 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -174,7 +178,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btnLlamar:
-                Toast.makeText(this, "Llamar", Toast.LENGTH_SHORT).show();
+                makeCall();
                 break;
 
             case R.id.btnSend:
@@ -183,7 +187,14 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void makeCall() {
+        // startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+    }
+
     private void postMessage() {
+        // Hide the keyboard
+        hideKeyboard();
+
         final String content = etMessage.getText().toString().trim();
 
         if (content.isEmpty())
@@ -192,6 +203,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         final String replyTo = adapter.getParentMid();
 
         Call<EnviarMsjeResponse> call = HomeSolutionApiAdapter.getApiService().getEnviarMensaje(token, toUid, replyTo, content);
+
         call.enqueue(new Callback<EnviarMsjeResponse>() {
             @Override
             public void onResponse(Response<EnviarMsjeResponse> response, Retrofit retrofit) {
@@ -205,6 +217,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                     if (message!=null) {
                         adapter.addItem(message);
                         etMessage.setText("");
+                        scrollLastMessage();
                     } else {
                         Toast.makeText(TalkActivity.this, "No se ha enviado el mensaje", Toast.LENGTH_SHORT).show();
                     }
@@ -217,6 +230,11 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void loadDummyMessages() {
@@ -257,6 +275,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
                     // Set messages
                     adapter.addAll(talk.getChat());
+                    scrollLastMessage();
                     Log.d("Test/Talk", "Number of messages in chat => " + talk.getChat().size());
                 }
             }
@@ -277,6 +296,10 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         // Save the categories for the last selected worker
         final Global global = (Global) getApplicationContext();
         global.setCategories(categories);
+    }
+
+    private void scrollLastMessage() {
+        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
     }
 
 }
