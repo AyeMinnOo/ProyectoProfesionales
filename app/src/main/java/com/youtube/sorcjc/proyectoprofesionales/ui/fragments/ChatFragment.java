@@ -146,10 +146,16 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
             case R.id.ivBuscar:
                 String queryText = etFilter.getText().toString().trim();
-                if (queryText.isEmpty()) // nothing happens
+
+                // Empty value? So, nothing happens
+                if (queryText.isEmpty())
                     break;
+
+                // Defining a new tag value
                 PanelActivity.viewPager.setTag(queryText);
-                Log.d("Test/Chat", "Defining a new tag value => " + queryText);
+
+                // Clear query
+                etFilter.setText("");
                 // break; isn't necessary
 
             case R.id.ivIrBusqueda:

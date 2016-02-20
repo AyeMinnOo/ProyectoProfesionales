@@ -44,7 +44,7 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class TalkActivity extends AppCompatActivity implements View.OnClickListener {
+public class TalkActivity extends AppCompatActivity implements View.OnClickListener, View.OnLayoutChangeListener {
 
     private Button btnPerfil;
     private Button btnCalificar;
@@ -95,6 +95,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         // Setting the recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnLayoutChangeListener(this);
 
         etMessage = (EditText) findViewById(R.id.etMessage);
         btnSend = (ImageView) findViewById(R.id.btnSend);
@@ -244,7 +245,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(TalkActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
                 } else {
                     Message message = response.body().getResponse();
-                    if (message!=null) {
+                    if (message != null) {
                         adapter.addItem(message);
                         etMessage.setText("");
                         scrollLastMessage();
@@ -332,4 +333,15 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
     }
 
+    @Override
+    public void onLayoutChange(View view, int i, int i1, int i2, int bottom, int i4, int i5, int i6, int oldBottom) {
+        if (bottom < oldBottom) {
+            recyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    scrollLastMessage();
+                }
+            }, 100);
+        }
+    }
 }

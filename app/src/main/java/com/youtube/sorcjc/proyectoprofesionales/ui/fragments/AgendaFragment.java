@@ -57,7 +57,6 @@ public class AgendaFragment extends Fragment implements Callback<AgendaResponse>
 
         // Setting the recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         recyclerView.setAdapter(adapter);
 
         return rootView;

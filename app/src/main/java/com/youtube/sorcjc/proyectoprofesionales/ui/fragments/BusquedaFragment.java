@@ -1,7 +1,5 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui.fragments;
 
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,31 +8,42 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
+import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.AgendaResponse;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.LoginResponse;
 import com.youtube.sorcjc.proyectoprofesionales.ui.PanelActivity;
-import com.youtube.sorcjc.proyectoprofesionales.ui.TalkActivity;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.CategoryAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
+import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.WorkerAdapter;
 
 import java.util.ArrayList;
 
-public class BusquedaFragment extends Fragment implements View.OnClickListener {
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
+
+public class BusquedaFragment extends Fragment implements View.OnClickListener, Callback<AgendaResponse> {
 
     private RecyclerView recyclerView;
     private EditText etFilter;
     private ImageView ivBuscar;
 
-    // Used to render the categories
-    private static CategoryAdapter adapter;
+    // Used to render the categories or workers
+    private static CategoryAdapter categoryAdapter;
+    private static WorkerAdapter workerAdapter;
+
     private ArrayList<Category> categoryList;
 
     // To manage requested search
+    private static String token;
     private static String requestedQuery = "";
 
 
@@ -42,7 +51,8 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new CategoryAdapter(getActivity());
+        categoryAdapter = new CategoryAdapter(getActivity());
+        workerAdapter = new WorkerAdapter(getActivity());
     }
 
     @Override
@@ -53,21 +63,24 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(categoryAdapter);
 
         etFilter = (EditText) rootView.findViewById(R.id.etFilter);
 
         ivBuscar = (ImageView) rootView.findViewById(R.id.ivBuscar);
         ivBuscar.setOnClickListener(this);
 
+        // Token
+        final Global global = (Global) getActivity().getApplicationContext();
+        token = global.getToken();
+
         // A search was requested?
         if (container.getTag() != null) {
             String queryText = container.getTag().toString();
-            Log.d("Test/Busqueda", "Reading the tag value => " + queryText);
+            Log.d("Test/Busqueda", "Tag value in the tabs => " + queryText);
             container.setTag(null);
             requestedQuery = queryText;
         }
-
 
         return rootView;
     }
@@ -76,16 +89,16 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Log.d("Test/Busqueda", "Loading the full list of categories");
-        if (adapter.getItemCount() == 0) {
+        if (categoryAdapter.getItemCount() == 0) {
+            Log.d("Test/Busqueda", "Loading the full list of categories");
             categoryList = ((PanelActivity) getActivity()).categoryList;
-            adapter.addAll(categoryList);
+            categoryAdapter.addAll(categoryList);
         }
 
-        Log.d("Test/Busqueda", "requestedQuery => " + requestedQuery);
         if (! requestedQuery.isEmpty()) {
-            adapter.setFilter(requestedQuery);
-            Log.d("Test/Busqueda", "New filter for categories => " + requestedQuery);
+            Log.d("Test/Busqueda", "requestedQuery => " + requestedQuery);
+            searchWorkers(requestedQuery);
+            recyclerView.setAdapter(workerAdapter);
             requestedQuery = "";
         }
     }
@@ -95,13 +108,27 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener {
         // Filter categories
         String queryText = etFilter.getText().toString().trim();
 
-        Log.d("Test/Busqueda", "Applying filter to categories => " + queryText);
         if (queryText.isEmpty()) {
-            adapter.flushFilter();
+            recyclerView.setAdapter(categoryAdapter);
         } else {
-            adapter.setFilter(queryText);
+            searchWorkers(queryText);
+            recyclerView.setAdapter(workerAdapter);
         }
     }
 
+    private void searchWorkers(String query) {
+        Call<AgendaResponse> call = HomeSolutionApiAdapter.getApiService().getBuscar(query, token);
+        call.enqueue(this);
+    }
 
+    @Override
+    public void onResponse(Response<AgendaResponse> response, Retrofit retrofit) {
+        ArrayList<Worker> workers = response.body().getResponse();
+        workerAdapter.setAll(workers);
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+        Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+    }
 }
