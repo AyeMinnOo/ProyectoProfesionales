@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,10 +35,10 @@ public class UpdateUserActivity extends AppCompatActivity implements View.OnClic
     private EditText etEmail;
     private EditText etUsername;
     private EditText etPassword;
-    private ImageButton ibArea;
-    private ImageButton ibEmail;
-    private ImageButton ibUsername;
-    private ImageButton ibPassword;
+    private ImageView ibArea;
+    private ImageView ibEmail;
+    private ImageView ibUsername;
+    private ImageView ibPassword;
 
     // Prompts areas
     private Spinner spinnerAreas;
@@ -82,13 +82,13 @@ public class UpdateUserActivity extends AppCompatActivity implements View.OnClic
         etPassword.setEnabled(false);
 
         // Buttons
-        ibArea = (ImageButton) findViewById(R.id.ibArea);
+        ibArea = (ImageView) findViewById(R.id.ibArea);
         ibArea.setOnClickListener(this);
-        ibEmail = (ImageButton) findViewById(R.id.ibEmail);
+        ibEmail = (ImageView) findViewById(R.id.ibEmail);
         ibEmail.setOnClickListener(this);
-        ibUsername = (ImageButton) findViewById(R.id.ibUsername);
+        ibUsername = (ImageView) findViewById(R.id.ibUsername);
         ibUsername.setOnClickListener(this);
-        ibPassword = (ImageButton) findViewById(R.id.ibPassword);
+        ibPassword = (ImageView) findViewById(R.id.ibPassword);
         ibPassword.setOnClickListener(this);
 
         // Current data for the authenticated user

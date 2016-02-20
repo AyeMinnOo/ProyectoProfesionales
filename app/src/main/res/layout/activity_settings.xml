@@ -11,10 +11,11 @@
         android:id="@+id/tvUpdateUserData"
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:layout_margin="10dp"
+        android:layout_margin="12dp"
         android:gravity="center_vertical"
         android:text="Modificar datos"
-        android:textSize="18sp" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="19sp" />
 
     <View
         android:layout_width="match_parent"
@@ -25,10 +26,11 @@
         android:id="@+id/tvTermsAndConditions"
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:layout_margin="10dp"
+        android:layout_margin="12dp"
         android:gravity="center_vertical"
         android:text="Ver términos y condiciones"
-        android:textSize="18sp" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="19sp" />
 
     <View
         android:layout_width="match_parent"
@@ -39,10 +41,11 @@
         android:id="@+id/tvLogout"
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:layout_margin="10dp"
+        android:layout_margin="12dp"
         android:gravity="center_vertical"
         android:text="Cerrar sesión"
-        android:textSize="18sp" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="19sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

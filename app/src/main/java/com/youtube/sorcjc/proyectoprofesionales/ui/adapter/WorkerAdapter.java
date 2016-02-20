@@ -46,7 +46,7 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
         holder.setImageClick(worker.getPid());
         holder.setDescription(worker.getCatstr());
         holder.setChatClick(worker.getUid(), worker.getPid(),  worker.getCatstr(), worker.getName(), worker.getPrestador().getTel());
-        holder.setDate("");
+        holder.hideDate();
     }
 
     @Override
@@ -156,8 +156,8 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
             tvDescription.setText(description);
         }
 
-        public void setDate(String date) {
-            tvDate.setText(date);
+        public void hideDate() {
+            tvDate.setVisibility(View.GONE);
         }
 
     }

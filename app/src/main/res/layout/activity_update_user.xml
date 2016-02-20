@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
     android:padding="@dimen/activity_vertical_margin"
     tools:context="com.youtube.sorcjc.proyectoprofesionales.ui.settings.UpdateUserActivity">
@@ -10,142 +11,161 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="Zona"
-        android:textSize="17sp" />
+        android:textColor="#FFF"
+        android:textSize="18sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/etArea"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="textNoSuggestions" />
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@drawable/edit_text_style"
+            android:inputType="textNoSuggestions"
+            android:minHeight="43dp"
+            android:paddingEnd="43dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="43dp"
+            android:paddingStart="12dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ibArea"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="8dp"
-            android:src="@android:drawable/ic_menu_edit" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/colorPrimaryDark" />
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_alignBottom="@+id/etArea"
+            android:layout_alignEnd="@+id/etArea"
+            android:layout_alignRight="@+id/etArea"
+            android:layout_alignTop="@+id/etArea"
+            android:padding="5dp"
+            android:src="@drawable/editar" />
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="E-mail"
-        android:textSize="17sp" />
+        android:text="Mail"
+        android:textColor="#FFF"
+        android:textSize="18sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/etEmail"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="textNoSuggestions" />
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@drawable/edit_text_style"
+            android:inputType="textNoSuggestions"
+            android:minHeight="43dp"
+            android:paddingEnd="43dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="43dp"
+            android:paddingStart="12dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ibEmail"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="8dp"
-            android:src="@android:drawable/ic_menu_edit" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/colorPrimaryDark" />
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_alignBottom="@+id/etEmail"
+            android:layout_alignEnd="@+id/etEmail"
+            android:layout_alignRight="@+id/etEmail"
+            android:layout_alignTop="@+id/etEmail"
+            android:padding="5dp"
+            android:src="@drawable/editar" />
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="Nombre de usuario"
-        android:textSize="17sp" />
+        android:textColor="#FFF"
+        android:textSize="18sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/etUsername"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="textNoSuggestions" />
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@drawable/edit_text_style"
+            android:inputType="textNoSuggestions"
+            android:minHeight="43dp"
+            android:paddingEnd="43dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="43dp"
+            android:paddingStart="12dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ibUsername"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="8dp"
-            android:src="@android:drawable/ic_menu_edit" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/colorPrimaryDark" />
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_alignBottom="@+id/etUsername"
+            android:layout_alignEnd="@+id/etUsername"
+            android:layout_alignRight="@+id/etUsername"
+            android:layout_alignTop="@+id/etUsername"
+            android:padding="5dp"
+            android:src="@drawable/editar" />
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="Contraseña"
-        android:textSize="17sp" />
+        android:textColor="#FFF"
+        android:textSize="18sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/etPassword"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="123456"
-            android:inputType="textPassword" />
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@drawable/edit_text_style"
+            android:inputType="textPassword"
+            android:minHeight="43dp"
+            android:paddingEnd="43dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="43dp"
+            android:paddingStart="12dp"
+            android:text="123456" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/ibPassword"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="8dp"
-            android:src="@android:drawable/ic_menu_edit" />
-    </LinearLayout>
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_alignBottom="@+id/etPassword"
+            android:layout_alignEnd="@+id/etPassword"
+            android:layout_alignRight="@+id/etPassword"
+            android:layout_alignTop="@+id/etPassword"
+            android:padding="5dp"
+            android:src="@drawable/editar" />
+    </RelativeLayout>
 </LinearLayout>

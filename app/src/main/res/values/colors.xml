@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#00474E</color>
     <color name="colorAccent">#00AE9C</color>
 
+    <color name="primaryTransparent">#8028717F</color>
+    <color name="primaryDarkTransparent">#8000474E</color>
+
     <color name="cement">#818075</color>
     <color name="cementDark">#5D6255</color>
 
