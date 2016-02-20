@@ -86,4 +86,8 @@ public interface HomeSolutionApiService {
     // http://dev.homesolution.com.ar/api/trackcall?uid={uid}&pid={pid}&tk={token}
     @GET("trackcall")
     Call<SimpleResponse> getRegistrarLlamada(@Query("uid") String uid, @Query("pid") String pid, @Query("tk") String token);
+
+    // http://dev.homesolution.com.ar/api/buscar?term=gonzalez&tk={token}
+    @GET("buscar")
+    Call<AgendaResponse> getBuscar(@Query("term") String term, @Query("tk") String token);
 }

@@ -76,7 +76,6 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
         private TextView tvDescription;
         private TextView tvDate;
 
-        private ImageView ivOpenChat;
         private LinearLayout contact_info;
 
         public WorkerViewHolder(View itemView) {
@@ -87,7 +86,6 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
             tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
 
-            ivOpenChat = (ImageView) itemView.findViewById(R.id.ivOpenChat);
             contact_info = (LinearLayout) itemView.findViewById(R.id.contact_info);
         }
 
@@ -119,10 +117,9 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
         }
 
         public void setChatClick(final String uid, final String pid, final String catstr, final String name, final String tel) {
-            // Set event click for the message icon and contact info
+            // Set event click for open the chat
             ChatClickListener chatClickListener = new ChatClickListener(uid, pid, catstr, name, tel);
 
-            ivOpenChat.setOnClickListener(chatClickListener);
             contact_info.setOnClickListener(chatClickListener);
         }
 

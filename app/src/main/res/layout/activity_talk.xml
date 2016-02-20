@@ -33,25 +33,44 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:orientation="horizontal">
+            android:background="@color/cement"
+            android:orientation="horizontal"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp">
 
-            <EditText
-                android:id="@+id/etMessage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="6dp"
-                android:layout_weight="0.72"
-                android:ems="10"
-                android:maxHeight="65dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <ImageButton
-                android:id="@+id/btnSend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/send" />
+                <EditText
+                    android:id="@+id/etMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="Escribir mensaje"
+                    android:minHeight="43dp"
+                    android:background="@drawable/edit_text_style"
+                    android:layout_centerVertical="true"
+                    android:paddingStart="12dp"
+                    android:paddingLeft="12dp"
+                    android:paddingEnd="42dp"
+                    android:paddingRight="42dp"
+                    android:singleLine="true" />
+
+                <ImageView
+                    android:id="@+id/btnSend"
+                    android:layout_width="40dp"
+                    android:padding="5dp"
+                    android:layout_height="40dp"
+                    android:layout_alignBottom="@+id/etMessage"
+                    android:layout_alignEnd="@+id/etMessage"
+                    android:layout_alignRight="@+id/etMessage"
+                    android:layout_alignTop="@+id/etMessage"
+                    android:src="@drawable/send" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

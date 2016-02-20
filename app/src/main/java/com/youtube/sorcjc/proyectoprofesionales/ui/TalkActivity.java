@@ -58,7 +58,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog progressDialog;
 
     // To send a message
-    private ImageButton btnSend;
+    private ImageView btnSend;
     private EditText etMessage;
 
     // User authenticated data
@@ -97,7 +97,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setAdapter(adapter);
 
         etMessage = (EditText) findViewById(R.id.etMessage);
-        btnSend = (ImageButton) findViewById(R.id.btnSend);
+        btnSend = (ImageView) findViewById(R.id.btnSend);
         btnSend.setOnClickListener(this);
 
         // Bundle parameters from previous activity

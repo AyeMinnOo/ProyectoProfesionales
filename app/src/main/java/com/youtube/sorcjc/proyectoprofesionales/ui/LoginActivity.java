@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -55,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button btnRealizarLogin;
     private LoginButton btnIngresarFacebook;
     private SignInButton btnIngresarGoogle;
-    private Button btnRegistrarme;
+    private TextView btnRegistrarme;
     private Button btnOlvidePassword;
 
     // Global variables
@@ -88,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // Getting the view controls
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPassword = (EditText) findViewById(R.id.etPassword);
-        btnRegistrarme = (Button) findViewById(R.id.btnRegistrarme);
+        btnRegistrarme = (TextView) findViewById(R.id.btnRegistrarme);
         btnRealizarLogin = (Button) findViewById(R.id.btnRealizarLogin);
         btnOlvidePassword = (Button) findViewById(R.id.btnOlvidePassword);
 

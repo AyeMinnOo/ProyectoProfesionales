@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.youtube.sorcjc.proyectoprofesionales.Global;
@@ -30,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private ProgressDialog progressDialog;
 
     private Button btnRealizarRegistro;
-    private Button btnIrLogin;
+    private TextView btnIrLogin;
 
     private EditText etNombre;
     private Spinner spinnerZona;
@@ -58,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         // Buttons
         btnRealizarRegistro = (Button) findViewById(R.id.btnRealizarRegistro);
-        btnIrLogin = (Button) findViewById(R.id.btnIrLogin);
+        btnIrLogin = (TextView) findViewById(R.id.btnIrLogin);
 
         btnRealizarRegistro.setOnClickListener(this);
         btnIrLogin.setOnClickListener(this);

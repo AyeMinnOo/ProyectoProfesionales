@@ -20,50 +20,42 @@
             android:text="Formulario de ingreso"
             android:textSize="21sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Ingrese sus datos:"
-            android:textSize="18sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="E-mail:"
+                android:text="Mail:"
                 android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/etEmail"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:inputType="textEmailAddress" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="8dp">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Contraseña:"
                 android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/etPassword"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:inputType="textPassword" />
 
         </LinearLayout>
@@ -72,7 +64,9 @@
             android:id="@+id/btnRealizarLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Iniciar sesión" />
+            android:text="Iniciar sesión"
+            android:background="@color/orange"
+            android:textColor="#FFF"/>
 
         <Button
             android:id="@+id/btnOlvidePassword"
@@ -84,7 +78,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ingresar usando redes sociales:"
+            android:text="Ingresar con"
+            android:gravity="center"
             android:textSize="16sp" />
 
         <com.facebook.login.widget.LoginButton
@@ -99,16 +94,12 @@
             android:layout_marginBottom="20dp" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="¿Aún no se ha registrado?"
-            android:textSize="16sp" />
-
-        <Button
             android:id="@+id/btnRegistrarme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Registrarme" />
+            android:gravity="center"
+            android:text="Soy usuario nuevo"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
