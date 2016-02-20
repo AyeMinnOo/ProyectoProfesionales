@@ -1,9 +1,12 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +34,7 @@ import com.youtube.sorcjc.proyectoprofesionales.io.responses.ChatResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.EnviarMsjeResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Talk;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.SimpleResponse;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
 
 import java.util.ArrayList;
@@ -67,6 +71,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private String pid;
     private String catstr;
     private String name;
+    private String phoneNumber;
 
     // Custom action bar
     private ImageView ivPhoto;
@@ -102,6 +107,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             pid = b.getString("pid");
             catstr = b.getString("catstr");
             name = b.getString("name");
+            phoneNumber = b.getString("tel");
             Log.d("Test/Talk", "Loading chat with uid => " + toUid);
         }
 
@@ -188,7 +194,31 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void makeCall() {
-        // startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(TalkActivity.this, "Usted no ha asignado los permisos para llamar", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        startActivity(intent);
+
+        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService().getRegistrarLlamada(toUid, pid, token);
+
+        call.enqueue(new Callback<SimpleResponse>() {
+            @Override
+            public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
+                if (response != null && response.body().getStatus() == 1) {
+                    Log.d("Test/Call", "phoneNumber => " + phoneNumber);
+                    Log.d("Test/Call", "Llamada registrada al usuario => uid "+toUid+" | pid "+pid);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(TalkActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void postMessage() {

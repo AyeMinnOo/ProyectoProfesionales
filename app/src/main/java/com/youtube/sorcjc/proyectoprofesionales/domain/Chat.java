@@ -41,6 +41,9 @@ public class Chat {
     @SerializedName("picture")
     private String picture;
 
+    @SerializedName("prestador")
+    private SimpleWorkerData prestador;
+
     public String getUid() {
         return uid;
     }
@@ -73,4 +76,7 @@ public class Chat {
         return picture;
     }
 
+    public SimpleWorkerData getPrestador() {
+        return prestador;
+    }
 }

@@ -46,7 +46,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         holder.setDescription(chat.getCatstr());
         holder.setDate(chat.getActivity());
         holder.setImageClick(chat.getPid());
-        holder.setChatClick(chat.getUid(), chat.getPid(),  chat.getCatstr(), chat.getName(), "phone?");
+        holder.setChatClick(chat.getUid(), chat.getPid(),  chat.getCatstr(), chat.getName(), chat.getPrestador().getTel());
     }
 
     @Override

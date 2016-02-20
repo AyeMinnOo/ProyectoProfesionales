@@ -3,7 +3,7 @@
     package="com.youtube.sorcjc.proyectoprofesionales"
     android:installLocation="internalOnly">
 
-    <uses-permission android:name="android.permision.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Only this application can receive the messages and registration result -->

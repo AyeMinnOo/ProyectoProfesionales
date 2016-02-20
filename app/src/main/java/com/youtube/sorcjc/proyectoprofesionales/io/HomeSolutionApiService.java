@@ -82,4 +82,8 @@ public interface HomeSolutionApiService {
     // http://dev.homesolution.com.ar/api/updateuser
     @GET("updateuser")
     Call<SimpleResponse> getModificarDatos(@Query("tk") String token, @Query("area") String area, @Query("gcm_id") String gcm_id, @Query("pass") String password, @Query("username") String username, @Query("email") String email);
+
+    // http://dev.homesolution.com.ar/api/trackcall?uid={uid}&pid={pid}&tk={token}
+    @GET("trackcall")
+    Call<SimpleResponse> getRegistrarLlamada(@Query("uid") String uid, @Query("pid") String pid, @Query("tk") String token);
 }

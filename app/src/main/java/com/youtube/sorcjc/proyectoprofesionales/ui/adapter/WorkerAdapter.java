@@ -45,7 +45,7 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
         holder.setImage(worker.getUrlPhoto());
         holder.setImageClick(worker.getPid());
         holder.setDescription(worker.getCatstr());
-        holder.setChatClick(worker.getUid(), worker.getPid(),  worker.getCatstr(), worker.getName());
+        holder.setChatClick(worker.getUid(), worker.getPid(),  worker.getCatstr(), worker.getName(), worker.getPrestador().getTel());
         holder.setDate("");
     }
 
@@ -118,9 +118,9 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
             });
         }
 
-        public void setChatClick(final String uid, final String pid, final String catstr, final String name) {
+        public void setChatClick(final String uid, final String pid, final String catstr, final String name, final String tel) {
             // Set event click for the message icon and contact info
-            ChatClickListener chatClickListener = new ChatClickListener(uid, pid, catstr, name);
+            ChatClickListener chatClickListener = new ChatClickListener(uid, pid, catstr, name, tel);
 
             ivOpenChat.setOnClickListener(chatClickListener);
             contact_info.setOnClickListener(chatClickListener);
@@ -131,12 +131,14 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
             private final String pid;
             private final String catstr;
             private final String name;
+            private final String tel;
 
-            public ChatClickListener(String uid, String pid, String catstr, String name) {
+            public ChatClickListener(String uid, String pid, String catstr, String name, String tel) {
                 this.uid = uid;
                 this.pid = pid;
                 this.catstr = catstr;
                 this.name = name;
+                this.tel = tel;
             }
 
             @Override
@@ -147,6 +149,7 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
                 b.putString("pid", pid);
                 b.putString("catstr", catstr);
                 b.putString("name", name);
+                b.putString("tel", tel);
                 i.putExtras(b);
                 view.getContext().startActivity(i);
             }
