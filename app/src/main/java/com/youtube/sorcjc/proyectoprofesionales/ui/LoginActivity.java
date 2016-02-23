@@ -19,6 +19,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -26,7 +27,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.youtube.sorcjc.proyectoprofesionales.Global;
@@ -38,6 +38,8 @@ import com.youtube.sorcjc.proyectoprofesionales.io.responses.RecuperarResponse;
 
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import retrofit.Call;
@@ -47,20 +49,23 @@ import retrofit.Retrofit;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, Callback<LoginResponse>, GoogleApiClient.OnConnectionFailedListener {
 
+    // Global variables
+    private Global global;
+
+    // Fields
     private EditText etEmail;
     private EditText etPassword;
 
     private ProgressDialog progressDialog;
 
-    // View controls
+    // Actions
     private Button btnRealizarLogin;
-    private LoginButton btnIngresarFacebook;
-    private SignInButton btnIngresarGoogle;
     private TextView btnRegistrarme;
     private Button btnOlvidePassword;
 
-    // Global variables
-    private Global global;
+    // Social buttons
+    private Button btnIngresarFacebook;
+    private Button btnIngresarGoogle;
 
     // Facebook SDK
     private CallbackManager callbackManager;
@@ -86,28 +91,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // The facebook sdk have to be loaded before
         setContentView(R.layout.activity_login);
 
-        // Getting the view controls
+        // View controls
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPassword = (EditText) findViewById(R.id.etPassword);
+
+        // Buttons
         btnRegistrarme = (TextView) findViewById(R.id.btnRegistrarme);
         btnRealizarLogin = (Button) findViewById(R.id.btnRealizarLogin);
         btnOlvidePassword = (Button) findViewById(R.id.btnOlvidePassword);
 
-        btnIngresarFacebook = (LoginButton) findViewById(R.id.btnIngresarFacebook);
-        btnIngresarGoogle = (SignInButton) findViewById(R.id.btnIngresarGoogle);
+        // Button actions
+        btnRegistrarme.setOnClickListener(this);
+        btnRealizarLogin.setOnClickListener(this);
+        btnOlvidePassword.setOnClickListener(this);
 
-        // Global variables instance
-        global = (Global) getApplicationContext();
+        // Social buttons
+        btnIngresarFacebook = (Button) findViewById(R.id.btnIngresarFacebook);
+        btnIngresarGoogle = (Button) findViewById(R.id.btnIngresarGoogle);
 
         // To manage the login using facebook
-        facebookLogin();
+        btnIngresarFacebook.setOnClickListener(this);
+        setUpFacebookLogin();
+
         // To manage the login using google+
         btnIngresarGoogle.setOnClickListener(this);
         setUpGoogleSignIn();
 
-        btnRegistrarme.setOnClickListener(this);
-        btnRealizarLogin.setOnClickListener(this);
-        btnOlvidePassword.setOnClickListener(this);
+        // Global variables instance
+        global = (Global) getApplicationContext();
     }
 
     @Override
@@ -159,15 +170,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Toast.makeText(this, "Error de conexión.", Toast.LENGTH_SHORT).show();
     }
 
-    private void facebookLogin() {
+    private void setUpFacebookLogin() {
         final Context context = this;
 
-        btnIngresarFacebook.setReadPermissions(Arrays.asList("email"));
-        btnIngresarFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            private ProgressDialog progressDialog;
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onSuccess(final LoginResult loginResult) {
                 // Credentials are correct, but we have to verify if the e-mail is registered
 
                 progressDialog = new ProgressDialog(LoginActivity.this);
@@ -181,12 +190,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         Log.i("Test/Facebook", response.toString());
-                        progressDialog.dismiss(); // dismiss() is better than hide()
+
                         // Get facebook data from login
                         Bundle facebookData = getFacebookData(object);
-                        Log.i("Test/Facebook", "E-mail:" + facebookData.getString("email"));
-                        Log.i("Test/Facebook", "Nombres:" + facebookData.getString("first_name"));
-                        Log.i("Test/Facebook", "Apellidos:" + facebookData.getString("last_name"));
+                        final String facebookId = facebookData.getString("id_facebook");
+                        final String email = facebookData.getString("email");
+                        final String gcm_id = global.getGcmId();
+                        final String sign = md5(email + facebookId + "ba314mdq");
+
+                        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getLoginFbResponse(email, facebookId, sign, gcm_id);
+                        call.enqueue(LoginActivity.this);
+
+                        LoginManager.getInstance().logOut();
                     }
                 });
 
@@ -201,9 +216,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 try {
                     Bundle bundle = new Bundle();
 
-                    String id = object.getString("id");
-                    bundle.putString("idFacebook", id);
-
+                    bundle.putString("id_facebook", object.getString("id"));
                     if (object.has("first_name"))
                         bundle.putString("first_name", object.getString("first_name"));
                     if (object.has("last_name"))
@@ -244,12 +257,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.btnRealizarLogin:
                 validateLogin();
                 break;
+
+            case R.id.btnIngresarFacebook:
+                // We have to request read permissions (email requires)
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"));
+                break;
+
             case R.id.btnIngresarGoogle:
                 signInWithGoogle();
                 break;
+
             case R.id.btnRegistrarme:
                 goToActivity(RegisterActivity.class);
                 break;
+
             case R.id.btnOlvidePassword:
                 recoverPassword();
                 break;
@@ -364,5 +385,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void clearCredentials() {
         etPassword.setText("");
+    }
+
+     private String md5(final String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

@@ -6,21 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,10 +28,10 @@ import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
+import com.youtube.sorcjc.proyectoprofesionales.domain.Talk;
+import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.ChatResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.EnviarMsjeResponse;
-import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Talk;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.SimpleResponse;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
 
@@ -69,8 +67,8 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     // User destination data
     private String toUid;
     private String pid;
-    private String catstr;
     private String name;
+    private String catstr;
     private String phoneNumber;
 
     // Custom action bar
@@ -106,8 +104,8 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             Bundle b = getIntent().getExtras();
             toUid = b.getString("uid");
             pid = b.getString("pid");
-            catstr = b.getString("catstr");
             name = b.getString("name");
+            catstr = b.getString("catstr");
             phoneNumber = b.getString("tel");
             Log.d("Test/Talk", "Loading chat with uid => " + toUid);
         }
@@ -195,6 +193,11 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void makeCall() {
+        if (phoneNumber.isEmpty()) {
+            Toast.makeText(TalkActivity.this, "No es posible realizar esta acción", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(TalkActivity.this, "Usted no ha asignado los permisos para llamar", Toast.LENGTH_SHORT).show();
             return;
@@ -302,7 +305,10 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                             .load(talk.getPicture())
                             .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
                             .into(ivPhoto);
-                    tvDescription.setText(catstr);
+                    if (catstr.isEmpty())
+                        tvDescription.setVisibility(View.GONE);
+                    else
+                        tvDescription.setText(catstr);
 
                     // Set messages
                     adapter.addAll(talk.getChat());
@@ -315,6 +321,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             public void onFailure(Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(TalkActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Log.d("Test/Talk", "onFailure => " + t.getLocalizedMessage());
             }
         });
 

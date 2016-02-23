@@ -23,6 +23,9 @@ public class Chat {
     @SerializedName("email")
     private String email;
 
+    @SerializedName("username")
+    private String username;
+
     @SerializedName("activity")
     private String activity;
 
@@ -44,6 +47,9 @@ public class Chat {
     @SerializedName("prestador")
     private SimpleWorkerData prestador;
 
+    @SerializedName("esprestador")
+    private boolean esPrestador;
+
     public String getUid() {
         return uid;
     }
@@ -61,6 +67,9 @@ public class Chat {
     }
 
     public String getName() {
+        if (name==null || name.isEmpty())
+            return username;
+
         return name;
     }
 
@@ -78,5 +87,9 @@ public class Chat {
 
     public SimpleWorkerData getPrestador() {
         return prestador;
+    }
+
+    public boolean isEsPrestador() {
+        return esPrestador;
     }
 }

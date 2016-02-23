@@ -16,11 +16,11 @@ public class User {
     @SerializedName("extras")
     private Extras extras;
 
-    @SerializedName("prestador")
-    private boolean prestador;
+    @SerializedName("esprestador")
+    private boolean esPrestador;
 
     @SerializedName("invitacionpendiente")
-    private boolean invitacionpendiente;
+    private boolean invitacionPendiente;
 
     @SerializedName("picture")
     private String picture;
@@ -50,11 +50,11 @@ public class User {
     }
 
     public boolean isPrestador() {
-        return prestador;
+        return esPrestador;
     }
 
-    public boolean isInvitacionpendiente() {
-        return invitacionpendiente;
+    public boolean hasInvitacionPendiente() {
+        return invitacionPendiente;
     }
 
     public String getPicture() {

@@ -6,10 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +31,7 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class WorkersListActivity extends AppCompatActivity {
+public class CategoryActivity extends AppCompatActivity {
 
     // Used to render the workers
     private RecyclerView recyclerView;
@@ -50,7 +52,7 @@ public class WorkersListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_workers_list);
+        setContentView(R.layout.activity_category);
 
         setUpActionBar();
 
@@ -73,17 +75,21 @@ public class WorkersListActivity extends AppCompatActivity {
     private void setUpActionBar() {
         // Custom action bar
         ActionBar mActionBar = getSupportActionBar();
+
         mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowCustomEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
+
         LayoutInflater mInflater = LayoutInflater.from(this);
 
-        View mCustomView = mInflater.inflate(R.layout.actionbar_talk, null);
+        View mCustomView = mInflater.inflate(R.layout.actionbar_category, null);
         tvName = (TextView) mCustomView.findViewById(R.id.tvName);
         ivPhoto = (ImageView) mCustomView.findViewById(R.id.ivPhoto);
         tvDescription = (TextView) mCustomView.findViewById(R.id.tvDescription);
 
-        mActionBar.setCustomView(mCustomView);
-        mActionBar.setDisplayShowCustomEnabled(true);
+        mActionBar.setCustomView(mCustomView, new Toolbar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        // Back button in action bar
         mActionBar.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -121,7 +127,7 @@ public class WorkersListActivity extends AppCompatActivity {
                 }
 
                 if (response.body().getStatus() == 0) {
-                    Toast.makeText(WorkersListActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CategoryActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
                 } else {
                     ArrayList<Worker> workers = response.body().getResponse();
 
@@ -141,7 +147,8 @@ public class WorkersListActivity extends AppCompatActivity {
             @Override
             public void onFailure(Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(WorkersListActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CategoryActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Log.d("Test/Category", t.getLocalizedMessage());
             }
         });
 

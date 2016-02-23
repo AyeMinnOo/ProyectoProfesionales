@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <include layout="@layout/search_category" />
+    <include layout="@layout/search_workers" />
 
     <View
         android:layout_width="match_parent"

@@ -1,15 +1,20 @@
 package com.youtube.sorcjc.proyectoprofesionales.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.youtube.sorcjc.proyectoprofesionales.Global;
@@ -66,6 +71,17 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener, 
         recyclerView.setAdapter(categoryAdapter);
 
         etFilter = (EditText) rootView.findViewById(R.id.etFilter);
+        etFilter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // Search when the user performs "done" in the keyboard
+                    onClick(v);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         ivBuscar = (ImageView) rootView.findViewById(R.id.ivBuscar);
         ivBuscar.setOnClickListener(this);
@@ -100,6 +116,8 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener, 
             searchWorkers(requestedQuery);
             recyclerView.setAdapter(workerAdapter);
             requestedQuery = "";
+            // It was open since the search in chat fragment
+            hideKeyboard();
         }
     }
 
@@ -114,6 +132,13 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener, 
             searchWorkers(queryText);
             recyclerView.setAdapter(workerAdapter);
         }
+
+        hideKeyboard();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void searchWorkers(String query) {

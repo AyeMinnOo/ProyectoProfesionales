@@ -3,7 +3,8 @@
     android:id="@+id/layoutGeneral"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:id="@+id/layoutTop"
@@ -22,7 +23,7 @@
             android:text="Ningún chat abierto en este momento."
             android:textSize="17sp" />
 
-        <include layout="@layout/search_category" />
+        <include layout="@layout/search_workers" />
 
     </LinearLayout>
 

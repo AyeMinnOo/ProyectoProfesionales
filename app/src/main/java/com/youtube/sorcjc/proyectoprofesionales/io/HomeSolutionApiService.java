@@ -27,6 +27,10 @@ public interface HomeSolutionApiService {
     @GET("login")
     Call<LoginResponse> getLoginResponse(@Query("us") String email, @Query("ps") String password, @Query("gcm_id") String gcm_id);
 
+    // http://dev.homesolution.com.ar/api/loginfb?sign=02da6005d76aa8f69b9e1ba899555ae0&us=mcelani@gmail.com&fbid=1204164922
+    @GET("loginfb")
+    Call<LoginResponse> getLoginFbResponse(@Query("us") String email, @Query("fbid") String facebookId, @Query("sign") String sign, @Query("gcm_id") String gcm_id);
+
     // http://dev.homesolution.com.ar/api/logout?tk=813abd218962ff966b54d26915388ecf
     @GET("logout")
     Call<SimpleResponse> getLogoutResponse(@Query("tk") String token);
@@ -47,7 +51,7 @@ public interface HomeSolutionApiService {
     @GET("getagenda")
     Call<AgendaResponse> getAgendaResponse(@Query("tk") String token);
 
-    // http://dev.homesolution.com.ar/api/getchat/?tk=813abd218962ff966b54d26915388ecf&touid=3
+    // http://dev.homesolution.com.ar/api/getchat?tk=813abd218962ff966b54d26915388ecf&touid=3
     @GET("getchat")
     Call<ChatResponse> getChatResponse(@Query("tk") String token, @Query("touid") String touid);
 

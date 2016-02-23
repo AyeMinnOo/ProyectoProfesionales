@@ -46,7 +46,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         holder.setDescription(chat.getCatstr());
         holder.setDate(chat.getActivity());
         holder.setImageClick(chat.getPid());
-        holder.setChatClick(chat.getUid(), chat.getPid(),  chat.getCatstr(), chat.getName(), chat.getPrestador().getTel());
+        if (chat.isEsPrestador())
+            holder.setChatClick(chat.getUid(), chat.getPid(),  chat.getName(), chat.getCatstr(), chat.getPrestador().getTel());
+        else holder.setChatClick(chat.getUid(), "", chat.getName(), "", "");
     }
 
     @Override
@@ -108,16 +110,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         }
 
         public void setDescription(String description) {
-            tvDescription.setText(description);
+            if (description==null || description.isEmpty())
+                tvDescription.setVisibility(View.GONE);
+            else
+                tvDescription.setText(description);
         }
 
         public void setDate(String date) {
             tvDate.setText(date);
         }
 
-        public void setChatClick(final String uid, final String pid, final String catstr, final String name, final String tel) {
+        public void setChatClick(final String uid, final String pid, final String name, final String catstr, final String tel) {
             // Set event click for open the chat
-            ChatClickListener chatClickListener = new ChatClickListener(uid, pid, catstr, name, tel);
+            ChatClickListener chatClickListener = new ChatClickListener(uid, pid, name, catstr, tel);
 
             contact_info.setOnClickListener(chatClickListener);
         }
@@ -129,7 +134,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
             private final String name;
             private final String tel;
 
-            public ChatClickListener(String uid, String pid, String catstr, String name, String tel) {
+            public ChatClickListener(String uid, String pid, String name, String catstr, String tel) {
                 this.uid = uid;
                 this.pid = pid;
                 this.catstr = catstr;
@@ -143,8 +148,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
                 Bundle b = new Bundle();
                 b.putString("uid", uid);
                 b.putString("pid", pid);
-                b.putString("catstr", catstr);
                 b.putString("name", name);
+                b.putString("catstr", catstr);
                 b.putString("tel", tel);
                 i.putExtras(b);
                 view.getContext().startActivity(i);

@@ -22,6 +22,7 @@
             android:layout_gravity="center"
             android:background="@drawable/edit_text_style"
             android:hint="Buscar"
+            android:imeOptions="actionDone"
             android:minHeight="43dp"
             android:paddingEnd="42dp"
             android:paddingLeft="12dp"

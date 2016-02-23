@@ -5,12 +5,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.youtube.sorcjc.proyectoprofesionales.Global;
@@ -73,6 +76,17 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
         ivBuscar = (ImageView) rootView.findViewById(R.id.ivBuscar);
         etFilter = (EditText) rootView.findViewById(R.id.etFilter);
+        etFilter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // Search when the user performs "done" in the keyboard
+                    onClick(v);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         // Setting the recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -143,6 +157,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.etFilter:
+                // "Done" action from keyboard
 
             case R.id.ivBuscar:
                 String queryText = etFilter.getText().toString().trim();

@@ -15,8 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
-import com.youtube.sorcjc.proyectoprofesionales.ui.ProfileActivity;
-import com.youtube.sorcjc.proyectoprofesionales.ui.WorkersListActivity;
+import com.youtube.sorcjc.proyectoprofesionales.ui.CategoryActivity;
 
 import java.util.ArrayList;
 
@@ -114,7 +113,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             layout_category.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(view.getContext(), WorkersListActivity.class);
+                    Intent i = new Intent(view.getContext(), CategoryActivity.class);
                     Bundle mBundle = new Bundle();
                     mBundle.putString("categoryId", categoryId);
                     mBundle.putString("categoryName", name);

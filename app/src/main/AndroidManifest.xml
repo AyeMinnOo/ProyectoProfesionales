@@ -51,7 +51,7 @@
         <activity
             android:name=".ui.ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.WorkersListActivity" />
+        <activity android:name=".ui.CategoryActivity" />
         <activity
             android:name=".ui.ScoreActivity"
             android:theme="@style/AppTheme.NoActionBar" />
