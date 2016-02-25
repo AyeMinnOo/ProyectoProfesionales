@@ -33,7 +33,7 @@
                 android:id="@+id/toolbar"
                 android:theme="@style/AppTheme.NoActionBar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="85dp"
                 android:layout_gravity="bottom"
                 android:background="@color/primaryDarkTransparent"
                 app:layout_scrollFlags="scroll|enterAlways">
@@ -41,6 +41,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
                     android:orientation="vertical">
 
                     <TextView android:id="@+id/tvTitulo"
@@ -50,12 +52,11 @@
                         android:textColor="#fff"
                         android:textSize="20sp" />
 
-                    <TextView android:id="@+id/tvSubtitulo"
-                        android:layout_width="match_parent"
+                    <RatingBar
+                        android:id="@+id/rbEstrellas"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Subtítulo"
-                        android:textColor="#fff"
-                        android:textSize="16sp" />
+                        style="@style/customRatingBar"/>
 
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>

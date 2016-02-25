@@ -147,7 +147,7 @@
             android:layout_height="30dp"
             android:orientation="horizontal">
 
-            <com.facebook.login.widget.LoginButton
+            <Button
                 android:id="@+id/btnIngresarFacebook"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -155,7 +155,9 @@
                 android:layout_marginEnd="6dp"
                 android:layout_marginRight="6dp"
                 android:layout_weight="1"
-                facebook:com_facebook_login_text="Facebook" />
+                android:textAllCaps="false"
+                android:background="#eee"
+                android:text="Facebook" />
 
             <Button
                 android:id="@+id/btnIngresarGoogle"

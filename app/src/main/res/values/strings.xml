@@ -3,7 +3,10 @@
     <string name="app_name">Home Solution</string>
 
     <!-- Social login -->
-    <string name="facebook_app_id">1681928755418939</string>
+    <string name="facebook_app_id">769495783106499</string>
+
+    <!-- RegisterActivity -->
+    <string name="default_area">Seleccione zona</string>
 
     <!-- PanelActivity -->
     <string name="title_activity_panel">Panel de usuario</string>

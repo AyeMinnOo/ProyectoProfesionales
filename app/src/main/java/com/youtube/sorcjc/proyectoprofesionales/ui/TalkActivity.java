@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,8 +85,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
         adapter = new MessageAdapter(this);
 
-        // Setup the tabs
-        setUpTabs();
+        // Setup the action bar
         setUpActionBar();
 
         // Get references to the views and controls
@@ -107,7 +108,6 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             name = b.getString("name");
             catstr = b.getString("catstr");
             phoneNumber = b.getString("tel");
-            Log.d("Test/Talk", "Loading chat with uid => " + toUid);
         }
 
         loadAuthenticatedUser();
@@ -120,16 +120,6 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             token = global.getToken();
             uid = global.getUid();
         }
-    }
-
-    private void setUpTabs() {
-        btnPerfil = (Button) findViewById(R.id.btnPerfil);
-        btnCalificar = (Button) findViewById(R.id.btnCalificar);
-        btnLlamar = (Button) findViewById(R.id.btnLlamar);
-
-        btnPerfil.setOnClickListener(this);
-        btnCalificar.setOnClickListener(this);
-        btnLlamar.setOnClickListener(this);
     }
 
     private void setUpActionBar() {
@@ -147,6 +137,21 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setUpTabs(boolean esPrestador) {
+        if (esPrestador) {
+            btnPerfil = (Button) findViewById(R.id.btnPerfil);
+            btnCalificar = (Button) findViewById(R.id.btnCalificar);
+            btnLlamar = (Button) findViewById(R.id.btnLlamar);
+
+            btnPerfil.setOnClickListener(this);
+            btnCalificar.setOnClickListener(this);
+            btnLlamar.setOnClickListener(this);
+        } else {
+            AppBarLayout topOptions = (AppBarLayout) findViewById(R.id.appbar);
+            topOptions.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -288,8 +293,6 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<ChatResponse>() {
             @Override
             public void onResponse(Response<ChatResponse> response, Retrofit retrofit) {
-                progressDialog.dismiss();
-
                 if (response.body() == null)
                     return;
 
@@ -297,7 +300,10 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(TalkActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
                 } else {
                     Talk talk = response.body().getResponse();
-                    saveCategoriesGlobal(talk.getPrestador().getCategories());
+                    setUpTabs(talk.isPrestador());
+                    if (talk.isPrestador()) {
+                        saveCategoriesGlobal(talk.getPrestador().getCategories());
+                    }
 
                     // Set contact data
                     tvName.setText(name);
@@ -315,6 +321,8 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                     scrollLastMessage();
                     Log.d("Test/Talk", "Number of messages in chat => " + talk.getChat().size());
                 }
+
+                progressDialog.dismiss();
             }
 
             @Override

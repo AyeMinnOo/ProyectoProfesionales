@@ -26,4 +26,8 @@ public class ChatResponse {
         return response;
     }
 
+    public void setResponse(Talk response) {
+        this.response = response;
+    }
+
 }

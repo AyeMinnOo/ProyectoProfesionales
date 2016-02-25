@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private TextView btnIrLogin;
 
     // Social buttons
-    private LoginButton btnIngresarFacebook;
+    private Button btnIngresarFacebook;
     private Button btnIngresarGoogle;
 
     // Facebook SDK
@@ -105,11 +105,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         btnIrLogin.setOnClickListener(this);
 
         // Social buttons
-        btnIngresarFacebook = (LoginButton) findViewById(R.id.btnIngresarFacebook);
+        btnIngresarFacebook = (Button) findViewById(R.id.btnIngresarFacebook);
         btnIngresarGoogle = (Button) findViewById(R.id.btnIngresarGoogle);
 
         // To manage the login using facebook
+        btnIngresarFacebook.setOnClickListener(this);
         //setUpFacebookLogin();
+
         // To manage the login using google+
         btnIngresarGoogle.setOnClickListener(this);
         setUpGoogleSignIn();
@@ -167,8 +169,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void setUpFacebookLogin() {
         final Context context = this;
 
-        btnIngresarFacebook.setReadPermissions(Arrays.asList("email"));
-        btnIngresarFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
             public void onSuccess(final LoginResult loginResult) {
@@ -275,7 +276,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void spinnerOptions(ArrayList<String> areas) {
         // Add a default first option
-        areas.add(0, "Seleccione zona");
+        areas.add(0, getResources().getString(R.string.default_area));
+
         // Load items on the spinner using an adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, areas);
         spinnerZona.setAdapter(adapter);
@@ -289,7 +291,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.btnIngresarFacebook:
-                Log.d("Test/Register", "Sign in with fb clicked !");
+                if (spinnerZona.getSelectedItem().toString().equals(getResources().getString(R.string.default_area))) {
+                    Toast.makeText(RegisterActivity.this, "Por favor seleccione una zona", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // We have to request read permissions (email requires)
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"));
                 break;
 
             case R.id.btnIngresarGoogle:
@@ -315,12 +323,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void performNormalRegister() {
         // User data
         final String nombre = etNombre.getText().toString();
-        final String zona = spinnerZona.getSelectedItem().toString();
         final String email = etEmail.getText().toString();
         final String password = etPassword.getText().toString();
+        final String zona = spinnerZona.getSelectedItem().toString();
         final String gcm_id = getGcmId();
 
-        if (nombre.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty()) {
+        if (nombre.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || zona.equals(getResources().getString(R.string.default_area))) {
             Toast.makeText(this, "Por favor rellene todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }

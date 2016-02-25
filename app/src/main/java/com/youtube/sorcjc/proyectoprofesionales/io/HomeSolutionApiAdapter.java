@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+import com.youtube.sorcjc.proyectoprofesionales.io.deserializers.ChatDeserializer;
 import com.youtube.sorcjc.proyectoprofesionales.io.deserializers.LoginDeserializer;
+import com.youtube.sorcjc.proyectoprofesionales.io.responses.ChatResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.LoginResponse;
 
 
@@ -42,6 +44,7 @@ public class HomeSolutionApiAdapter {
 
         // Adding custom deserializers
         gsonBuilder.registerTypeAdapter(LoginResponse.class, new LoginDeserializer());
+        gsonBuilder.registerTypeAdapter(ChatResponse.class, new ChatDeserializer());
         Gson myGson = gsonBuilder.create();
 
         return GsonConverterFactory.create(myGson);

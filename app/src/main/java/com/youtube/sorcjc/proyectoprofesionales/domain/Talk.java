@@ -1,14 +1,16 @@
 package com.youtube.sorcjc.proyectoprofesionales.domain;
 
 import com.google.gson.annotations.SerializedName;
-import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
 
 import java.util.ArrayList;
 
 public class Talk {
 
-    @SerializedName("prestador")
-    private SimpleWorkerData prestador;
+    @SerializedName("esprestador")
+    private boolean esPrestador;
+
+    // Read it only if the previous variable is TRUE
+    private SimpleWorkerData simpleWorkerData;
 
     @SerializedName("username")
     private String username;
@@ -19,8 +21,16 @@ public class Talk {
     @SerializedName("chat")
     private ArrayList<Message> chat;
 
+    public boolean isPrestador() {
+        return esPrestador;
+    }
+
     public SimpleWorkerData getPrestador() {
-        return prestador;
+        return simpleWorkerData;
+    }
+
+    public void setPrestador(SimpleWorkerData simpleWorkerData) {
+        this.simpleWorkerData = simpleWorkerData;
     }
 
     public String getUsername() {

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +50,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     // Custom toolbar and actionbar
     private Toolbar toolbar;
     private TextView tvTitulo;
-    private TextView tvSubtitulo;
+    private RatingBar rbEstrellas;
 
     // Worker display data
     private TextView tvContenido1;
@@ -126,7 +127,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
         tvTitulo = (TextView) findViewById(R.id.tvTitulo);
-        tvSubtitulo = (TextView) findViewById(R.id.tvSubtitulo);
+        rbEstrellas = (RatingBar) findViewById(R.id.rbEstrellas);
     }
 
     private void loadAuthenticatedUser() {
@@ -182,7 +183,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
             saveCategoriesGlobal(categories);
 
             tvTitulo.setText(workerBasic.getName());
-            tvSubtitulo.setText(workerData.getEstrellitas() + " estrellas");
+            rbEstrellas.setRating(workerData.getEstrellitas());
 
             tvContenido1.setText(workerBasic.toString());
 
