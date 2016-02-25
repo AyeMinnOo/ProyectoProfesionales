@@ -99,27 +99,13 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <Spinner
+            android:id="@+id/spinnerZona"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="7dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Zona:"
-                android:textColor="#FFF"
-                android:textSize="16sp" />
-
-            <Spinner
-                android:id="@+id/spinnerZona"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown" />
-
-        </LinearLayout>
+            android:background="@android:drawable/btn_dropdown"
+            android:paddingBottom="6dp"
+            android:spinnerMode="dropdown" />
 
         <Button
             android:id="@+id/btnRealizarRegistro"
@@ -155,19 +141,25 @@
                 android:layout_marginEnd="6dp"
                 android:layout_marginRight="6dp"
                 android:layout_weight="1"
+                android:background="@color/facebook_button"
+                android:drawableLeft="@drawable/facebook"
+                android:drawableStart="@drawable/facebook"
+                android:text="Facebook"
                 android:textAllCaps="false"
-                android:background="#eee"
-                android:text="Facebook" />
+                android:textColor="#FFF" />
 
             <Button
                 android:id="@+id/btnIngresarGoogle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#eee"
+                android:background="@color/google_button"
+                android:drawableLeft="@drawable/google"
+                android:drawableStart="@drawable/google"
                 android:gravity="center"
                 android:text="Google"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="#FFF" />
         </LinearLayout>
 
 
@@ -175,10 +167,10 @@
             android:id="@+id/btnIrLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="Ya soy usuario"
             android:textColor="#FFF"
-            android:layout_marginTop="6dp"
             android:textSize="18sp" />
 
     </LinearLayout>
