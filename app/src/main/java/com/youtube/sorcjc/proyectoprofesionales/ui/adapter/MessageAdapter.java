@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Message;
 
@@ -27,7 +28,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.item_message, parent, false);
+        View itemView = null;
+
+        if (viewType == 1)
+            itemView = LayoutInflater.from(context).inflate(R.layout.item_message_right, parent, false);
+        else
+            itemView = LayoutInflater.from(context).inflate(R.layout.item_message_left, parent, false);
         return new MessageViewHolder(itemView);
     }
 
@@ -35,7 +41,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         Message message = messages.get(position);
 
-        holder.setSender(message.amISender(context.getApplicationContext()));
         holder.setMessage(message.getContent());
         holder.setTime(message.getCreated());
     }
@@ -43,6 +48,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public int getItemCount() {
         return messages.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (messages.get(position).amISender(context.getApplicationContext()))
+            return 1;
+        return 0;
     }
 
     public void addAll(@NonNull ArrayList<Message> messages) {
@@ -71,33 +83,42 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
         private TextView tvMessage;
+        private ImageView ivImagen;
         private TextView tvTime;
-        private ImageView ivLeft;
-        private ImageView ivRight;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
 
             tvMessage = (TextView) itemView.findViewById(R.id.tvMessage);
+            ivImagen = (ImageView) itemView.findViewById(R.id.ivImagen);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
-            ivLeft = (ImageView) itemView.findViewById(R.id.ivBubbleLeft);
-            ivRight = (ImageView) itemView.findViewById(R.id.ivBubbleRight);
         }
 
         public void setMessage(String message) {
-            tvMessage.setText(Html.fromHtml(message + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;")); // 10 spaces
+            int startImage = message.indexOf("[image]");
+
+            if (startImage != -1) {
+                // The message is an image
+                int endImage = message.indexOf("[/image]");
+                String urlImage = message.substring(7, endImage);
+                ivImagen.setVisibility(View.VISIBLE);
+                tvMessage.setVisibility(View.GONE);
+
+                // Get image from URL
+                Picasso.with(context)
+                        .load(urlImage)
+                        .placeholder(R.drawable.ic_category_default)
+                        .into(ivImagen);
+
+            } else {
+                // The message is a simple text
+                tvMessage.setText(Html.fromHtml(message + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;")); // 10 spaces
+            }
+
         }
 
         public void setTime(String time) {
             tvTime.setText(time);
-        }
-
-        public void setSender(boolean amISender) {
-            if (amISender) {
-                ivLeft.setVisibility(View.GONE);
-            } else {
-                ivRight.setVisibility(View.GONE);
-            }
         }
 
     }
