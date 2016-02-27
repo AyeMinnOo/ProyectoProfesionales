@@ -45,9 +45,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         holder.setImage(chat.getUrlPhoto());
         holder.setDescription(chat.getCatstr());
         holder.setDate(chat.getActivity());
-        holder.setImageClick(chat.getPid());
-        if (chat.isEsPrestador())
-            holder.setChatClick(chat.getUid(), chat.getPid(),  chat.getName(), chat.getCatstr(), chat.getPrestador().getTel());
+        if (chat.isEsPrestador()) {
+            // Send full data
+            holder.setChatClick(chat.getUid(), chat.getPid(), chat.getName(), chat.getCatstr(), chat.getPrestador().getTel());
+
+            // The profile activity is only for workers
+            holder.setImageClick(chat.getPid());
+        } // Just send basic data
         else holder.setChatClick(chat.getUid(), "", chat.getName(), "", "");
     }
 

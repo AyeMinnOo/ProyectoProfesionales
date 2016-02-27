@@ -3,6 +3,7 @@ package com.youtube.sorcjc.proyectoprofesionales.ui;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -29,8 +30,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 import com.youtube.sorcjc.proyectoprofesionales.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
+import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 import com.youtube.sorcjc.proyectoprofesionales.io.HomeSolutionApiAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.LoginResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.ZonasResponse;
@@ -45,8 +48,12 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, Callback<LoginResponse> {
 
+    // Global variables
+    private Global global;
+
+    // Dialogs
     private ProgressDialog progressDialog;
 
     // Fields
@@ -110,11 +117,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         // To manage the login using facebook
         btnIngresarFacebook.setOnClickListener(this);
-        //setUpFacebookLogin();
+        setUpFacebookLogin();
 
         // To manage the login using google+
         btnIngresarGoogle.setOnClickListener(this);
         setUpGoogleSignIn();
+
+        // Global variables instance
+        global = (Global) getApplicationContext();
     }
 
     @Override
@@ -173,29 +183,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onSuccess(final LoginResult loginResult) {
-                // Credentials are correct, but we have to verify if the e-mail is registered
-
                 progressDialog = new ProgressDialog(RegisterActivity.this);
                 progressDialog.setMessage("Procesando datos ...");
                 progressDialog.show();
 
-                String accessToken = loginResult.getAccessToken().getToken();
-                Log.i("Test/Facebook", "accessToken: " + accessToken);
+                final String accessToken = loginResult.getAccessToken().getToken();
 
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         Log.i("Test/Facebook", response.toString());
 
-                        // Get facebook data from login
-                        Bundle facebookData = getFacebookData(object);
-                        final String facebookId = facebookData.getString("id_facebook");
-                        final String email = facebookData.getString("email");
-                        //final String gcm_id = global.getGcmId();
-                        //final String sign = md5(email + facebookId + "ba314mdq");
+                        // Facebook connect WS
+                        final String gcmId = global.getGcmId();
+                        final String area = spinnerZona.getSelectedItem().toString();
+                        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getFbConnect(accessToken, gcmId, area);
 
-                        //Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getLoginFbResponse(email, facebookId, sign, gcm_id);
-                        //call.enqueue(RegisterActivity.this);
+                        call.enqueue(RegisterActivity.this);
 
                         LoginManager.getInstance().logOut();
                     }
@@ -353,5 +357,55 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    @Override
+    public void onResponse(Response<LoginResponse> response, Retrofit retrofit) {
+        progressDialog.dismiss();
+
+        if (response.body() != null && response.body().getStatus() == 1) {
+            UserAuthenticated userAuthenticated = response.body().getResponse();
+            saveUserData(userAuthenticated);
+            goToActivity(PanelActivity.class);
+        } else {
+            Toast.makeText(this, response.body().getError(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+        progressDialog.dismiss();
+
+        Toast.makeText(this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        Log.d("Test/Login", "Login WS onFailure => " + t.getLocalizedMessage());
+    }
+
+    private void saveUserData(UserAuthenticated userAuthenticated) {
+        // Save the session in a global variable
+        global.setUserAuthenticated(userAuthenticated);
+
+        updateSharedPreferences(userAuthenticated);
+    }
+
+    private void updateSharedPreferences(UserAuthenticated userAuthenticated) {
+        // Using Shared Preferences to avoid exceptions when memory is clean
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        // Start app with this activity
+        editor.putString(getString(R.string.first_activity), ".ui.LoginActivity");
+
+        // Save the user data in json format
+        String userData = new Gson().toJson(userAuthenticated);
+        editor.putString(getString(R.string.user_data), userData);
+
+        editor.apply();
+    }
+
+    private void goToActivity(Class activity) {
+        Intent intent = null;
+        intent = new Intent(this, activity);
+        if (intent != null)
+            startActivity(intent);
     }
 }

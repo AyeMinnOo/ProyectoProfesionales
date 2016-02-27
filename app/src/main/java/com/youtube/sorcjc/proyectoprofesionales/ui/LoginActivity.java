@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -52,11 +53,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // Global variables
     private Global global;
 
+    // Dialogs
+    private ProgressDialog progressDialog;
+
     // Fields
     private EditText etEmail;
     private EditText etPassword;
-
-    private ProgressDialog progressDialog;
 
     // Actions
     private Button btnRealizarLogin;
@@ -183,32 +185,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 progressDialog.setMessage("Procesando datos ...");
                 progressDialog.show();
 
-                String accessToken = loginResult.getAccessToken().getToken();
-                Log.i("Test/Facebook", "accessToken: " + accessToken);
+                final String accessToken = loginResult.getAccessToken().getToken();
+                Log.i("Test/Facebook", "accessToken => " + accessToken);
 
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         Log.i("Test/Facebook", response.toString());
-
-                        // Get facebook data from login
                         Bundle facebookData = getFacebookData(object);
-                        final String facebookId = facebookData.getString("id_facebook");
-                        final String email = facebookData.getString("email");
-                        final String gcm_id = global.getGcmId();
-                        final String sign = md5(email + facebookId + "ba314mdq");
 
-                        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getLoginFbResponse(email, facebookId, sign, gcm_id);
+                        // Facebook connect WS
+                        final String gcmId = global.getGcmId();
+                        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getFbConnect(accessToken, gcmId, null);
+
                         call.enqueue(LoginActivity.this);
 
                         LoginManager.getInstance().logOut();
                     }
                 });
 
+                // Set requested parameters
                 Bundle parameters = new Bundle();
-                // Requested parameters
                 parameters.putString("fields", "id, first_name, last_name, email, gender, birthday, location");
                 request.setParameters(parameters);
+                // Perform the request
                 request.executeAsync();
             }
 
@@ -216,7 +216,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 try {
                     Bundle bundle = new Bundle();
 
+                    // Id is always a received parameter
                     bundle.putString("id_facebook", object.getString("id"));
+
                     if (object.has("first_name"))
                         bundle.putString("first_name", object.getString("first_name"));
                     if (object.has("last_name"))
@@ -333,16 +335,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onResponse(Response<LoginResponse> response, Retrofit retrofit) {
         progressDialog.dismiss();
 
-        if (response.body() == null)
-            return;
-
-        if (response.body().getStatus() == 0) {
-            Toast.makeText(this, response.body().getError(), Toast.LENGTH_SHORT).show();
-        } else {
+        if (response.body() != null && response.body().getStatus() == 1) {
             UserAuthenticated userAuthenticated = response.body().getResponse();
             saveUserData(userAuthenticated);
             goToActivity(PanelActivity.class);
             clearCredentials();
+        } else {
+            Toast.makeText(this, response.body().getError(), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -25,11 +25,11 @@ public interface HomeSolutionApiService {
 
     // http://dev.homesolution.com.ar/api/login?us=info@latrampera.com&ps=lolcats
     @GET("login")
-    Call<LoginResponse> getLoginResponse(@Query("us") String email, @Query("ps") String password, @Query("gcm_id") String gcm_id);
+    Call<LoginResponse> getLoginResponse(@Query("us") String email, @Query("ps") String password, @Query("gcm_id") String gcmId);
 
-    // http://dev.homesolution.com.ar/api/loginfb?sign=02da6005d76aa8f69b9e1ba899555ae0&us=mcelani@gmail.com&fbid=1204164922
-    @GET("loginfb")
-    Call<LoginResponse> getLoginFbResponse(@Query("us") String email, @Query("fbid") String facebookId, @Query("sign") String sign, @Query("gcm_id") String gcm_id);
+    // http://dev.homesolution.com.ar/api/fbconnect
+    @GET("fbconnect")
+    Call<LoginResponse> getFbConnect(@Query("fbtk") String facebookToken, @Query("gcm_id") String gcmId, @Query("area") String area);
 
     // http://dev.homesolution.com.ar/api/logout?tk=813abd218962ff966b54d26915388ecf
     @GET("logout")
