@@ -5,6 +5,20 @@
     <!-- Social login -->
     <string name="facebook_app_id">769495783106499</string>
 
+    <!-- Field names -->
+    <string name="field_name">Nombre</string>
+    <string name="field_email">E-mail</string>
+    <string name="field_password">Contraseña</string>
+    <string name="field_area">Zona</string>
+
+    <!-- Main buttons and actions -->
+    <string name="btn_register">Registrarme</string>
+    <string name="btn_i_am_user">Ya soy usuario</string>
+    <string name="btn_login">Iniciar sesión</string>
+    <string name="btn_forgot_password">Olvidé mi contraseña</string>
+    <string name="btn_i_am_new">Soy usuario nuevo</string>
+    <string name="lbl_login_with">Ingresar con</string>
+
     <!-- RegisterActivity -->
     <string name="default_area">Seleccione zona</string>
 

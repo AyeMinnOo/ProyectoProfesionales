@@ -23,7 +23,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Mail:"
+                android:text="@string/field_email"
                 android:textColor="#FFF"
                 android:textSize="16sp" />
 
@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Contraseña:"
+                android:text="@string/field_password"
                 android:textColor="#FFF"
                 android:textSize="16sp" />
 
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:background="@color/orange"
-            android:text="Iniciar sesión"
+            android:text="@string/btn_login"
             android:textAllCaps="false"
             android:textColor="#FFF"
             android:textSize="18sp" />
@@ -85,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_marginBottom="20dp"
-            android:text="Olvidé mi contraseña"
+            android:text="@string/btn_forgot_password"
             android:textAllCaps="false" />
 
         <TextView
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:gravity="center"
-            android:text="Ingresar con"
+            android:text="@string/lbl_login_with"
             android:textColor="#FFF"
             android:textSize="16sp" />
 
@@ -138,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Soy usuario nuevo"
+            android:text="@string/btn_i_am_new"
             android:textColor="#FFF"
             android:textSize="18sp" />
 

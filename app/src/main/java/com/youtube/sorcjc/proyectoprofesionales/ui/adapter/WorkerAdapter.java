@@ -97,7 +97,7 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
             // Get image from URL
             Picasso.with(context)
                     .load(urlImage)
-                    .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
+                    .placeholder(R.drawable.avatar_default)
                     .transform(new CircleTransform())
                     .into(ivPhoto);
         }
