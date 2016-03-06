@@ -3,16 +3,25 @@ package com.youtube.sorcjc.proyectoprofesionales.ui;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.SyncStateContract;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -21,7 +30,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +45,7 @@ import com.youtube.sorcjc.proyectoprofesionales.io.responses.EnviarMsjeResponse;
 import com.youtube.sorcjc.proyectoprofesionales.io.responses.SimpleResponse;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import retrofit.Call;
@@ -61,6 +70,9 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView btnSend;
     private EditText etMessage;
 
+    // To send a picture
+    private ImageView btnImage;
+
     // User authenticated data
     // Using static we just need one load
     private static String token;
@@ -77,6 +89,10 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView ivPhoto;
     private TextView tvName;
     private TextView tvDescription;
+
+    // Request codes
+    private static final int REQUEST_CAMERA = 20;
+    private static final int SELECT_FILE = 21;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +116,9 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         btnSend = (ImageView) findViewById(R.id.btnSend);
         btnSend.setOnClickListener(this);
 
+        btnImage = (ImageView) findViewById(R.id.btnImage);
+        btnImage.setOnClickListener(this);
+
         // Bundle parameters from previous activity
         if (toUid == null) {
             Bundle b = getIntent().getExtras();
@@ -112,6 +131,36 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
         loadAuthenticatedUser();
         loadMessages();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA) {
+                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                final String defaultExtension = "jpg";
+                postPicture(thumbnail, defaultExtension);
+
+            } else if (requestCode == SELECT_FILE) {
+                Uri selectedImageUri = data.getData();
+                String[] projection = {MediaStore.MediaColumns.DATA};
+                CursorLoader cursorLoader = new CursorLoader(this, selectedImageUri, projection,
+                        null, null, null);
+                Cursor cursor = cursorLoader.loadInBackground();
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                cursor.moveToFirst();
+                String selectedImagePath = cursor.getString(column_index);
+
+                // Get the extension from the full path
+                final int lastDot = selectedImagePath.lastIndexOf(".");
+                final String extension = selectedImagePath.substring(lastDot+1);
+
+                Bitmap bitmap = BitmapFactory.decodeFile(selectedImagePath);
+                postPicture(bitmap, extension);
+            }
+        }
     }
 
     private void loadAuthenticatedUser() {
@@ -194,6 +243,10 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnSend:
                 postMessage();
                 break;
+
+            case R.id.btnImage:
+                selectPicture();
+                break;
         }
     }
 
@@ -219,7 +272,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
                 if (response != null && response.body().getStatus() == 1) {
                     Log.d("Test/Call", "phoneNumber => " + phoneNumber);
-                    Log.d("Test/Call", "Llamada registrada al usuario => uid "+toUid+" | pid "+pid);
+                    Log.d("Test/Call", "Llamada registrada al usuario => uid " + toUid + " | pid " + pid);
                 }
             }
 
@@ -269,6 +322,65 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+    }
+
+    private void selectPicture() {
+        final CharSequence[] items = {"Tomar una foto", "Escoger una imagen", "Cancelar"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(TalkActivity.this);
+        builder.setTitle("Enviar imagen !");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Tomar una foto")) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else if (items[item].equals("Escoger una imagen")) {
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(
+                            Intent.createChooser(intent, "Seleccione imagen"),
+                            SELECT_FILE);
+                } else if (items[item].equals("Cancelar")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void postPicture(Bitmap bitmap, final String extension) {
+        final String base64 = getBase64FromBitmap(bitmap);
+        final String replyTo = adapter.getParentMid();
+
+        Call<EnviarMsjeResponse> call = HomeSolutionApiAdapter.getApiService().postPic(token, toUid, base64, extension, replyTo);
+
+        call.enqueue(new Callback<EnviarMsjeResponse>() {
+            @Override
+            public void onResponse(Response<EnviarMsjeResponse> response, Retrofit retrofit) {
+                if (response.body() == null)
+                    return;
+
+                if (response.body().getStatus() == 0) {
+                    Toast.makeText(TalkActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Message message = response.body().getResponse();
+                    if (message != null) {
+                        adapter.addItem(message);
+                        etMessage.setText("");
+                        scrollLastMessage();
+                    } else {
+                        Toast.makeText(TalkActivity.this, "Ocurrió un problema al enviar la imagen", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(TalkActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void hideKeyboard() {
@@ -359,4 +471,13 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             }, 100);
         }
     }
+
+    public String getBase64FromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        byte[] byteFormat = stream.toByteArray();
+        // Get the base 64 string
+        return Base64.encodeToString(byteFormat, Base64.NO_WRAP);
+    }
+
 }

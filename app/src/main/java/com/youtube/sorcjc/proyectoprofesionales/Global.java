@@ -2,9 +2,11 @@ package com.youtube.sorcjc.proyectoprofesionales;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Category;
 import com.youtube.sorcjc.proyectoprofesionales.domain.UserAuthenticated;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
@@ -24,7 +26,22 @@ public class Global extends Application {
     }
 
     public String getToken() {
+        if (userAuthenticated == null) {
+            loadUserAuthenticatedFromSharedPreferences();
+        }
+
         return userAuthenticated.getToken();
+    }
+
+    public void loadUserAuthenticatedFromSharedPreferences() {
+        // SharedPreferences instance
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+
+        // Read the user authentication data from SharedPreferences
+        String userData = sharedPref.getString(getString(R.string.user_data), "");
+
+        if (! userData.equals(""))
+            setUserAuthenticated(new Gson().fromJson(userData, UserAuthenticated.class));
     }
 
     public String getUid() {

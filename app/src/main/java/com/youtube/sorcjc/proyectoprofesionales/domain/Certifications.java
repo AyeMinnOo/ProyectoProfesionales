@@ -89,9 +89,10 @@ public class Certifications {
         if (garantias != null && ! garantias.isEmpty())
             certificaciones += "Garantías: " + garantias + "\n";
 
+        /*
         if (certificaciones.isEmpty())
             certificaciones = "Este usuario no dispone de certificaciones.";
-
+        */
         return certificaciones;
     }
 }

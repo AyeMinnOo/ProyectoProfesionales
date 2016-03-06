@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -53,10 +54,8 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     private RatingBar rbEstrellas;
 
     // Worker display data
-    private TextView tvContenido1;
-    private TextView tvContenido2;
-    private TextView tvContenido3;
-    private TextView tvContenido4;
+    private CardView cardView1, cardView2, cardView3, cardView4;
+    private TextView description1, description2, description3, description4;
 
     // Worker parameter data (to start TalkActivity)
     private String uid;
@@ -99,18 +98,30 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
         }
 
         ivBigPhoto = (ImageView) findViewById(R.id.ivBigPhoto);
-        tvContenido1 = (TextView) findViewById(R.id.card_basic).findViewById(R.id.tvContenido);
-        tvContenido2 = (TextView) findViewById(R.id.card_skills).findViewById(R.id.tvContenido);
-        tvContenido3 = (TextView) findViewById(R.id.card_ratings).findViewById(R.id.tvContenido);
-        tvContenido4 = (TextView) findViewById(R.id.card_certifications).findViewById(R.id.tvContenido);
-        setCardTitles();
+        getCards();
+        getCardDescriptions();
+        getCardTitles();
     }
 
-    private void setCardTitles() {
-        final TextView tvTitulo1 = (TextView) findViewById(R.id.card_basic).findViewById(R.id.tvTitulo);
-        final TextView tvTitulo2 = (TextView) findViewById(R.id.card_skills).findViewById(R.id.tvTitulo);
-        final TextView tvTitulo3 = (TextView) findViewById(R.id.card_ratings).findViewById(R.id.tvTitulo);
-        final TextView tvTitulo4 = (TextView) findViewById(R.id.card_certifications).findViewById(R.id.tvTitulo);
+    private void getCards() {
+        cardView1 = (CardView) findViewById(R.id.card_basic);
+        cardView2 = (CardView) findViewById(R.id.card_skills);
+        cardView3 = (CardView) findViewById(R.id.card_ratings);
+        cardView4 = (CardView) findViewById(R.id.card_certifications);
+    }
+
+    private void getCardDescriptions() {
+        description1 = (TextView) cardView1.findViewById(R.id.tvContenido);
+        description2 = (TextView) cardView2.findViewById(R.id.tvContenido);
+        description3 = (TextView) cardView3.findViewById(R.id.tvContenido);
+        description4 = (TextView) cardView4.findViewById(R.id.tvContenido);
+    }
+
+    private void getCardTitles() {
+        final TextView tvTitulo1 = (TextView) cardView1.findViewById(R.id.tvTitulo);
+        final TextView tvTitulo2 = (TextView) cardView2.findViewById(R.id.tvTitulo);
+        final TextView tvTitulo3 = (TextView) cardView3.findViewById(R.id.tvTitulo);
+        final TextView tvTitulo4 = (TextView) cardView4.findViewById(R.id.tvTitulo);
 
         tvTitulo1.setText("Información");
         tvTitulo2.setText("Habilidades");
@@ -157,7 +168,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
         final Global global = (Global) getApplicationContext();
         isContact = global.isContact(pid);
         if (isContact)
-            btnAgendar.setText("Desagendar");
+            btnAgendar.setText(getResources().getString(R.string.remove_contact));
     }
 
     @Override
@@ -171,8 +182,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
             WorkerProfile workerProfile = response.body().getResponse();
             // Setting the profile image
             RequestCreator request = Picasso.with(getBaseContext())
-                    .load(workerProfile.getPicture())
-                    .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait);
+                    .load(workerProfile.getPicture());
             //request.into(ivPhoto);
             request.into(ivBigPhoto);
 
@@ -185,25 +195,39 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
             tvTitulo.setText(workerBasic.getName());
             rbEstrellas.setRating(workerData.getEstrellitas());
 
-            tvContenido1.setText(workerBasic.toString());
+            // Basic information
+            description1.setText(workerBasic.toString());
+            cardView1.setVisibility(View.VISIBLE);
 
-            String contenido2 = "";
+            // Skills
+            String content2 = "";
             ArrayList<Skill> skills = workerData.getSkills();
             for (Skill skill : skills) {
-                contenido2 += "- "+skill.getName()+"\n";
+                content2 += "- "+skill.getName()+"\n";
             }
-            tvContenido2.setText(contenido2);
+            if (! content2.isEmpty()) {
+                description2.setText(content2);
+                cardView2.setVisibility(View.VISIBLE);
+            }
 
-            String contenido3 = "";
+            // Ratings
+            String content3 = "";
             ArrayList<Rating> ratings = workerData.getRatings();
             for (Rating rating : ratings) {
-                contenido3 += "- "+rating.getComment()+"\n";
+                content3 += "- "+rating.getComment()+"\n";
             }
-            if (contenido3.isEmpty())
-                contenido3 = "Este usuario no ha recibido ninguna calificación.";
-            tvContenido3.setText(contenido3);
+            if (! content3.isEmpty()) {
+                description3.setText(content3);
+                cardView3.setVisibility(View.VISIBLE);
+            }
 
-            tvContenido4.setText(workerBasic.getCertifications().toString());
+            // Certifications
+            final String content4 = workerBasic.getCertifications().toString();
+            if (! content4.isEmpty()) {
+                description4.setText(content4);
+                cardView4.setVisibility(View.VISIBLE);
+            }
+
 
             uid = workerBasic.getUid();
             catstr = workerBasic.getCatstr();
@@ -238,10 +262,10 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
                 final String successMessage;
 
                 if (isContact) {
-                    successMessage = "Contacto eliminado exitosamente";
+                    successMessage = getResources().getString(R.string.success_remove_contact);
                     call = HomeSolutionApiAdapter.getApiService().getDesagendar(token, pid);
                 } else {
-                    successMessage = "Contacto agregado exitosamente";
+                    successMessage = getResources().getString(R.string.success_add_contact);
                     call = HomeSolutionApiAdapter.getApiService().getAgendar(token, pid);
                 }
 
@@ -259,10 +283,10 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
                                 AgendaFragment.loadContacts();
 
                                 if (isContact) {
-                                    btnAgendar.setText("Agendar");
+                                    btnAgendar.setText(getResources().getString(R.string.add_contact));
                                     isContact = false;
                                 } else {
-                                    btnAgendar.setText("Desagendar");
+                                    btnAgendar.setText(getResources().getString(R.string.remove_contact));
                                     isContact = true;
                                 }
                             }

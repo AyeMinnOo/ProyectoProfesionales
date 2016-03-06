@@ -26,6 +26,12 @@
     <string name="title_activity_panel">Panel de usuario</string>
     <string name="action_settings">Opciones</string>
 
+    <!-- ProfileActivity -->
+    <string name="add_contact">Agendar</string>
+    <string name="remove_contact">Desagendar</string>
+    <string name="success_add_contact">Contacto agregado exitosamente</string>
+    <string name="success_remove_contact">Contacto eliminado exitosamente</string>
+
     <!-- Define the first screen when the app starts -->
     <string name="preference_file">Preferences</string>
     <string name="first_activity">FirstActivity</string>

@@ -15,6 +15,7 @@ import com.youtube.sorcjc.proyectoprofesionales.io.responses.ZonasResponse;
 
 import retrofit.Call;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Query;
 
 public interface HomeSolutionApiService {
@@ -59,6 +60,10 @@ public interface HomeSolutionApiService {
     @GET("sendmsg")
     Call<EnviarMsjeResponse> getEnviarMensaje(@Query("tk") String token, @Query("touid") String toUid, @Query("replyto") String replyTo, @Query("msg") String message);
 
+    // http://dev.homesolution.com.ar/api/sendpic/
+    @POST("sendpic")
+    Call<EnviarMsjeResponse> postPic(@Query("tk") String token, @Query("touid") String toUid, @Query("image") String base64, @Query("extension") String extension, @Query("replyto") String replyTo);
+
     // http://dev.homesolution.com.ar/api/getprestadores?cid=36&tk={token}
     @GET("getprestadores")
     Call<AgendaResponse> getPrestadores(@Query("cid") String categoryId, @Query("tk") String token);
@@ -94,4 +99,5 @@ public interface HomeSolutionApiService {
     // http://dev.homesolution.com.ar/api/buscar?term=gonzalez&tk={token}
     @GET("buscar")
     Call<AgendaResponse> getBuscar(@Query("term") String term, @Query("tk") String token);
+
 }

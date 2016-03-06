@@ -136,18 +136,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
 
-        // SharedPreferences instance
-        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
-
-        // Read the user authentication data from SharedPreferences
-        String userData = sharedPref.getString(getString(R.string.user_data), "");
-
         // Global variables instance
         final Global global = (Global) getApplicationContext();
 
-        if (! userData.equals("")) {
-            global.setUserAuthenticated(new Gson().fromJson(userData, UserAuthenticated.class));
-        }
+        // Load info from SharedPreferences
+        global.loadUserAuthenticatedFromSharedPreferences();
 
         // There is a session active?
         if (global.isAuthenticated()) {
@@ -157,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // If not, read the default activity from SharedPreferences
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+
         String defaultActivity = getResources().getString(R.string.first_activity_default);
         String firstActivity = sharedPref.getString(getString(R.string.first_activity), defaultActivity);
 

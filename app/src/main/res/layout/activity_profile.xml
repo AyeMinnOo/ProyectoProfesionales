@@ -50,6 +50,7 @@
                         android:layout_height="wrap_content"
                         android:text="Título"
                         android:textColor="#fff"
+                        android:singleLine="true"
                         android:textSize="20sp" />
 
                     <RatingBar
