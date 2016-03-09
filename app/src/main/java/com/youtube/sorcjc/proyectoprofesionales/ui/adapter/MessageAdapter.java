@@ -111,6 +111,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                         .into(ivImagen);
 
             } else {
+                // This is logically not necessary but fix a strange bug
+                ivImagen.setVisibility(View.GONE);
+                tvMessage.setVisibility(View.VISIBLE);
+
                 // The message is a simple text
                 tvMessage.setText(Html.fromHtml(message + " &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;")); // 10 spaces
             }

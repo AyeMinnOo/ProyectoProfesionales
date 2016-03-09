@@ -15,7 +15,9 @@ import com.youtube.sorcjc.proyectoprofesionales.io.responses.ZonasResponse;
 
 import retrofit.Call;
 import retrofit.http.GET;
+import retrofit.http.Multipart;
 import retrofit.http.POST;
+import retrofit.http.Part;
 import retrofit.http.Query;
 
 public interface HomeSolutionApiService {
@@ -61,8 +63,9 @@ public interface HomeSolutionApiService {
     Call<EnviarMsjeResponse> getEnviarMensaje(@Query("tk") String token, @Query("touid") String toUid, @Query("replyto") String replyTo, @Query("msg") String message);
 
     // http://dev.homesolution.com.ar/api/sendpic/
+    @Multipart
     @POST("sendpic")
-    Call<EnviarMsjeResponse> postPic(@Query("tk") String token, @Query("touid") String toUid, @Query("image") String base64, @Query("extension") String extension, @Query("replyto") String replyTo);
+    Call<EnviarMsjeResponse> postPic(@Query("tk") String token, @Query("touid") String toUid, @Part("image") String base64, @Query("extension") String extension, @Query("replyto") String replyTo);
 
     // http://dev.homesolution.com.ar/api/getprestadores?cid=36&tk={token}
     @GET("getprestadores")

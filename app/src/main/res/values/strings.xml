@@ -23,7 +23,7 @@
     <string name="default_area">Seleccione zona</string>
 
     <!-- PanelActivity -->
-    <string name="title_activity_panel">Panel de usuario</string>
+    <string name="title_activity_panel">Home Solution</string>
     <string name="action_settings">Opciones</string>
 
     <!-- ProfileActivity -->
@@ -31,6 +31,13 @@
     <string name="remove_contact">Desagendar</string>
     <string name="success_add_contact">Contacto agregado exitosamente</string>
     <string name="success_remove_contact">Contacto eliminado exitosamente</string>
+
+    <!-- TalkActivity -->
+    <string name="picture_title">Enviar imagen !</string>
+    <string name="picture_from_camera">Tomar una foto</string>
+    <string name="picture_from_gallery">Escoger una imagen</string>
+    <string name="picture_chooser_title">Seleccione imagen</string>
+    <string name="picture_cancel">Cancelar</string>
 
     <!-- Define the first screen when the app starts -->
     <string name="preference_file">Preferences</string>

@@ -137,8 +137,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginEnd="6dp"
-                android:layout_marginRight="6dp"
                 android:layout_weight="1"
                 android:background="@color/facebook_button"
                 android:drawableLeft="@drawable/facebook"
@@ -148,6 +146,7 @@
                 android:textColor="#FFF" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/btnIngresarGoogle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

@@ -15,4 +15,9 @@
     <!-- Social buttons background -->
     <color name="facebook_button">#415DAD</color>
     <color name="google_button">#EA4B57</color>
+
+    <!-- Chat colors -->
+    <color name="chat_left_color">#FFFFFF</color>
+    <color name="chat_right_color">#E5E3E0</color>
+    <color name="chat_color">#C8C5C0</color>
 </resources>

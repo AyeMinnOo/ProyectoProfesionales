@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.SyncStateContract;
 import android.support.design.widget.AppBarLayout;
@@ -46,6 +47,10 @@ import com.youtube.sorcjc.proyectoprofesionales.io.responses.SimpleResponse;
 import com.youtube.sorcjc.proyectoprofesionales.ui.adapter.MessageAdapter;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import retrofit.Call;
@@ -94,6 +99,13 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_CAMERA = 20;
     private static final int SELECT_FILE = 21;
 
+    // Default extension for images (using camera)
+    private final String defaultExtension = "jpg";
+
+    // Location of the last photo taken
+    private String currentPhotoPath;
+    private File photoFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,9 +151,25 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CAMERA) {
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-                final String defaultExtension = "jpg";
-                postPicture(thumbnail, defaultExtension);
+                // Get the thumbnail from extras
+                /*
+                // Get the dimensions of the bitmap
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+                int photoW = bmOptions.outWidth;
+                int photoH = bmOptions.outHeight;
+
+                // Determine how much to scale down the image
+                int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+                // Decode the image file into a Bitmap sized to fill the View
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                */
+                Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+                postPicture(bitmap, defaultExtension);
+                new File(currentPhotoPath).delete();
 
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
@@ -324,25 +352,64 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private File createDestinationFile() throws IOException {
+        // Path for the temporary image and its name
+        final File storageDirectory = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        final String imageFileName = "" + System.currentTimeMillis();
+
+        File image = File.createTempFile(
+                imageFileName,          // prefix
+                "." + defaultExtension, // suffix
+                storageDirectory              // directory
+        );
+
+        // Save a the file path
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
     private void selectPicture() {
-        final CharSequence[] items = {"Tomar una foto", "Escoger una imagen", "Cancelar"};
+        // Options for the alert dialog
+        final CharSequence[] items = {
+                getResources().getString(R.string.picture_from_camera),
+                getResources().getString(R.string.picture_from_gallery),
+                getResources().getString(R.string.picture_cancel)
+        };
         AlertDialog.Builder builder = new AlertDialog.Builder(TalkActivity.this);
-        builder.setTitle("Enviar imagen !");
+
+        // Title
+        builder.setTitle(getResources().getString(R.string.picture_title));
+
+        // Actions
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Tomar una foto")) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, REQUEST_CAMERA);
-                } else if (items[item].equals("Escoger una imagen")) {
+            public void onClick(DialogInterface dialog, int option) {
+
+                if (option == 0) {
+                    // Create the File where the photo should go
+                    File photoFile = null;
+                    try {
+                        photoFile = createDestinationFile();
+                    } catch (IOException ex) {
+                        return;
+                    }
+
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                        startActivityForResult(takePictureIntent, REQUEST_CAMERA);
+                    }
+
+                } else if (option == 1) {
                     Intent intent = new Intent(
                             Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
-                    startActivityForResult(
-                            Intent.createChooser(intent, "Seleccione imagen"),
-                            SELECT_FILE);
-                } else if (items[item].equals("Cancelar")) {
+                    final String chooserTitle = getResources().getString(R.string.picture_chooser_title);
+                    startActivityForResult(Intent.createChooser(intent, chooserTitle), SELECT_FILE);
+                } else if (option == 2) {
                     dialog.dismiss();
                 }
             }
@@ -380,6 +447,8 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             public void onFailure(Throwable t) {
                 Toast.makeText(TalkActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
+
+
         });
     }
 
