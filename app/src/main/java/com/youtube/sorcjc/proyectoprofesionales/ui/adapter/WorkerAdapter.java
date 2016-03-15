@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.youtube.sorcjc.proyectoprofesionales.domain.Worker;
 import com.youtube.sorcjc.proyectoprofesionales.ui.ProfileActivity;
-import com.youtube.sorcjc.proyectoprofesionales.ui.TalkActivity;
 import com.youtube.sorcjc.proyectoprofesionales.ui.custom.CircleTransform;
 
 import java.util.ArrayList;
@@ -43,9 +42,8 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
 
         holder.setName(worker.getName());
         holder.setImage(worker.getUrlPhoto());
-        holder.setImageClick(worker.getPid());
+        holder.setEventClick(worker.getPid());
         holder.setDescription(worker.getCatstr());
-        holder.setChatClick(worker.getUid(), worker.getPid(),  worker.getCatstr(), worker.getName(), worker.getPrestador().getTel());
         holder.hideDate();
     }
 
@@ -76,7 +74,7 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
         private TextView tvDescription;
         private TextView tvDate;
 
-        private LinearLayout contact_info;
+        private LinearLayout layout_info;
 
         public WorkerViewHolder(View itemView) {
             super(itemView);
@@ -86,7 +84,7 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
             tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
 
-            contact_info = (LinearLayout) itemView.findViewById(R.id.contact_info);
+            layout_info = (LinearLayout) itemView.findViewById(R.id.layout_info);
         }
 
         public void setName(String name){
@@ -102,51 +100,24 @@ public class WorkerAdapter extends RecyclerView.Adapter<WorkerAdapter.WorkerView
                     .into(ivPhoto);
         }
 
-        public void setImageClick(final String pid) {
-            // Set event click
-            ivPhoto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(view.getContext(), ProfileActivity.class);
-                    Bundle mBundle = new Bundle();
-                    mBundle.putString("pid", pid);
-                    i.putExtras(mBundle);
-                    context.startActivity(i);
-                }
-            });
+        public void setEventClick(final String pid) {
+            // Set event click for all item to open the profile
+            ProfileClickListener chatClickListener = new ProfileClickListener(pid);
+            layout_info.setOnClickListener(chatClickListener);
         }
 
-        public void setChatClick(final String uid, final String pid, final String catstr, final String name, final String tel) {
-            // Set event click for open the chat
-            ChatClickListener chatClickListener = new ChatClickListener(uid, pid, catstr, name, tel);
-
-            contact_info.setOnClickListener(chatClickListener);
-        }
-
-        class ChatClickListener implements View.OnClickListener {
-            private final String uid;
+        class ProfileClickListener implements View.OnClickListener {
             private final String pid;
-            private final String catstr;
-            private final String name;
-            private final String tel;
 
-            public ChatClickListener(String uid, String pid, String catstr, String name, String tel) {
-                this.uid = uid;
+            public ProfileClickListener(String pid) {
                 this.pid = pid;
-                this.catstr = catstr;
-                this.name = name;
-                this.tel = tel;
             }
 
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(view.getContext(), TalkActivity.class);
+                Intent i = new Intent(view.getContext(), ProfileActivity.class);
                 Bundle b = new Bundle();
-                b.putString("uid", uid);
                 b.putString("pid", pid);
-                b.putString("catstr", catstr);
-                b.putString("name", name);
-                b.putString("tel", tel);
                 i.putExtras(b);
                 view.getContext().startActivity(i);
             }

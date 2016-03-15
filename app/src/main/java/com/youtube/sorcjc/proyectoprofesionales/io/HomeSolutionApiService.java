@@ -67,6 +67,10 @@ public interface HomeSolutionApiService {
     @POST("sendpic")
     Call<EnviarMsjeResponse> postPic(@Query("tk") String token, @Query("touid") String toUid, @Part("image") String base64, @Query("extension") String extension, @Query("replyto") String replyTo);
 
+    // http://dev.homesolution.com.ar/api/closechat/
+    @GET("closechat")
+    Call<SimpleResponse> getCloseChatResponse(@Query("tk") String token, @Query("touid") String toUid);
+
     // http://dev.homesolution.com.ar/api/getprestadores?cid=36&tk={token}
     @GET("getprestadores")
     Call<AgendaResponse> getPrestadores(@Query("cid") String categoryId, @Query("tk") String token);
