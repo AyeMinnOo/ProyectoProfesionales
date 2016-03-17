@@ -66,33 +66,30 @@ public class Certifications {
 
     @Override
     public String toString() {
+        // Returns the certifications in html format
         String certificaciones = "";
 
         if (matriculas != null && ! matriculas.isEmpty())
-            certificaciones += "Matrículas: " + matriculas + "\n";
+            certificaciones += "<b>Matrículas: </b>" + matriculas + "<br /><br />";
 
         if (habilitaciones != null && ! habilitaciones.isEmpty())
-            certificaciones += "Habilitaciones: " + habilitaciones + "\n";
+            certificaciones += "<b>Habilitaciones: </b>" + habilitaciones + "<br /><br />";
 
         if (titulos != null && ! titulos.isEmpty())
-            certificaciones += "Títulos: " + titulos + "\n";
+            certificaciones += "<b>Títulos: </b>" + titulos + "<br /><br />";
 
         if (cursos != null && ! cursos.isEmpty())
-            certificaciones += "Cursos: " + cursos + "\n";
+            certificaciones += "<b>Cursos: </b>" + cursos + "<br /><br />";
 
         if (otras != null && ! otras.isEmpty())
-            certificaciones += "Otras: " + otras + "\n";
+            certificaciones += "<b>Otras: </b>" + otras + "<br /><br />";
 
         if (ART != null && ! ART.isEmpty())
-            certificaciones += "ART: " + ART + "\n";
+            certificaciones += "<b>ART: </b>" + ART + "<br /><br />";
 
         if (garantias != null && ! garantias.isEmpty())
-            certificaciones += "Garantías: " + garantias + "\n";
+            certificaciones += "<b>Garantías: </b>" + garantias + "<br />";
 
-        /*
-        if (certificaciones.isEmpty())
-            certificaciones = "Este usuario no dispone de certificaciones.";
-        */
         return certificaciones;
     }
 }

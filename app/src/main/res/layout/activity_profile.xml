@@ -116,6 +116,7 @@
             android:orientation="vertical">
 
             <include layout="@layout/item_info" android:id="@+id/card_basic" />
+            <include layout="@layout/item_info" android:id="@+id/card_areas" />
             <include layout="@layout/item_info" android:id="@+id/card_skills" />
             <include layout="@layout/item_info" android:id="@+id/card_ratings" />
             <include layout="@layout/item_info" android:id="@+id/card_certifications" />

@@ -17,13 +17,21 @@ public class Rating {
   },
   "skills": "[\"15\"]",
   "created": "2015-05-16 01:39:35",
-  "overall": "998"
+  "overall": "998",
+  "estrellitas": 5
 }
 */
     @SerializedName("comment")
     private String comment;
 
+    @SerializedName("estrellitas")
+    private String stars;
+
     public String getComment() {
         return comment;
+    }
+
+    public String getStars() {
+        return stars;
     }
 }

@@ -49,6 +49,7 @@
     <string name="next">Siguiente</string>
     <string name="prev">Anterior</string>
     <string name="finish">Calificar</string>
+    <string name="review">Revisión</string>
     <string name="submit_confirm_message">¿Está seguro de enviar esta calificación?</string>
     <string name="submit_confirm_button">Confirmar</string>
     <string name="label_spinner_category">Categoría de trabajo</string>

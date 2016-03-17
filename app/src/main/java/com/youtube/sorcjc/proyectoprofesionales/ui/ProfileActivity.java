@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,8 +55,8 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     private RatingBar rbEstrellas;
 
     // Worker display data
-    private CardView cardView1, cardView2, cardView3, cardView4;
-    private TextView description1, description2, description3, description4;
+    private CardView cardView1, cardView2, cardView3, cardView4, cardView5;
+    private TextView description1, description2, description3, description4, description5;
 
     // Worker parameter data (to start TalkActivity)
     private String uid;
@@ -105,9 +106,10 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
 
     private void getCards() {
         cardView1 = (CardView) findViewById(R.id.card_basic);
-        cardView2 = (CardView) findViewById(R.id.card_skills);
-        cardView3 = (CardView) findViewById(R.id.card_ratings);
-        cardView4 = (CardView) findViewById(R.id.card_certifications);
+        cardView2 = (CardView) findViewById(R.id.card_areas);
+        cardView3 = (CardView) findViewById(R.id.card_skills);
+        cardView4 = (CardView) findViewById(R.id.card_ratings);
+        cardView5 = (CardView) findViewById(R.id.card_certifications);
     }
 
     private void getCardDescriptions() {
@@ -115,6 +117,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
         description2 = (TextView) cardView2.findViewById(R.id.tvContenido);
         description3 = (TextView) cardView3.findViewById(R.id.tvContenido);
         description4 = (TextView) cardView4.findViewById(R.id.tvContenido);
+        description5 = (TextView) cardView5.findViewById(R.id.tvContenido);
     }
 
     private void getCardTitles() {
@@ -122,11 +125,13 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
         final TextView tvTitulo2 = (TextView) cardView2.findViewById(R.id.tvTitulo);
         final TextView tvTitulo3 = (TextView) cardView3.findViewById(R.id.tvTitulo);
         final TextView tvTitulo4 = (TextView) cardView4.findViewById(R.id.tvTitulo);
+        final TextView tvTitulo5 = (TextView) cardView5.findViewById(R.id.tvTitulo);
 
-        tvTitulo1.setText("Información");
-        tvTitulo2.setText("Habilidades");
-        tvTitulo3.setText("Calificaciones");
+        tvTitulo1.setText("Descripción");
+        tvTitulo2.setText("Áreas");
+        tvTitulo3.setText("Habilidades");
         tvTitulo4.setText("Certificaciones");
+        tvTitulo5.setText("Calificaciones");
     }
 
     private void setUpActionBar() {
@@ -196,38 +201,46 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
             rbEstrellas.setRating(workerData.getEstrellitas());
 
             // Basic information
-            description1.setText(workerBasic.toString());
+            description1.setText( Html.fromHtml(workerBasic.toString()) );
             cardView1.setVisibility(View.VISIBLE);
 
-            // Skills
-            String content2 = "";
-            ArrayList<Skill> skills = workerData.getSkills();
-            for (Skill skill : skills) {
-                content2 += "- "+skill.getName()+"\n";
-            }
+            // Areas
+            String content2 = workerBasic.getArea();
             if (! content2.isEmpty()) {
-                description2.setText(content2);
+                description2.setText( content2 );
                 cardView2.setVisibility(View.VISIBLE);
             }
 
-            // Ratings
+            // Skills
             String content3 = "";
-            ArrayList<Rating> ratings = workerData.getRatings();
-            for (Rating rating : ratings) {
-                content3 += "- "+rating.getComment()+"\n";
+            ArrayList<Skill> skills = workerData.getSkills();
+            for (Skill skill : skills) {
+                content3 += "&#8226; "+skill.getName()+"<br />";
             }
             if (! content3.isEmpty()) {
-                description3.setText(content3);
+                description3.setText( Html.fromHtml(content3) );
                 cardView3.setVisibility(View.VISIBLE);
             }
 
             // Certifications
             final String content4 = workerBasic.getCertifications().toString();
             if (! content4.isEmpty()) {
-                description4.setText(content4);
+                description4.setText( Html.fromHtml(content4) );
                 cardView4.setVisibility(View.VISIBLE);
             }
 
+            // Ratings
+            String content5 = "";
+            ArrayList<Rating> ratings = workerData.getRatings();
+            for (Rating rating : ratings) {
+                if (rating.getComment().length() > 1) {
+                    content5 += "&#8226; ("+rating.getStars()+") "+rating.getComment()+"<br /><br />";
+                }
+            }
+            if (! content5.isEmpty()) {
+                description5.setText( Html.fromHtml(content5) );
+                cardView5.setVisibility(View.VISIBLE);
+            }
 
             uid = workerBasic.getUid();
             catstr = workerBasic.getCatstr();
@@ -251,8 +264,11 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
         switch (view.getId()) {
             case R.id.btnCalificar:
                 Intent iScore = new Intent(view.getContext(), ScoreActivity.class);
+
                 Bundle bScore = new Bundle();
                 bScore.putString("pid", pid);
+                bScore.putString("name", name);
+
                 iScore.putExtras(bScore);
                 startActivity(iScore);
                 break;

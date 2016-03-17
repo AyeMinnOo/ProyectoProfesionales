@@ -2,6 +2,7 @@ package com.youtube.sorcjc.proyectoprofesionales.ui;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -58,6 +59,7 @@ public class ScoreActivity extends AppCompatActivity implements
 
     // Selected worker to qualify
     private String pid;
+    private String name;
 
     // User authenticated data
     private static String token;
@@ -97,7 +99,17 @@ public class ScoreActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
 
+        // Bundle parameters from previous activity
+        if (pid == null) {
+            Bundle b = getIntent().getExtras();
+            pid = b.getString("pid");
+            name = b.getString("name");
+            loadAuthenticatedUser();
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.action_bar);
+        toolbar.setTitle(name);
+        toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
 
         if (savedInstanceState != null) {
@@ -139,13 +151,6 @@ public class ScoreActivity extends AppCompatActivity implements
                 updateBottomBar();
             }
         });
-
-        // Bundle parameters from previous activity
-        if (pid == null) {
-            Bundle b = getIntent().getExtras();
-            pid = b.getString("pid");
-            loadAuthenticatedUser();
-        }
 
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override

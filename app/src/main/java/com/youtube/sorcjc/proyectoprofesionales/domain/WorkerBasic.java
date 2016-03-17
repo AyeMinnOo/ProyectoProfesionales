@@ -93,17 +93,19 @@ public class WorkerBasic {
     public String toString() {
         String info = "";
 
+        if (! catstr.isEmpty())
+            info += "<i>" + catstr + "</i><br />";
+
         if (! description.isEmpty())
-            info += "Descripción: " + description + "\n";
+            info += description + "<br /><br />";
 
         if (! experience.isEmpty())
-            info += "Experiencia: " + experience + "\n";
+            info += "<b>Experiencia: </b>" + experience + "<br /><br />";
 
-        if (! catstr.isEmpty())
-            info += "Categorías: " + catstr + "\n";
-
+        /* Now, this info will be loaded in a different card
         if (! area.isEmpty())
-            info += "Áreas: " + area + "\n";
+            info += "<b>Áreas: </b>" + area + "<br />";
+        */
 
         if (info.isEmpty())
             info = "Este usuario no ha cargado su información básica.";

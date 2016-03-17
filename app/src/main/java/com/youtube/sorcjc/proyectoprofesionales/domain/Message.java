@@ -5,6 +5,10 @@ import android.content.Context;
 import com.google.gson.annotations.SerializedName;
 import com.youtube.sorcjc.proyectoprofesionales.Global;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Message {
 /*
     {
@@ -57,9 +61,21 @@ public class Message {
     }
 
     public String getCreated() {
-        final String time = created.split(" ")[1];
-        final String time_parts[] = time.split(":");
-        return time_parts[0] + ":" + time_parts[1];
+        // Example for "created" => 2016-03-09 13:15:30
+        String time;
+        try {
+            // Original format => yyyy-MM-dd hh:mm:ss
+            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date date = dt.parse(created);
+
+            // New format => dd/MM/yyyy hh:mm
+            SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+            time = dt1.format(date);
+        } catch (ParseException pe) {
+            time = "Unknown";
+        }
+
+        return time;
     }
 
     public boolean amISender(Context context) {
