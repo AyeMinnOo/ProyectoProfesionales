@@ -2,6 +2,8 @@ package com.homesolution.app.domain;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class WorkerProfile {
 
     /*
@@ -18,11 +20,18 @@ public class WorkerProfile {
     @SerializedName("picture")
     private String picture;
 
+    @SerializedName("galeria")
+    private ArrayList<String> gallery;
+
     public WorkerData getPrestador() {
         return prestador;
     }
 
     public String getPicture() {
         return picture;
+    }
+
+    public ArrayList<String> getGallery() {
+        return gallery;
     }
 }

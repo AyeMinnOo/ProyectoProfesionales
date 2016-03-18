@@ -18,17 +18,27 @@
             android:id="@+id/tvTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Título"
+            android:text="Galería"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/tvContenido"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Contenido\nContenido"
-            android:textSize="15sp" />
+        <ImageView
+            android:id="@+id/ivA"
+            android:adjustViewBounds="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
+        <ImageView
+            android:id="@+id/ivB"
+            android:adjustViewBounds="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/ivC"
+            android:adjustViewBounds="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

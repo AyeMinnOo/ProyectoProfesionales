@@ -121,6 +121,7 @@
             <include layout="@layout/item_info" android:id="@+id/card_ratings" />
             <include layout="@layout/item_info" android:id="@+id/card_certifications" />
 
+            <include layout="@layout/item_gallery" android:id="@+id/card_gallery" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

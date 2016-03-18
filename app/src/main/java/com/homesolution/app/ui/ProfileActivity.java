@@ -32,6 +32,7 @@ import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.io.responses.PrestadorResponse;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -55,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     private RatingBar rbEstrellas;
 
     // Worker display data
-    private CardView cardView1, cardView2, cardView3, cardView4, cardView5;
+    private CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardViewGallery;
     private TextView description1, description2, description3, description4, description5;
 
     // Worker parameter data (to start TalkActivity)
@@ -110,6 +111,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
         cardView3 = (CardView) findViewById(R.id.card_skills);
         cardView4 = (CardView) findViewById(R.id.card_ratings);
         cardView5 = (CardView) findViewById(R.id.card_certifications);
+        cardViewGallery = (CardView) findViewById(R.id.card_gallery);
     }
 
     private void getCardDescriptions() {
@@ -242,10 +244,31 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
                 cardView5.setVisibility(View.VISIBLE);
             }
 
+            // Gallery
+            ArrayList<String> gallery = workerProfile.getGallery();
+            if (gallery.size() > 0) {
+                loadImageGallery(R.id.ivA, gallery.get(0));
+                if (gallery.size() > 1) {
+                    loadImageGallery(R.id.ivB, gallery.get(1));
+                    if (gallery.size() > 2)
+                        loadImageGallery(R.id.ivC, gallery.get(2));
+                }
+
+                cardViewGallery.setVisibility(View.VISIBLE);
+            }
+
             uid = workerBasic.getUid();
             catstr = workerBasic.getCatstr();
             name = workerBasic.getName();
         }
+    }
+
+    private void loadImageGallery(int idView, String urlImage) {
+        ImageView imageView = (ImageView) cardViewGallery.findViewById(idView);
+        Picasso.with(getApplicationContext())
+                .load(urlImage)
+                .placeholder(R.drawable.ic_category_default)
+                .into(imageView);
     }
 
     private void saveCategoriesGlobal(ArrayList<Category> categories) {

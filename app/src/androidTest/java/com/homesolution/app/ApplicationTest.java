@@ -1,4 +1,4 @@
-package com.youtube.sorcjc.proyectoprofesionales;
+package com.homesolution.app;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
