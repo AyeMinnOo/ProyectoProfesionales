@@ -9,7 +9,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.youtube.sorcjc.proyectoprofesionales"
+        applicationId "com.homesolution.app"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1

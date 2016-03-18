@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
     <!-- Contact info -->
-    <com.youtube.sorcjc.proyectoprofesionales.ui.custom.RoundedImageView
+    <com.homesolution.app.ui.custom.RoundedImageView
         android:id="@+id/ivPhoto"
         android:layout_width="30dp"
         android:layout_height="30dp"

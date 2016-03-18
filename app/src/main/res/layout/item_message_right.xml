@@ -48,7 +48,7 @@
             android:textColor="#484848"
             android:textSize="16sp" />
 
-        <com.youtube.sorcjc.proyectoprofesionales.ui.custom.AspectRatioImageView
+        <com.homesolution.app.ui.custom.AspectRatioImageView
             android:id="@+id/ivImagen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -15,7 +15,7 @@
     <uses-permission android:name=".permission.C2D_MESSAGE" />
 
     <application
-        android:name=".Global"
+        android:name="com.homesolution.app.Global"
         android:allowBackup="true"
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
@@ -27,35 +27,35 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name="com.homesolution.app.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.RegisterActivity" />
-        <activity android:name=".ui.ConfirmRegisterActivity" />
-        <activity android:name=".ui.LoginActivity" />
+        <activity android:name="com.homesolution.app.ui.RegisterActivity" />
+        <activity android:name="com.homesolution.app.ui.ConfirmRegisterActivity" />
+        <activity android:name="com.homesolution.app.ui.LoginActivity" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".ui.PanelActivity"
+            android:name="com.homesolution.app.ui.PanelActivity"
             android:label="@string/title_activity_panel"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.settings.SettingsActivity" />
-        <activity android:name=".ui.settings.UpdateUserActivity" />
-        <activity android:name=".ui.settings.TermsConditionsActivity" />
-        <activity android:name=".ui.TalkActivity" />
+        <activity android:name="com.homesolution.app.ui.settings.SettingsActivity" />
+        <activity android:name="com.homesolution.app.ui.settings.UpdateUserActivity" />
+        <activity android:name="com.homesolution.app.ui.settings.TermsConditionsActivity" />
+        <activity android:name="com.homesolution.app.ui.TalkActivity" />
         <activity
-            android:name=".ui.ProfileActivity"
+            android:name="com.homesolution.app.ui.ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.CategoryActivity" />
+        <activity android:name="com.homesolution.app.ui.CategoryActivity" />
         <activity
-            android:name=".ui.ScoreActivity"
+            android:name="com.homesolution.app.ui.ScoreActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
@@ -71,21 +71,21 @@
         </receiver>
 
         <service
-            android:name=".io.gcm.MyGcmListenerService"
+            android:name="com.homesolution.app.io.gcm.MyGcmListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
         <service
-            android:name=".io.gcm.MyInstanceIDListenerService"
+            android:name="com.homesolution.app.io.gcm.MyInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
         <service
-            android:name=".io.gcm.RegistrationIntentService"
+            android:name="com.homesolution.app.io.gcm.RegistrationIntentService"
             android:exported="false" />
 
     </application>

@@ -8,10 +8,10 @@
     {
       "client_info": {
         "mobilesdk_app_id": "1:214942368528:android:106af26a7d5b6a94",
-        "client_id": "android:com.youtube.sorcjc.proyectoprofesionales",
+        "client_id": "android:com.homesolution.app",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "com.youtube.sorcjc.proyectoprofesionales"
+          "package_name": "com.homesolution.app"
         }
       },
       "oauth_client": [],
