@@ -29,7 +29,7 @@ public class HomeSolutionApiAdapter {
 
         if (API_SERVICE == null) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://dev.homesolution.com.ar/api/")
+                    .baseUrl("http://homesolution.com.ar/api/")
                     .addConverterFactory(buildGsonConverter())
                     .client(httpClient) // <-- using the log level
                     .build();
