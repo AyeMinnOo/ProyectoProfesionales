@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:focusableInTouchMode="true">
 
             <TextView
                 android:layout_width="match_parent"
@@ -115,7 +116,6 @@
                 android:textColor="#FFF" />
 
             <Button
-                android:visibility="gone"
                 android:id="@+id/btnIngresarGoogle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -126,7 +126,8 @@
                 android:gravity="center"
                 android:text="Google"
                 android:textAllCaps="false"
-                android:textColor="#FFF" />
+                android:textColor="#FFF"
+                android:visibility="gone" />
         </LinearLayout>
 
 

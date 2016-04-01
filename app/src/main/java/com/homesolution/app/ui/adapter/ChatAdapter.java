@@ -151,10 +151,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
                 Intent i = new Intent(view.getContext(), TalkActivity.class);
                 Bundle b = new Bundle();
                 b.putString("uid", uid);
-                b.putString("pid", pid);
-                b.putString("name", name);
-                b.putString("catstr", catstr);
-                b.putString("tel", tel);
                 i.putExtras(b);
                 view.getContext().startActivity(i);
             }

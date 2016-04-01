@@ -2,9 +2,11 @@ package com.homesolution.app.ui;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.CursorLoader;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -77,7 +80,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
     // User authenticated data
     // Using static we just need one load
-    private static String token;
+    public static String token;
     private static String uid;
 
     // User destination data
@@ -103,12 +106,22 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private String currentPhotoPath;
     private File photoFile;
 
+    // To handle the push notifications about messages
+    // This variable stores the toUid of the current chat
+    public static String isOpened = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_talk);
 
         adapter = new MessageAdapter(this);
+
+        // Bundle parameters from previous activity
+        if (toUid == null) {
+            Bundle b = getIntent().getExtras();
+            toUid = b.getString("uid");
+        }
 
         // Setup the action bar
         setUpActionBar();
@@ -128,18 +141,39 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         btnImage = (ImageView) findViewById(R.id.btnImage);
         btnImage.setOnClickListener(this);
 
-        // Bundle parameters from previous activity
-        if (toUid == null) {
-            Bundle b = getIntent().getExtras();
-            toUid = b.getString("uid");
-            pid = b.getString("pid");
-            name = b.getString("name");
-            catstr = b.getString("catstr");
-            phoneNumber = b.getString("tel");
-        }
-
+        // Load the user data, from global variables
         loadAuthenticatedUser();
-        loadMessages();
+
+        // Load the messages in chat, using a webservice
+        loadMessages(true);
+
+        // Register a receiver for incoming messages from GCM
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("chat-message"));
+        this.isOpened = toUid;
+    }
+
+    // Here we can handle the received Intents.
+    // This will be called whenever an Intent with an action name "chat-message" is sent.
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String uidNewMessage = intent.getStringExtra("uid");
+            if (toUid.equals(uidNewMessage))
+                loadMessages(false);
+            else
+                Log.d("Test/Receiver", "New message from another user ("+uidNewMessage+"). Current is "+toUid);
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        // Unregister since the activity is about to be closed.
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        this.isOpened = "";
+
+        super.onDestroy();
     }
 
     @Override
@@ -454,8 +488,8 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    /* Just for testing purpouses
     private void loadDummyMessages() {
-        // Used for testing
         ArrayList<Message> examples = new ArrayList<>();
         examples.add(new Message("Hola, cómo estás?", "4.30 PM", false));
         examples.add(new Message("Estás ahí?", "4.45 PM", false));
@@ -463,8 +497,9 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         examples.add(new Message("Quería hacerte una consulta", "4.55 PM", false));
         adapter.addAll(examples);
     }
+    */
 
-    private void loadMessages() {
+    private void loadMessages(final boolean loadAll) {
         Log.d("Test/Talk", "Loading chat with the uid => " + toUid);
         Call<ChatResponse> call = HomeSolutionApiAdapter.getApiService().getChatResponse(token, toUid);
 
@@ -478,26 +513,45 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(TalkActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
                 } else {
                     Talk talk = response.body().getResponse();
-                    setUpTabs(talk.isPrestador());
-                    if (talk.isPrestador()) {
-                        saveCategoriesGlobal(talk.getPrestador().getCategories());
+
+                    // Avoid to load all when comes new messages to the current chat
+                    if (loadAll) {
+
+                        // First time we set the basic information in action bar
+                        name = talk.getUsername();
+                        tvName.setText(name);
+
+                        // If the user is a worker, we show the tabs,
+                        setUpTabs(talk.isPrestador());
+
+                        if (talk.isPrestador()) {
+                            // save the categories in a global variable,
+                            saveCategoriesGlobal(talk.getPrestador().getCategories());
+
+                            // set the categories string in action bar,
+                            catstr = talk.getPrestador().getBasico().getCatstr();
+                            tvDescription.setText(catstr);
+
+                            // and store a useful information
+                            pid = talk.getPrestador().getBasico().getPid();
+                            phoneNumber = talk.getPrestador().getTel();
+                        } else {
+                            // If not, there aren't categories available
+                            tvDescription.setVisibility(View.GONE);
+                        }
+
+                        // Load the avatar in the action bar
+                        Picasso.with(getBaseContext())
+                                .load(talk.getPicture())
+                                .placeholder(R.drawable.avatar_default)
+                                .into(ivPhoto);
                     }
 
-                    // Set contact data
-                    tvName.setText(name);
-                    Picasso.with(getBaseContext())
-                            .load(talk.getPicture())
-                            .placeholder(R.drawable.com_facebook_profile_picture_blank_portrait)
-                            .into(ivPhoto);
-                    if (catstr.isEmpty())
-                        tvDescription.setVisibility(View.GONE);
-                    else
-                        tvDescription.setText(catstr);
-
-                    // Set messages
-                    adapter.addAll(talk.getChat());
+                    // We always reload the messages and scroll to the end
+                    adapter.setAll(talk.getChat());
                     scrollLastMessage();
-                    Log.d("Test/Talk", "Number of messages in chat => " + talk.getChat().size());
+
+                    Log.d("Test/Talk", "Messages loaded in chat => " + talk.getChat().size());
                 }
 
                 progressDialog.dismiss();

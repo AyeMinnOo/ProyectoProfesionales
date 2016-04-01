@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.homesolution.app.ui.LoginActivity;
 import com.homesolution.app.Global;
+import com.homesolution.app.ui.TalkActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.io.responses.SimpleResponse;
@@ -109,6 +110,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString(getString(R.string.user_data), "");
             editor.apply();
+
+            // Clear static variables
+            TalkActivity.token = null;
 
             // Back to LoginActivity
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
