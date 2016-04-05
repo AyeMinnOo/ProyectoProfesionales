@@ -86,6 +86,11 @@ public class WorkerBasic {
     }
 
     public String getArea() {
+        final int last = area.length() - 1;
+
+        if (area.charAt(last) == ',')
+            return area.substring(0, last);
+
         return area;
     }
 

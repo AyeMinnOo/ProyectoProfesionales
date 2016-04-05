@@ -13,11 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.homesolution.app.io.responses.CategoriasResponse;
 import com.homesolution.app.ui.fragments.AgendaFragment;
-import com.homesolution.app.ui.fragments.ChatFragment;
+import com.homesolution.app.ui.fragments.ChatsFragment;
 import com.homesolution.app.ui.settings.SettingsActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.domain.Category;
@@ -42,19 +41,6 @@ public class PanelActivity extends AppCompatActivity {
     public static ArrayList<Category> categoryList;
     public static ProgressDialog progressDialog;
 
-    /*
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        switch(keyCode)
-        {
-            case KeyEvent.KEYCODE_BACK:
-                moveTaskToBack(true);
-                return true;
-        }
-        return false;
-    }*/
-
     @Override
     public void onBackPressed() {
         finishAffinity();
@@ -65,17 +51,13 @@ public class PanelActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_panel);
 
+        // Data required by the fragments
+        loadCategories();
+
         // Views
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         viewPager = (ViewPager) findViewById(R.id.container);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-
-        // Setting the view pager
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), buildFragments(), buildTabTitles());
-        viewPager.setAdapter(pagerAdapter);
-
-        // Some delay to prevent empty titles
-        tabLayout.setupWithViewPager(viewPager);
 
         // Setting the toolbar
         if (toolbar != null)
@@ -96,14 +78,26 @@ public class PanelActivity extends AppCompatActivity {
                 ArrayList<Category> categories = response.body().getResponse();
                 categoryList = categories;
                 Log.d("Test/Panel", "Categories are ready => " + categories.size());
+
+                // After load categories ...
+                setupViewPager();
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(PanelActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("Test/Panel", t.getLocalizedMessage());
             }
         });
 
+    }
+
+    private void setupViewPager() {
+        // Setting the view pager
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), buildFragments(), buildTabTitles());
+        viewPager.setAdapter(pagerAdapter);
+
+        // Some delay to prevent empty titles
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -131,12 +125,9 @@ public class PanelActivity extends AppCompatActivity {
     }
 
     private ArrayList<Fragment> buildFragments() {
-        // Data required by the fragments
-        loadCategories();
-
         ArrayList<Fragment> fragments = new ArrayList<>();
 
-        fragments.add(new ChatFragment());
+        fragments.add(new ChatsFragment());
         fragments.add(new AgendaFragment());
         fragments.add(new BusquedaFragment());
 

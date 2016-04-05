@@ -20,7 +20,10 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingBottom="63dp"
+            android:clipToPadding="false"/>
+
     </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>

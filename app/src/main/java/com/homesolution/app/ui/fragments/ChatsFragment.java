@@ -1,5 +1,6 @@
 package com.homesolution.app.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,13 +33,13 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class ChatFragment extends Fragment implements View.OnClickListener {
+public class ChatsFragment extends Fragment implements View.OnClickListener {
 
 
-    // Views and controls in fragment_chat.xml
-    private LinearLayout layoutTop;
-    private RecyclerView recyclerView;
-    private LinearLayout layoutIrBusqueda;
+    // Views and controls in fragment_chats.xmll
+    private static LinearLayout layoutTop;
+    private static RecyclerView recyclerView;
+    private static LinearLayout layoutIrBusqueda;
     private ImageView ivIrBusqueda;
 
     // The search will be performed in the third tab
@@ -54,19 +55,26 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     // User authenticated data
     private static String token;
 
+    // Required to reload the active chats
+    private static Context context;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         chatAdapter = new ChatAdapter(getActivity());
         categoryAdapter = new CategoryAdapter(getActivity());
+
+        context = getActivity();
+
+        Log.d("Test/Chats", "onCreate fired !");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_chats, container, false);
 
         // Get references to the views and controls
         layoutTop = (LinearLayout) rootView.findViewById(R.id.layoutTop);
@@ -92,37 +100,42 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(chatAdapter);
 
+        // Click events
         ivIrBusqueda.setOnClickListener(this);
         ivBuscar.setOnClickListener(this);
 
+        // Log.d("Test/Chats", "onCreateView fired !");
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setAuthenticatedUser();
+        getAuthenticatedUser();
 
         // Try to load active chats
         // Use the ChatAdapter if there are messages
         // But use CategoriesAdapter if there aren't messages
         loadActiveChats();
+
+        // Log.d("Test/Chats", "onViewCreated fired !");
     }
 
-    private void setAuthenticatedUser() {
+    private void getAuthenticatedUser() {
         final Global global = (Global) getActivity().getApplicationContext();
         token = global.getToken();
     }
 
-    private void loadActiveChats() {
+    public static void loadActiveChats() {
         Call<ChatsResponse> call = HomeSolutionApiAdapter.getApiService().getChatsResponse(token);
+
         call.enqueue(new Callback<ChatsResponse>() {
             @Override
             public void onResponse(Response<ChatsResponse> response, Retrofit retrofit) {
                 ArrayList<Chat> chats = response.body().getResponse();
 
                 if (chats.size() > 0) {
-                    Log.d("Test/Chat", "Active chats from WS => " + chats.size());
+                    // Log.d("Test/Chat", "Active chats from WS => " + chats.size());
                     showMessages(chats);
                 } else {
                     showCategories();
@@ -133,20 +146,21 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("Test/Chat", "ChatsResponse onFailure => " + t.getLocalizedMessage());
+                Toast.makeText(ChatsFragment.context, R.string.retrofit_failure, Toast.LENGTH_SHORT).show();
+                // Log.d("Test/Chat", "ChatsResponse onFailure => " + t.getLocalizedMessage());
+
                 PanelActivity.progressDialog.dismiss();
             }
         });
     }
 
-    private void showMessages(ArrayList<Chat> chats) {
+    public static void showMessages(ArrayList<Chat> chats) {
         // Hide top layout
         layoutTop.setVisibility(View.GONE);
         chatAdapter.setAll(chats);
     }
 
-    private void showCategories() {
+    public static void showCategories() {
         // Hide bottom layout
         layoutIrBusqueda.setVisibility(View.GONE);
 
@@ -178,7 +192,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 PanelActivity.viewPager.setCurrentItem(2, true);
                 break;
         }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        // Log.d("Test/Chats", "onResume fired !");
     }
 }

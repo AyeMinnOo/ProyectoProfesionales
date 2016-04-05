@@ -254,7 +254,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onError(FacebookException e) {
-                Toast.makeText(context, e.getCause().toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

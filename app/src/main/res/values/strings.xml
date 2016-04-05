@@ -57,6 +57,13 @@
     <!-- Terms and conditions -->
     <string name="terms_conditions">Toda persona que quiera utilizar los servicios debe leer, entender y aceptar las condiciones establecidas en los Términos y Condiciones Generales y en las Políticas de Privacidad así como en los demás documentos incorporados a los mismos por referencia, previo a su registración como Usuario de Home Solution ™.\n\nLos Servicios sólo están disponibles para personas que tengan capacidad legal para contratar y capacidad legal para trabajar, según la normativa vigente a tales efectos en la República Argentina. No podrán utilizar los servicios las personas que no tengan esa capacidad, los menores de edad o Usuarios/Prestadores de Home Solution ™ que hayan sido suspendidos temporalmente o inhabilitados definitivamente. Si estás registrando un Usuario/Prestador como Empresa, debes contar con la representación necesaria otorgada por la entidad y, por carácter transitivo, obligar a la misma en los términos de este Acuerdo.</string>
 
+    <!-- Category with 0 results -->
+    <string name="empty_category_title">Home Solution recién inicia operaciones en tu ciudad.</string>
+    <string name="empty_category_description">Si no encontrás aún al profesional que buscas, te invitamos a que sigas ingresando.\nSi conoces algúno de confianza, lo podes invitar a formar parte desde tu cuenta.</string>
+
+    <!-- Message for Retrofit onFailure -->
+    <string name="retrofit_failure">Ocurrió un error inesperado</string>
+
     <!-- Just for debug GCM -->
     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
         send downstream messages to this app.</string>

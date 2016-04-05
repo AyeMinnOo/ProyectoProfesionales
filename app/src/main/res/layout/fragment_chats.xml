@@ -28,7 +28,7 @@
     </LinearLayout>
 
     <!-- The magic happens when height is 0 and weight just 1 -->
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -40,9 +40,11 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewChat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingBottom="63dp"
+            android:clipToPadding="false" />
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
     <View
         android:layout_width="match_parent"
@@ -73,4 +75,5 @@
             android:text="Buscar"
             android:textSize="20sp" />
     </LinearLayout>
+
 </LinearLayout>

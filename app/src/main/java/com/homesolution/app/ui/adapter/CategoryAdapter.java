@@ -72,9 +72,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public void addAll(@NonNull ArrayList<Category> categories) {
-        if (categories == null)
-            throw new NullPointerException("The results cannot be null.");
-
         this.allCategories.addAll(categories);
 
         if (this.filteredCategories.size() == 0)

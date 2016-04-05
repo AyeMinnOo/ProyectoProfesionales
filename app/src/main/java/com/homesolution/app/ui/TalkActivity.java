@@ -45,6 +45,7 @@ import com.homesolution.app.io.responses.ChatResponse;
 import com.homesolution.app.io.responses.EnviarMsjeResponse;
 import com.homesolution.app.io.responses.SimpleResponse;
 import com.homesolution.app.ui.adapter.MessageAdapter;
+import com.homesolution.app.ui.fragments.ChatsFragment;
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 
@@ -172,6 +173,9 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         // Unregister since the activity is about to be closed.
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         this.isOpened = "";
+
+        // Reload active chats
+        ChatsFragment.loadActiveChats();
 
         super.onDestroy();
     }

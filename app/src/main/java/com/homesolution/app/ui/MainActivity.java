@@ -20,7 +20,6 @@ import com.homesolution.app.io.gcm.QuickstartPreferences;
 import com.homesolution.app.io.gcm.RegistrationIntentService;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // Controls
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /*
         PackageInfo info;
         try {
-            info = getPackageManager().getPackageInfo("com.youtube.sorcjc.proyectoprofesionales", PackageManager.GET_SIGNATURES);
+            info = getPackageManager().getPackageInfo("com.homesolution.app", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md;
                 md = MessageDigest.getInstance("SHA");
@@ -54,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.e("no such an algorithm", e.toString());
         } catch (Exception e) {
             Log.e("exception", e.toString());
-        }*/
+        }
+        */
 
         // When the internet is not available
         btnTryAgain = (Button) findViewById(R.id.btnTryAgain);

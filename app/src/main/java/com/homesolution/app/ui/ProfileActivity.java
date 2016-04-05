@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.homesolution.app.Global;
+import com.homesolution.app.domain.Certifications;
 import com.homesolution.app.domain.Rating;
 import com.homesolution.app.domain.Skill;
 import com.homesolution.app.domain.WorkerData;
@@ -225,7 +226,10 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
             }
 
             // Certifications
-            final String content4 = workerBasic.getCertifications().toString();
+            final Certifications certifications = workerBasic.getCertifications();
+            String content4 = "";
+            if (certifications != null)
+                content4 = certifications.toString();
             if (! content4.isEmpty()) {
                 description4.setText( Html.fromHtml(content4) );
                 cardView4.setVisibility(View.VISIBLE);

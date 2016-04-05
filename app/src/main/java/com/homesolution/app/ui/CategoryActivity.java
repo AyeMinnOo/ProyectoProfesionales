@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +39,9 @@ public class CategoryActivity extends AppCompatActivity {
     private WorkerAdapter adapter;
     private ProgressDialog progressDialog;
 
+    // Message showed for 0 results
+    private CardView cardNoWorkers;
+
     // Custom action bar
     private ImageView ivPhoto;
     private TextView tvName;
@@ -67,6 +71,9 @@ public class CategoryActivity extends AppCompatActivity {
         categoryId = b.getString("categoryId");
         categoryName = b.getString("categoryName");
         categoryPicture = b.getString("categoryPicture");
+
+        // Message for 0 results
+        cardNoWorkers = (CardView) findViewById(R.id.card_no_workers);
 
         loadAuthenticatedUser();
         loadworkers();
@@ -140,13 +147,19 @@ public class CategoryActivity extends AppCompatActivity {
 
                     // Set workers
                     adapter.addAll(workers);
+
+                    // No workers?
+                    if (workers.isEmpty())
+                        showNoWorkersMessage();
                 }
+
                 progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Throwable t) {
                 progressDialog.dismiss();
+
                 Toast.makeText(CategoryActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 Log.d("Test/Category", t.getLocalizedMessage());
             }
@@ -155,5 +168,10 @@ public class CategoryActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Cargando categoría ...");
         progressDialog.show();
+    }
+
+    private void showNoWorkersMessage() {
+        cardNoWorkers.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
     }
 }

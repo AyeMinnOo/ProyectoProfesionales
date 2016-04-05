@@ -31,33 +31,35 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
-                android:theme="@style/AppTheme.NoActionBar"
                 android:layout_width="match_parent"
                 android:layout_height="66dp"
                 android:layout_gravity="bottom"
                 android:background="@color/primaryDarkTransparent"
+                android:theme="@style/AppTheme.NoActionBar"
                 app:layout_scrollFlags="scroll|enterAlways">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="2dp"
+                    android:orientation="vertical"
                     android:paddingBottom="2dp"
-                    android:orientation="vertical">
+                    android:paddingTop="2dp">
 
-                    <TextView android:id="@+id/tvTitulo"
+                    <TextView
+                        android:id="@+id/tvTitulo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:singleLine="true"
                         android:text="Título"
                         android:textColor="#fff"
-                        android:singleLine="true"
                         android:textSize="20sp" />
 
                     <RatingBar
                         android:id="@+id/rbEstrellas"
+                        style="@style/customRatingBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/customRatingBar"/>
+                        android:isIndicator="true" />
 
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
@@ -75,8 +77,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:textColor="#fff"
-                android:text="Calificar" />
+                android:text="Calificar"
+                android:textColor="#fff" />
 
             <Button
                 android:id="@+id/btnAgendar"
@@ -84,8 +86,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:textColor="#fff"
-                android:text="Agendar" />
+                android:text="Agendar"
+                android:textColor="#fff" />
 
             <Button
                 android:id="@+id/btnChat"
@@ -93,8 +95,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:textColor="#fff"
-                android:text="Chat" />
+                android:text="Chat"
+                android:textColor="#fff" />
         </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
@@ -109,19 +111,35 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="16dp"
+            android:orientation="vertical"
             android:paddingBottom="8dp"
-            android:paddingRight="6dp"
             android:paddingLeft="6dp"
-            android:orientation="vertical">
+            android:paddingRight="6dp"
+            android:paddingTop="16dp">
 
-            <include layout="@layout/item_info" android:id="@+id/card_basic" />
-            <include layout="@layout/item_info" android:id="@+id/card_areas" />
-            <include layout="@layout/item_info" android:id="@+id/card_skills" />
-            <include layout="@layout/item_info" android:id="@+id/card_ratings" />
-            <include layout="@layout/item_info" android:id="@+id/card_certifications" />
+            <include
+                android:id="@+id/card_basic"
+                layout="@layout/item_info" />
 
-            <include layout="@layout/item_gallery" android:id="@+id/card_gallery" />
+            <include
+                android:id="@+id/card_areas"
+                layout="@layout/item_info" />
+
+            <include
+                android:id="@+id/card_skills"
+                layout="@layout/item_info" />
+
+            <include
+                android:id="@+id/card_ratings"
+                layout="@layout/item_info" />
+
+            <include
+                android:id="@+id/card_certifications"
+                layout="@layout/item_info" />
+
+            <include
+                android:id="@+id/card_gallery"
+                layout="@layout/item_gallery" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
