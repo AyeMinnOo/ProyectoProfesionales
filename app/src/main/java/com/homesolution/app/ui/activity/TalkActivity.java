@@ -65,6 +65,14 @@ import retrofit.Retrofit;
  */
 public class TalkActivity extends AppCompatActivity implements View.OnClickListener, View.OnLayoutChangeListener {
 
+    // Global variables
+    private Global global;
+
+    // User authenticated data
+    // Using static we just need one load
+    public static String token;
+    private static String uid;
+
     private Button btnPerfil;
     private Button btnCalificar;
     private Button btnLlamar;
@@ -82,11 +90,6 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
     // To send a picture
     private ImageView btnImage;
-
-    // User authenticated data
-    // Using static we just need one load
-    public static String token;
-    private static String uid;
 
     // User destination data
     private String toUid;
@@ -146,7 +149,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         btnImage = (ImageView) findViewById(R.id.btnImage);
         btnImage.setOnClickListener(this);
 
-        // Load the user data, from global variables
+        // Load the user data
         loadAuthenticatedUser();
 
         // Load the messages in chat, using a webservice
@@ -155,7 +158,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         // Register a receiver for incoming messages from GCM
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("chat-message"));
-        this.isOpened = toUid;
+        isOpened = toUid;
     }
 
     // Here we can handle the received Intents.
@@ -176,7 +179,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         // Unregister since the activity is about to be closed.
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
-        this.isOpened = "";
+        isOpened = "";
 
         // Reload active chats
         ChatsFragment.loadActiveChats();
@@ -230,11 +233,17 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private Global getGlobal() {
+        if (global == null)
+            global = (Global) getApplicationContext();
+
+        return global;
+    }
+
     private void loadAuthenticatedUser() {
-        if (token == null) {
-            final Global global = (Global) getApplicationContext();
-            token = global.getToken();
-            uid = global.getUid();
+        if (token == null || uid == null) {
+            token = getGlobal().getToken();
+            uid = getGlobal().getUid();
         }
     }
 
@@ -332,14 +341,15 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         intent.setData(Uri.parse("tel:" + phoneNumber));
         startActivity(intent);
 
-        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService().getRegistrarLlamada(toUid, pid, token);
+        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                                        .getRegistrarLlamada(toUid, pid, token);
 
         call.enqueue(new Callback<SimpleResponse>() {
             @Override
             public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
                 if (response != null && response.body().getStatus() == 1) {
                     Log.d("Test/Call", "phoneNumber => " + phoneNumber);
-                    Log.d("Test/Call", "Llamada registrada al usuario => uid " + toUid + " | pid " + pid);
+                    // Log.d("Test/Call", "Llamada registrada al usuario => uid " + toUid + " | pid " + pid);
                 }
             }
 
@@ -361,7 +371,8 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
         final String replyTo = adapter.getParentMid();
 
-        Call<EnviarMsjeResponse> call = HomeSolutionApiAdapter.getApiService().getEnviarMensaje(token, toUid, replyTo, content);
+        Call<EnviarMsjeResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                                .getEnviarMensaje(token, toUid, replyTo, content);
 
         call.enqueue(new Callback<EnviarMsjeResponse>() {
             @Override
@@ -460,7 +471,8 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         final String base64 = getBase64FromBitmap(bitmap);
         final String replyTo = adapter.getParentMid();
 
-        Call<EnviarMsjeResponse> call = HomeSolutionApiAdapter.getApiService().postPic(token, toUid, base64, extension, replyTo);
+        Call<EnviarMsjeResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                                .postPic(token, toUid, base64, extension, replyTo);
 
         call.enqueue(new Callback<EnviarMsjeResponse>() {
             @Override
@@ -508,8 +520,9 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     */
 
     private void loadMessages(final boolean loadAll) {
-        Log.d("Test/Talk", "Loading chat with the uid => " + toUid);
-        Call<ChatResponse> call = HomeSolutionApiAdapter.getApiService().getChatResponse(token, toUid);
+        // Log.d("Test/Talk", "Loading chat with the uid => " + toUid);
+        Call<ChatResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                                        .getChatResponse(token, toUid);
 
         call.enqueue(new Callback<ChatResponse>() {
             @Override
@@ -574,14 +587,13 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Cargando mensajes ...");
+        progressDialog.setMessage(getString(R.string.loading_messages));
         progressDialog.show();
     }
 
     private void saveCategoriesGlobal(ArrayList<Category> categories) {
         // Save the categories for the last selected worker
-        final Global global = (Global) getApplicationContext();
-        global.setCategories(categories);
+        getGlobal().setCategories(categories);
     }
 
     private void scrollLastMessage() {

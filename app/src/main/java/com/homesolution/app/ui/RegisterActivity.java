@@ -1,9 +1,11 @@
 package com.homesolution.app.ui;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -51,9 +53,6 @@ import retrofit.Retrofit;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, Callback<LoginResponse> {
 
-    // Global variables
-    private Global global;
-
     // Dialogs
     private ProgressDialog progressDialog;
 
@@ -79,9 +78,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     // Request code used to invoke sign in user interactions
     private static final int RC_SIGN_IN = 0;
 
+    @TargetApi(16)
     @Override
     public void onBackPressed() {
-        finishAffinity();
+        final int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentApiVersion >= 16) { // API 16
+            finishAffinity();
+        } else {
+            finish();
+        }
     }
 
     @Override
@@ -123,9 +128,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         // To manage the login using google+
         btnIngresarGoogle.setOnClickListener(this);
         setUpGoogleSignIn();
-
-        // Global variables instance
-        global = (Global) getApplicationContext();
 
         // Custom action bar
         ActionBar actionBar = getSupportActionBar();
@@ -203,9 +205,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         Log.i("Test/Facebook", response.toString());
 
                         // Facebook connect WS
+                        final Global global = (Global) getApplicationContext();
                         final String gcmId = global.getGcmId();
                         final String area = spinnerZona.getSelectedItem().toString();
-                        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getFbConnect(accessToken, gcmId, area);
+                        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService(global.getCountry()).getFbConnect(accessToken, gcmId, area);
 
                         call.enqueue(RegisterActivity.this);
 
@@ -261,7 +264,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void loadAreasFromWS() {
         // We will use retrofit to get the list
-        Call<ZonasResponse> call = HomeSolutionApiAdapter.getApiService().getZonasResponse();
+        final Global global = (Global) getApplicationContext();
+        Call<ZonasResponse> call = HomeSolutionApiAdapter.getApiService(global.getCountry()).getZonasResponse();
         call.enqueue(new Callback<ZonasResponse>() {
             @Override
             public void onResponse(Response<ZonasResponse> response, Retrofit retrofit) {
@@ -282,7 +286,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             }
         });
         progressDialog = new ProgressDialog(RegisterActivity.this);
-        progressDialog.setMessage("Cargando datos ...");
+        progressDialog.setMessage(getString(R.string.loading_data));
         progressDialog.show();
     }
 
@@ -390,6 +394,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void saveUserData(UserAuthenticated userAuthenticated) {
         // Save the session in a global variable
+        final Global global = (Global) getApplicationContext();
         global.setUserAuthenticated(userAuthenticated);
 
         updateSharedPreferences(userAuthenticated);

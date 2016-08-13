@@ -68,8 +68,7 @@ public class UpdateUserActivity extends AppCompatActivity implements View.OnClic
         }
 
         // Required to apply changes
-        global =  (Global) getApplicationContext();
-        token = global.getToken();
+        token = getGlobal().getToken();
 
         // Read-only
         etArea = (EditText) findViewById(R.id.etArea);
@@ -97,6 +96,13 @@ public class UpdateUserActivity extends AppCompatActivity implements View.OnClic
         etUsername.setText(global.getUsername());
 
         prepareAreaPrompts();
+    }
+
+    private Global getGlobal() {
+        if (global == null)
+            global = (Global) getApplicationContext();
+
+        return global;
     }
 
     @Override
@@ -151,7 +157,8 @@ public class UpdateUserActivity extends AppCompatActivity implements View.OnClic
             return;
         }
 
-        Call<ZonasResponse> call = HomeSolutionApiAdapter.getApiService().getZonasResponse();
+        Call<ZonasResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                                            .getZonasResponse();
         call.enqueue(new Callback<ZonasResponse>() {
             @Override
             public void onResponse(Response<ZonasResponse> response, Retrofit retrofit) {
@@ -269,13 +276,14 @@ public class UpdateUserActivity extends AppCompatActivity implements View.OnClic
     * Webservice requests
     */
     private void updateArea(final String area) {
-        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService().getModificarDatos(token, area, null, null, null, null);
+        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                    .getModificarDatos(token, area, null, null, null, null);
         call.enqueue(new Callback<SimpleResponse>() {
             @Override
             public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
                 if (response.body() != null && response.body().getStatus() == 1) {
                     etArea.setText(area);
-                    global.setArea(area);
+                    getGlobal().setArea(area);
                 }
                 else
                     Toast.makeText(UpdateUserActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
@@ -289,15 +297,16 @@ public class UpdateUserActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void updateEmail(final String email) {
-        String username = global.getUsername();
-        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService().getModificarDatos(token, null, null, null, username, email);
+        String username = getGlobal().getUsername();
+        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService(global.getCountry())
+                                    .getModificarDatos(token, null, null, null, username, email);
 
         call.enqueue(new Callback<SimpleResponse>() {
             @Override
             public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
                 if (response.body() != null && response.body().getStatus() == 1) {
                     etEmail.setText(email);
-                    global.setEmail(email);
+                    getGlobal().setEmail(email);
                 }
                 else
                     Toast.makeText(UpdateUserActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
@@ -311,15 +320,16 @@ public class UpdateUserActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void updateUsername(final String username) {
-        String email = global.getEmail();
-        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService().getModificarDatos(token, null, null, null, username, email);
+        String email = getGlobal().getEmail();
+        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService(global.getCountry())
+                                    .getModificarDatos(token, null, null, null, username, email);
 
         call.enqueue(new Callback<SimpleResponse>() {
             @Override
             public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
                 if (response.body() != null && response.body().getStatus() == 1) {
                     etUsername.setText(username);
-                    global.setUsername(username);
+                    getGlobal().setUsername(username);
                 }
                 else
                     Toast.makeText(UpdateUserActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
@@ -338,10 +348,10 @@ public class UpdateUserActivity extends AppCompatActivity implements View.OnClic
             return;
         }
 
-
-        final String email = global.getEmail();
+        final String email = getGlobal().getEmail();
         final String username = global.getUsername();
-        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService().getModificarDatos(token, null, null, password, username, email);
+        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService(global.getCountry())
+                                .getModificarDatos(token, null, null, password, username, email);
 
         call.enqueue(new Callback<SimpleResponse>() {
             @Override

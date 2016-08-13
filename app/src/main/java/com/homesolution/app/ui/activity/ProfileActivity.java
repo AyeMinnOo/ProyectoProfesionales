@@ -1,13 +1,12 @@
 package com.homesolution.app.ui.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,20 +16,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.homesolution.app.Global;
+import com.homesolution.app.domain.Category;
 import com.homesolution.app.domain.Certifications;
 import com.homesolution.app.domain.Rating;
 import com.homesolution.app.domain.Skill;
+import com.homesolution.app.domain.WorkerBasic;
 import com.homesolution.app.domain.WorkerData;
+import com.homesolution.app.domain.WorkerProfile;
+import com.homesolution.app.io.HomeSolutionApiAdapter;
+import com.homesolution.app.io.response.PrestadorResponse;
+import com.homesolution.app.io.response.SimpleResponse;
 import com.homesolution.app.ui.fragment.AgendaFragment;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.homesolution.app.domain.Category;
-import com.homesolution.app.domain.WorkerBasic;
-import com.homesolution.app.domain.WorkerProfile;
-import com.homesolution.app.io.response.SimpleResponse;
-import com.homesolution.app.io.HomeSolutionApiAdapter;
-import com.homesolution.app.io.response.PrestadorResponse;
 
 import java.util.ArrayList;
 
@@ -43,6 +42,9 @@ import retrofit.Retrofit;
     This activity shows the profile of the selected professional.
  */
 public class ProfileActivity extends AppCompatActivity implements Callback<PrestadorResponse>, View.OnClickListener {
+
+    // Global variables
+    private Global global;
 
     // Worker data
     private String pid;
@@ -97,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
             Bundle b = getIntent().getExtras();
             pid = b.getString("pid");
 
-            Log.d("Test/Profile", "Loading profile with pid => " + pid);
+            // Log.d("Test/Profile", "Loading profile with pid => " + pid);
             loadAuthenticatedUser();
             loadProfile();
         }
@@ -106,6 +108,16 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
         getCards();
         getCardDescriptions();
         getCardTitles();
+
+        // Global variables instance
+        global = getGlobal();
+    }
+
+    private Global getGlobal() {
+        if (global == null)
+            global = (Global) getApplicationContext();
+
+        return global;
     }
 
     private void getCards() {
@@ -152,8 +164,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     }
 
     private void loadAuthenticatedUser() {
-        final Global global = (Global) getApplicationContext();
-        token = global.getToken();
+        token = getGlobal().getToken();
     }
 
     @Override
@@ -171,12 +182,12 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
     }
 
     private void loadProfile() {
-        Call<PrestadorResponse> call = HomeSolutionApiAdapter.getApiService().getPrestador(token, pid);
+        Call<PrestadorResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                        .getPrestador(token, pid);
         call.enqueue(this);
 
         // If this user is a contact, change the text of button
-        final Global global = (Global) getApplicationContext();
-        isContact = global.isContact(pid);
+        isContact = getGlobal().isContact(pid);
         if (isContact)
             btnAgendar.setText(getResources().getString(R.string.remove_contact));
     }
@@ -279,8 +290,7 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
 
     private void saveCategoriesGlobal(ArrayList<Category> categories) {
         // Save the categories for the last selected worker
-        final Global global = (Global) getApplicationContext();
-        global.setCategories(categories);
+        getGlobal().setCategories(categories);
     }
 
     @Override
@@ -308,10 +318,12 @@ public class ProfileActivity extends AppCompatActivity implements Callback<Prest
 
                 if (isContact) {
                     successMessage = getResources().getString(R.string.success_remove_contact);
-                    call = HomeSolutionApiAdapter.getApiService().getDesagendar(token, pid);
+                    call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                                    .getDesagendar(token, pid);
                 } else {
                     successMessage = getResources().getString(R.string.success_add_contact);
-                    call = HomeSolutionApiAdapter.getApiService().getAgendar(token, pid);
+                    call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                                    .getAgendar(token, pid);
                 }
 
                 call.enqueue(new Callback<SimpleResponse>() {

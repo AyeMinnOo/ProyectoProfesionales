@@ -48,14 +48,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         tvLogout = (TextView) findViewById(R.id.tvLogout);
         tvLogout.setOnClickListener(this);
 
-        // Global variables instance
-        global = (Global) getApplicationContext();
+    }
+
+    private Global getGlobal() {
+        if (global == null)
+            global = (Global) getApplicationContext();
+
+        return global;
     }
 
     private void setUpActionBar() {
         ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setTitle("Opciones");
+        if (mActionBar != null) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setTitle("Opciones");
+        }
     }
 
     @Override
@@ -93,9 +100,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void requestLogout() {
         // Global variables instance
-        final String token = global.getToken();
+        final String token = getGlobal().getToken();
 
-        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService().getLogoutResponse(token);
+        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                                            .getLogoutResponse(token);
         call.enqueue(this);
     }
 
@@ -103,7 +111,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
         if (response.body() != null && response.body().getStatus() == 1) {
             // Clear session from global variable
-            global.setUserAuthenticated(null);
+            getGlobal().setUserAuthenticated(null);
 
             // Clear session from SharedPreferences
             SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);

@@ -2,16 +2,19 @@ package com.homesolution.app.ui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -22,9 +25,6 @@ import com.homesolution.app.ui.activity.PanelActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-    // Controls
-    private Button btnTryAgain;
 
     // GCM Management
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         */
 
         // When the internet is not available
-        btnTryAgain = (Button) findViewById(R.id.btnTryAgain);
+        Button btnTryAgain = (Button) findViewById(R.id.btnTryAgain);
         btnTryAgain.setOnClickListener(this);
 
         setupGCM();
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("Test/Main", "Event onReceive fired !");
+                // Log.d("Test/Main", "Event onReceive fired !");
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sentToken = sharedPreferences
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
-            Log.d("Test/Main", "Start IntentService to register this application with GCM");
+            // Log.d("Test/Main", "Start IntentService to register this application with GCM");
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Load info from SharedPreferences
         global.loadUserAuthenticatedFromSharedPreferences();
+        global.loadCountryFromSharedPreferences();
 
         // There is a session active?
         if (global.isAuthenticated()) {
@@ -147,12 +148,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String defaultActivity = getResources().getString(R.string.first_activity_default);
         String firstActivity = sharedPref.getString(getString(R.string.first_activity), defaultActivity);
 
+        createRadioListDialog();
+
         // Start activity
         Intent intent = new Intent();
         intent.setClassName(this, this.getPackageName() + firstActivity);
         startActivity(intent);
     }
 
+    public AlertDialog createRadioListDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final CharSequence[] items = new CharSequence[6];
+        items[0] = "Argentina";
+        items[1] = "Chile";
+        items[2] = "Uruguay";
+        items[3] = "Ecuador";
+        items[4] = "Colombia";
+        items[5] = "Perú";
+
+        builder.setTitle("Seleccione su país")
+                .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this, "Luego de iniciar sesión puede modifcar su selección", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        return builder.create();
+    }
 
     @Override
     public void onClick(View view) {

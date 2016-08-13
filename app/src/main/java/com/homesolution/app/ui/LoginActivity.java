@@ -1,5 +1,6 @@
 package com.homesolution.app.ui;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,19 +24,18 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
-import com.homesolution.app.io.response.LoginResponse;
 import com.homesolution.app.Global;
-import com.homesolution.app.ui.activity.PanelActivity;
-import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.domain.UserAuthenticated;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
+import com.homesolution.app.io.response.LoginResponse;
 import com.homesolution.app.io.response.RecuperarResponse;
+import com.homesolution.app.ui.activity.PanelActivity;
+import com.youtube.sorcjc.proyectoprofesionales.R;
 
 import org.json.JSONObject;
 
@@ -77,9 +77,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     // Request code used to invoke sign in user interactions
     private static final int RC_SIGN_IN = 0;
 
+    @TargetApi(16)
     @Override
     public void onBackPressed() {
-        finishAffinity();
+        final int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentApiVersion >= 16) { // API 16
+            finishAffinity();
+        } else {
+            finish();
+        }
     }
 
     @Override
@@ -119,15 +125,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnIngresarGoogle.setOnClickListener(this);
         setUpGoogleSignIn();
 
-        // Global variables instance
-        global = (Global) getApplicationContext();
-
         // Custom action bar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             getSupportActionBar().setCustomView(R.layout.actionbar_guess);
         }
+    }
+
+    private Global getGlobal() {
+        if (global == null)
+            global = (Global) getApplicationContext();
+
+        return global;
     }
 
     @Override
@@ -160,6 +170,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
+        /*
         Log.d("Test/Google", "handleSignInResult: " + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
@@ -171,6 +182,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // Signed out, show unauthenticated UI.
             // updateUI(false);
         }
+        */
     }
 
     @Override
@@ -193,17 +205,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 progressDialog.show();
 
                 final String accessToken = loginResult.getAccessToken().getToken();
-                Log.i("Test/Facebook", "accessToken => " + accessToken);
+                // Log.i("Test/Facebook", "accessToken => " + accessToken);
 
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.i("Test/Facebook", response.toString());
+                        // Log.i("Test/Facebook", response.toString());
                         Bundle facebookData = getFacebookData(object);
 
                         // Facebook connect WS
-                        final String gcmId = global.getGcmId();
-                        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getFbConnect(accessToken, gcmId, null);
+                        final String gcmId = getGlobal().getGcmId();
+                        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry()).getFbConnect(accessToken, gcmId, null);
 
                         call.enqueue(LoginActivity.this);
 
@@ -249,7 +261,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onCancel() {
                 // If the user cancel the login, just back to the main activity
-                Log.e("Test/Facebook", "Acceso cancelado por el usuario.");
                 Toast.makeText(context, "Acceso cancelado por el usuario.", Toast.LENGTH_LONG).show();
             }
 
@@ -289,7 +300,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void recoverPassword() {
         String email = etEmail.getText().toString();
         if (isValidEmail(email)) {
-            Call<RecuperarResponse> call = HomeSolutionApiAdapter.getApiService().getRecuperarContra(email);
+            Call<RecuperarResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry()).getRecuperarContra(email);
             call.enqueue(new Callback<RecuperarResponse>() {
                 @Override
                 public void onResponse(Response<RecuperarResponse> response, Retrofit retrofit) {
@@ -326,11 +337,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void validateLogin() {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
-        String gcm_id = global.getGcmId();
+        String gcm_id = getGlobal().getGcmId();
 
         Log.d("Test/Login", "Credentials => " + email + " / " + password);
 
-        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getLoginResponse(email, password, gcm_id);
+        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry()).getLoginResponse(email, password, gcm_id);
         call.enqueue(this);
 
         progressDialog = new ProgressDialog(this);
@@ -357,12 +368,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         progressDialog.dismiss();
 
         Toast.makeText(this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-        Log.d("Test/Login", "Login WS onFailure => " + t.getLocalizedMessage());
+        // Log.d("Test/Login", "Login WS onFailure => " + t.getLocalizedMessage());
     }
 
     private void saveUserData(UserAuthenticated userAuthenticated) {
         // Save the session in a global variable
-        global.setUserAuthenticated(userAuthenticated);
+        getGlobal().setUserAuthenticated(userAuthenticated);
 
         updateSharedPreferences(userAuthenticated);
     }
@@ -383,8 +394,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void goToActivity(Class activity) {
-        Intent intent = null;
-        intent = new Intent(this, activity);
+        Intent intent = new Intent(this, activity);
         if (intent != null)
             startActivity(intent);
     }

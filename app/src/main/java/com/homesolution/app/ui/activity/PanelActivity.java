@@ -1,5 +1,6 @@
 package com.homesolution.app.ui.activity;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.homesolution.app.Global;
 import com.homesolution.app.io.response.CategoriasResponse;
 import com.homesolution.app.ui.fragment.AgendaFragment;
 import com.homesolution.app.ui.fragment.ChatsFragment;
@@ -36,6 +38,9 @@ import retrofit.Retrofit;
  */
 public class PanelActivity extends AppCompatActivity {
 
+    // Global variables
+    private Global global;
+
     private PagerAdapter pagerAdapter;
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -45,9 +50,15 @@ public class PanelActivity extends AppCompatActivity {
     public static ArrayList<Category> categoryList;
     public static ProgressDialog progressDialog;
 
+    @TargetApi(16)
     @Override
     public void onBackPressed() {
-        finishAffinity();
+        final int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentApiVersion >= 16) { // API 16
+            finishAffinity();
+        } else {
+            finish();
+        }
     }
 
     @Override
@@ -66,22 +77,31 @@ public class PanelActivity extends AppCompatActivity {
         // Setting the toolbar
         if (toolbar != null)
             setSupportActionBar(toolbar);
+
+        // Global variables instance
+        global = getGlobal();
+    }
+
+    private Global getGlobal() {
+        if (global == null)
+            global = (Global) getApplicationContext();
+
+        return global;
     }
 
     private void loadCategories() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Cargando datos ...");
+        progressDialog.setMessage(getString(R.string.loading_data));
         progressDialog.show();
+        // Log.d("Test/Panel", "Categories are loading ...");
 
-        Log.d("Test/Panel", "Categories are loading ...");
-
-        Call<CategoriasResponse> call = HomeSolutionApiAdapter.getApiService().getCategoriasResponse();
+        Call<CategoriasResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                        .getCategoriasResponse();
         call.enqueue(new Callback<CategoriasResponse>() {
             @Override
             public void onResponse(Response<CategoriasResponse> response, Retrofit retrofit) {
-                ArrayList<Category> categories = response.body().getResponse();
-                categoryList = categories;
-                Log.d("Test/Panel", "Categories are ready => " + categories.size());
+                categoryList = response.body().getResponse();
+                // Log.d("Test/Panel", "Categories are ready => " + categoryList.size());
 
                 // After load categories ...
                 setupViewPager();

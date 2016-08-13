@@ -74,7 +74,8 @@ public class AgendaFragment extends Fragment implements Callback<AgendaResponse>
         final Global global = (Global) activity.getApplicationContext();
         token = global.getToken();
 
-        Call<AgendaResponse> call = HomeSolutionApiAdapter.getApiService().getAgendaResponse(token);
+        Call<AgendaResponse> call = HomeSolutionApiAdapter.getApiService(global.getCountry())
+                                                            .getAgendaResponse(token);
         call.enqueue(agendaFragment);
     }
 

@@ -28,8 +28,10 @@ import retrofit.Retrofit;
 
 public class ConfirmRegisterActivity extends AppCompatActivity {
 
-    private ProgressDialog progressDialog;
+    // Global variables
+    private Global global;
 
+    private ProgressDialog progressDialog;
     private TextView tvTermsAndConditions;
 
     // New user data
@@ -59,6 +61,13 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
         email = b.getString("email");
         password = b.getString("password");
         gcm_id = b.getString("gcm_id");
+    }
+
+    private Global getGlobal() {
+        if (global == null)
+            global = (Global) getApplicationContext();
+
+        return global;
     }
 
     private void setTermsAndConditions() {
@@ -91,7 +100,8 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
     }
 
     private void callRegisterWS() {
-        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService().getRegistroResponse(nombre, email, password, 1, zona, gcm_id);
+        Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                    .getRegistroResponse(nombre, email, password, 1, zona, gcm_id);
 
         call.enqueue(new Callback<LoginResponse>() {
             @Override
@@ -125,8 +135,7 @@ public class ConfirmRegisterActivity extends AppCompatActivity {
 
     private void autoLogin(UserAuthenticated userAuthenticated) {
         // Save the session in a global variable
-        final Global global = (Global) getApplicationContext();
-        global.setUserAuthenticated(userAuthenticated);
+        getGlobal().setUserAuthenticated(userAuthenticated);
 
         updateSharedPreferences(userAuthenticated);
 

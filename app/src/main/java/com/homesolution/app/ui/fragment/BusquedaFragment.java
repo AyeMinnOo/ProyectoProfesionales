@@ -36,6 +36,10 @@ import retrofit.Retrofit;
 
 public class BusquedaFragment extends Fragment implements View.OnClickListener, Callback<AgendaResponse> {
 
+    // Global variables
+    private Global global;
+    private static String token;
+
     private RecyclerView recyclerView;
     private EditText etFilter;
     private ImageView ivBuscar;
@@ -47,9 +51,7 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener, 
     private ArrayList<Category> categoryList;
 
     // To manage requested search
-    private static String token;
     private static String requestedQuery = "";
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,18 +88,24 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener, 
         ivBuscar.setOnClickListener(this);
 
         // Token
-        final Global global = (Global) getActivity().getApplicationContext();
-        token = global.getToken();
+        token = getGlobal().getToken();
 
         // A search was requested?
         if (container.getTag() != null) {
             String queryText = container.getTag().toString();
-            Log.d("Test/Busqueda", "Tag value in the tabs => " + queryText);
+            // Log.d("Test/Busqueda", "Tag value in the tabs => " + queryText);
             container.setTag(null);
             requestedQuery = queryText;
         }
 
         return rootView;
+    }
+
+    private Global getGlobal() {
+        if (global == null)
+            global = (Global) getActivity().getApplicationContext();
+
+        return global;
     }
 
     @Override
@@ -141,7 +149,8 @@ public class BusquedaFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void searchWorkers(String query) {
-        Call<AgendaResponse> call = HomeSolutionApiAdapter.getApiService().getBuscar(query, token);
+        Call<AgendaResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                                            .getBuscar(query, token);
         call.enqueue(this);
     }
 

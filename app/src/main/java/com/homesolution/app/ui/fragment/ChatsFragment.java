@@ -35,6 +35,9 @@ import retrofit.Retrofit;
 
 public class ChatsFragment extends Fragment implements View.OnClickListener {
 
+    // Global variables
+    private static Global global;
+    private static String token;
 
     // Views and controls in fragment_chats.xmll
     private static LinearLayout layoutTop;
@@ -52,9 +55,6 @@ public class ChatsFragment extends Fragment implements View.OnClickListener {
     // Used to render the categories
     private static CategoryAdapter categoryAdapter;
 
-    // User authenticated data
-    private static String token;
-
     // Required to reload the active chats
     private static Context context;
 
@@ -66,8 +66,7 @@ public class ChatsFragment extends Fragment implements View.OnClickListener {
         categoryAdapter = new CategoryAdapter(getActivity());
 
         context = getActivity();
-
-        Log.d("Test/Chats", "onCreate fired !");
+        // Log.d("Test/Chats", "onCreate fired !");
     }
 
     @Override
@@ -111,7 +110,8 @@ public class ChatsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getAuthenticatedUser();
+
+        token = getGlobal().getToken();
 
         // Try to load active chats
         // Use the ChatAdapter if there are messages
@@ -121,13 +121,17 @@ public class ChatsFragment extends Fragment implements View.OnClickListener {
         // Log.d("Test/Chats", "onViewCreated fired !");
     }
 
-    private void getAuthenticatedUser() {
-        final Global global = (Global) getActivity().getApplicationContext();
-        token = global.getToken();
+    private Global getGlobal() {
+        if (global == null) {
+            global = (Global) getActivity().getApplicationContext();
+        }
+
+        return global;
     }
 
     public static void loadActiveChats() {
-        Call<ChatsResponse> call = HomeSolutionApiAdapter.getApiService().getChatsResponse(token);
+        Call<ChatsResponse> call = HomeSolutionApiAdapter.getApiService(global.getCountry())
+                                                            .getChatsResponse(token);
 
         call.enqueue(new Callback<ChatsResponse>() {
             @Override

@@ -46,6 +46,9 @@ import retrofit.Retrofit;
 public class ScoreActivity extends AppCompatActivity implements
         PageFragmentCallbacks, ReviewFragment.Callbacks, ModelCallbacks {
 
+    // Global variables
+    private Global global;
+
     private ViewPager mPager;
     private MyPagerAdapter mPagerAdapter;
 
@@ -69,19 +72,15 @@ public class ScoreActivity extends AppCompatActivity implements
     private static String token;
 
     private int getScorePoints(String quality) {
-        switch (quality) {
-            case "Muy satisfecho":
-                return 4;
+        final String very_good = getString(R.string.score_very_good);
+        final String good = getString(R.string.score_good);
+        final String bad = getString(R.string.score_bad);
+        // final String very_bad = getString(R.string.score_very_bad);
 
-            case "Satisfecho":
-                return 3;
-
-            case "Poco satisfecho":
-                return 2;
-
-            default: // case "Nada satisfecho":
-                return 1;
-        }
+        if (quality.equals(very_good)) return 4;
+        else if (quality.equals(good)) return 3;
+        else if (quality.equals(bad)) return 2;
+        else return 1;
     }
 
     private int getCommendPoints(String commend) {
@@ -95,8 +94,7 @@ public class ScoreActivity extends AppCompatActivity implements
     }
 
     private String getCategoryId(String categoryName) {
-        final Global global = (Global) getApplicationContext();
-        return global.getCategoryId(categoryName);
+        return getGlobal().getCategoryId(categoryName);
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -115,6 +113,9 @@ public class ScoreActivity extends AppCompatActivity implements
         toolbar.setTitle(name);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
+
+        // Global variables instance
+        global = getGlobal();
 
         if (savedInstanceState != null) {
             mWizardModel.load(savedInstanceState.getBundle("model"));
@@ -191,9 +192,15 @@ public class ScoreActivity extends AppCompatActivity implements
         updateBottomBar();
     }
 
+    private Global getGlobal() {
+        if (global == null)
+            global = (Global) getApplicationContext();
+
+        return global;
+    }
+
     private void loadAuthenticatedUser() {
-        final Global global = (Global) getApplicationContext();
-        token = global.getToken();
+        token = getGlobal().getToken();
     }
 
     class confirmButtonHandler implements DialogInterface.OnClickListener, Callback<CalificarResponse> {
@@ -204,7 +211,7 @@ public class ScoreActivity extends AppCompatActivity implements
             String _profesionalismo = mWizardModel.findByKey("Profesionalismo").getData().getString(Page.SIMPLE_DATA_KEY);
             String _cumplimiento = mWizardModel.findByKey("Cumplimiento").getData().getString(Page.SIMPLE_DATA_KEY);
             String _precio = mWizardModel.findByKey("Precio").getData().getString(Page.SIMPLE_DATA_KEY);
-            Log.d("Test/Score", "Puntualidad selected choice => " + _puntualidad);
+            // Log.d("Test/Score", "Puntualidad selected choice => " + _puntualidad);
             // Commend?
             String _commend = mWizardModel.findByKey("Precio").getData().getString(Page.SIMPLE_DATA_KEY);
             // Custom question
@@ -212,7 +219,7 @@ public class ScoreActivity extends AppCompatActivity implements
             // Possible field
             String addComment = mWizardModel.findByKey("Desea añadir un comentario?").getData().getString(Page.SIMPLE_DATA_KEY);
             String comments = "";
-            if (addComment.equals("Sí"))
+            if (addComment!=null && addComment.equals("Sí"))
                 comments = mWizardModel.findByKey("Sí:Comentarios").getData().getString(Page.SIMPLE_DATA_KEY);
 
             // Convert the selected options in points
@@ -223,7 +230,8 @@ public class ScoreActivity extends AppCompatActivity implements
             int commend = getCommendPoints(_commend);
             String categoryId = getCategoryId(_category);
 
-            Call<CalificarResponse> call = HomeSolutionApiAdapter.getApiService().getCalificar(token, pid, puntualidad, profesionalismo, cumplimiento, commend, precio, categoryId, comments);
+            Call<CalificarResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                                                    .getCalificar(token, pid, puntualidad, profesionalismo, cumplimiento, commend, precio, categoryId, comments);
             call.enqueue(this);
 
             finish();
@@ -237,7 +245,7 @@ public class ScoreActivity extends AppCompatActivity implements
             if (response.body().getStatus() == 0)
                 Toast.makeText(getBaseContext(), response.body().getError(), Toast.LENGTH_SHORT).show();
             else
-                Toast.makeText(getBaseContext(), "Calificación registrada con éxito", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), getString(R.string.score_saved), Toast.LENGTH_SHORT).show();
         }
 
         @Override

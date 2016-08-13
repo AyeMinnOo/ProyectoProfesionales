@@ -38,6 +38,9 @@ import retrofit.Retrofit;
 */
 public class CategoryActivity extends AppCompatActivity {
 
+    // Global variables
+    private Global global;
+
     // Used to render the workers
     private RecyclerView recyclerView;
     private WorkerAdapter adapter;
@@ -78,6 +81,9 @@ public class CategoryActivity extends AppCompatActivity {
 
         // Message for 0 results
         cardNoWorkers = (CardView) findViewById(R.id.card_no_workers);
+
+        // Global variables instance
+        global = getGlobal();
 
         loadAuthenticatedUser();
         loadworkers();
@@ -121,14 +127,21 @@ public class CategoryActivity extends AppCompatActivity {
 
     private void loadAuthenticatedUser() {
         if (token == null) {
-            final Global global = (Global) getApplicationContext();
-            token = global.getToken();
+            token = getGlobal().getToken();
         }
     }
 
+    private Global getGlobal() {
+        if (global == null)
+            global = (Global) getApplicationContext();
+
+        return global;
+    }
+
     private void loadworkers() {
-        Log.d("Test/WorkersList", "Loading workers for the categoryId => " + categoryId);
-        Call<AgendaResponse> call = HomeSolutionApiAdapter.getApiService().getPrestadores(categoryId, token);
+        // Log.d("Test/WorkersList", "Loading workers for the categoryId => " + categoryId);
+        Call<AgendaResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                                    .getPrestadores(categoryId, token);
 
         call.enqueue(new Callback<AgendaResponse>() {
             @Override

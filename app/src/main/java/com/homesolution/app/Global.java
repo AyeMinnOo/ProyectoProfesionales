@@ -20,9 +20,9 @@ public class Global extends Application {
     * User authenticated data
     */
     private UserAuthenticated userAuthenticated;
+    private String country;
 
     public boolean isAuthenticated() {
-        Log.d("Test/Global", "userAuthenticated is null => " + (userAuthenticated == null));
         return userAuthenticated != null;
     }
 
@@ -43,6 +43,14 @@ public class Global extends Application {
 
         if (! userData.equals(""))
             setUserAuthenticated(new Gson().fromJson(userData, UserAuthenticated.class));
+    }
+
+    public void loadCountryFromSharedPreferences() {
+        // SharedPreferences instance
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+
+        // We also look for a country preference
+        country = sharedPref.getString(getString(R.string.country_data), "");
     }
 
     public String getUid() {
@@ -75,6 +83,13 @@ public class Global extends Application {
 
     public void setUserAuthenticated(UserAuthenticated userAuthenticated) {
         this.userAuthenticated = userAuthenticated;
+    }
+
+    public String getCountry() {
+        if (country == null)
+            loadCountryFromSharedPreferences();
+
+        return country;
     }
 
 
@@ -149,4 +164,5 @@ public class Global extends Application {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
+
 }

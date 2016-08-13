@@ -12,6 +12,7 @@
     <string name="field_area">Zona</string>
 
     <!-- Main buttons and actions -->
+    <string name="loading_data">Cargando datos &#8230;</string>
     <string name="btn_register">Registrarme</string>
     <string name="btn_i_am_user">Ya soy usuario</string>
     <string name="btn_login">Iniciar sesión</string>
@@ -33,6 +34,7 @@
     <string name="success_remove_contact">Contacto eliminado exitosamente</string>
 
     <!-- TalkActivity -->
+    <string name="loading_messages">Cargando mensajes &#8230;</string>
     <string name="picture_title">Enviar imagen !</string>
     <string name="picture_from_camera">Tomar una foto</string>
     <string name="picture_from_gallery">Escoger una imagen</string>
@@ -42,8 +44,11 @@
     <!-- Define the first screen when the app starts -->
     <string name="preference_file">Preferences</string>
     <string name="first_activity">FirstActivity</string>
-    <string name="user_data">UserData</string>
     <string name="first_activity_default">.ui.RegisterActivity</string>
+
+    <!-- SharedPreferences keys -->
+    <string name="user_data">UserData</string>
+    <string name="country_data">CountryData</string>
 
     <!-- ScoreActivity -->
     <string name="next">Siguiente</string>
@@ -53,6 +58,13 @@
     <string name="submit_confirm_message">¿Está seguro de enviar esta calificación?</string>
     <string name="submit_confirm_button">Confirmar</string>
     <string name="label_spinner_category">Categoría de trabajo</string>
+    <string name="score_saved">Calificación registrada con éxito</string>
+
+    <!-- Score options -->
+    <string name="score_very_good">Muy satisfecho</string>
+    <string name="score_good">Satisfecho</string>
+    <string name="score_bad">Poco satisfecho</string>
+    <string name="score_very_bad">Nada satisfecho</string>
 
     <!-- Terms and conditions -->
     <string name="terms_conditions">Toda persona que quiera utilizar los servicios debe leer, entender y aceptar las condiciones establecidas en los Términos y Condiciones Generales y en las Políticas de Privacidad así como en los demás documentos incorporados a los mismos por referencia, previo a su registración como Usuario de Home Solution ™.\n\nLos Servicios sólo están disponibles para personas que tengan capacidad legal para contratar y capacidad legal para trabajar, según la normativa vigente a tales efectos en la República Argentina. No podrán utilizar los servicios las personas que no tengan esa capacidad, los menores de edad o Usuarios/Prestadores de Home Solution ™ que hayan sido suspendidos temporalmente o inhabilitados definitivamente. Si estás registrando un Usuario/Prestador como Empresa, debes contar con la representación necesaria otorgada por la entidad y, por carácter transitivo, obligar a la misma en los términos de este Acuerdo.</string>
