@@ -32,6 +32,10 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+/*
+    This activity display a list of professionals
+    associated with the selected category.
+*/
 public class CategoryActivity extends AppCompatActivity {
 
     // Used to render the workers

@@ -21,7 +21,6 @@ import com.homesolution.app.domain.Certifications;
 import com.homesolution.app.domain.Rating;
 import com.homesolution.app.domain.Skill;
 import com.homesolution.app.domain.WorkerData;
-import com.homesolution.app.ui.ScoreActivity;
 import com.homesolution.app.ui.fragment.AgendaFragment;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -40,6 +39,9 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+/*
+    This activity shows the profile of the selected professional.
+ */
 public class ProfileActivity extends AppCompatActivity implements Callback<PrestadorResponse>, View.OnClickListener {
 
     // Worker data

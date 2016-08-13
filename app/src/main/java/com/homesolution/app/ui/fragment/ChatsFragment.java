@@ -24,7 +24,7 @@ import com.homesolution.app.ui.adapter.ChatAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.io.response.ChatsResponse;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
-import com.homesolution.app.ui.PanelActivity;
+import com.homesolution.app.ui.activity.PanelActivity;
 
 import java.util.ArrayList;
 

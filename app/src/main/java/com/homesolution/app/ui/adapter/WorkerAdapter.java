@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.domain.Worker;
-import com.homesolution.app.ui.ProfileActivity;
+import com.homesolution.app.ui.activity.ProfileActivity;
 import com.homesolution.app.ui.custom.CircleTransform;
 
 import java.util.ArrayList;

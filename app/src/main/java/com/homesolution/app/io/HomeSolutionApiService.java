@@ -1,16 +1,16 @@
 package com.homesolution.app.io;
 
-import com.homesolution.app.io.responses.AgendaResponse;
-import com.homesolution.app.io.responses.CategoriasResponse;
-import com.homesolution.app.io.responses.ChatResponse;
-import com.homesolution.app.io.responses.ChatsResponse;
-import com.homesolution.app.io.responses.EnviarMsjeResponse;
-import com.homesolution.app.io.responses.LoginResponse;
-import com.homesolution.app.io.responses.PrestadorResponse;
-import com.homesolution.app.io.responses.RecuperarResponse;
-import com.homesolution.app.io.responses.ZonasResponse;
-import com.homesolution.app.io.responses.SimpleResponse;
-import com.homesolution.app.io.responses.CalificarResponse;
+import com.homesolution.app.io.response.AgendaResponse;
+import com.homesolution.app.io.response.CategoriasResponse;
+import com.homesolution.app.io.response.ChatResponse;
+import com.homesolution.app.io.response.ChatsResponse;
+import com.homesolution.app.io.response.EnviarMsjeResponse;
+import com.homesolution.app.io.response.LoginResponse;
+import com.homesolution.app.io.response.PrestadorResponse;
+import com.homesolution.app.io.response.RecuperarResponse;
+import com.homesolution.app.io.response.ZonasResponse;
+import com.homesolution.app.io.response.SimpleResponse;
+import com.homesolution.app.io.response.CalificarResponse;
 
 import retrofit.Call;
 import retrofit.http.GET;

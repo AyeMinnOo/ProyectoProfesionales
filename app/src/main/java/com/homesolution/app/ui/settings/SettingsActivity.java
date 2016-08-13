@@ -13,10 +13,10 @@ import android.widget.Toast;
 
 import com.homesolution.app.ui.LoginActivity;
 import com.homesolution.app.Global;
-import com.homesolution.app.ui.TalkActivity;
+import com.homesolution.app.ui.activity.TalkActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
-import com.homesolution.app.io.responses.SimpleResponse;
+import com.homesolution.app.io.response.SimpleResponse;
 
 import retrofit.Call;
 import retrofit.Callback;

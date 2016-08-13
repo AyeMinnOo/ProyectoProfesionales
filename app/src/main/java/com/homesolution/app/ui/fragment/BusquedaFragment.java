@@ -21,7 +21,7 @@ import com.homesolution.app.Global;
 import com.homesolution.app.domain.Worker;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.io.response.AgendaResponse;
-import com.homesolution.app.ui.PanelActivity;
+import com.homesolution.app.ui.activity.PanelActivity;
 import com.homesolution.app.ui.adapter.CategoryAdapter;
 import com.homesolution.app.ui.adapter.WorkerAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.R;

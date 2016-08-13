@@ -29,12 +29,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
-import com.homesolution.app.io.responses.LoginResponse;
+import com.homesolution.app.io.response.LoginResponse;
 import com.homesolution.app.Global;
+import com.homesolution.app.ui.activity.PanelActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.domain.UserAuthenticated;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
-import com.homesolution.app.io.responses.RecuperarResponse;
+import com.homesolution.app.io.response.RecuperarResponse;
 
 import org.json.JSONObject;
 

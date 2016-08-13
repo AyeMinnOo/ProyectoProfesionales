@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.domain.Category;
-import com.homesolution.app.ui.CategoryActivity;
+import com.homesolution.app.ui.activity.CategoryActivity;
 
 import java.util.ArrayList;
 

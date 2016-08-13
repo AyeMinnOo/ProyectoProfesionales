@@ -30,6 +30,10 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+/*
+    This is the main activity after the authentication.
+    It contains three tabs and a view pager.
+ */
 public class PanelActivity extends AppCompatActivity {
 
     private PagerAdapter pagerAdapter;

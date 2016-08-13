@@ -2,12 +2,12 @@ package com.homesolution.app.io;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.homesolution.app.io.deserializers.LoginDeserializer;
-import com.homesolution.app.io.responses.ChatResponse;
-import com.homesolution.app.io.responses.LoginResponse;
+import com.homesolution.app.io.deserializer.LoginDeserializer;
+import com.homesolution.app.io.response.ChatResponse;
+import com.homesolution.app.io.response.LoginResponse;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-import com.homesolution.app.io.deserializers.ChatDeserializer;
+import com.homesolution.app.io.deserializer.ChatDeserializer;
 
 
 import retrofit.GsonConverterFactory;

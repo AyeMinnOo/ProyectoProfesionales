@@ -17,9 +17,9 @@ import android.widget.Toast;
 
 import com.homesolution.app.Global;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
-import com.homesolution.app.io.responses.ZonasResponse;
+import com.homesolution.app.io.response.ZonasResponse;
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.homesolution.app.io.responses.SimpleResponse;
+import com.homesolution.app.io.response.SimpleResponse;
 
 import java.util.ArrayList;
 

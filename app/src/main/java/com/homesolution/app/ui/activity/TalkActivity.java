@@ -44,8 +44,6 @@ import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.io.response.ChatResponse;
 import com.homesolution.app.io.response.EnviarMsjeResponse;
 import com.homesolution.app.io.response.SimpleResponse;
-import com.homesolution.app.ui.ProfileActivity;
-import com.homesolution.app.ui.ScoreActivity;
 import com.homesolution.app.ui.adapter.MessageAdapter;
 import com.homesolution.app.ui.fragment.ChatsFragment;
 import com.squareup.picasso.Picasso;
@@ -61,6 +59,10 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+/*
+    This activity defines a real-time chat
+    between users, clients and professionals.
+ */
 public class TalkActivity extends AppCompatActivity implements View.OnClickListener, View.OnLayoutChangeListener {
 
     private Button btnPerfil;

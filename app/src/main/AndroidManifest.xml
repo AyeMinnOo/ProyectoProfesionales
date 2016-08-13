@@ -43,19 +43,19 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name="com.homesolution.app.ui.PanelActivity"
+            android:name="com.homesolution.app.ui.activity.PanelActivity"
             android:label="@string/title_activity_panel"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.homesolution.app.ui.settings.SettingsActivity" />
         <activity android:name="com.homesolution.app.ui.settings.UpdateUserActivity" />
         <activity android:name="com.homesolution.app.ui.settings.TermsConditionsActivity" />
-        <activity android:name="com.homesolution.app.ui.TalkActivity" />
+        <activity android:name="com.homesolution.app.ui.activity.TalkActivity" />
         <activity
-            android:name="com.homesolution.app.ui.ProfileActivity"
+            android:name="com.homesolution.app.ui.activity.ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.homesolution.app.ui.CategoryActivity" />
+        <activity android:name="com.homesolution.app.ui.activity.CategoryActivity" />
         <activity
-            android:name="com.homesolution.app.ui.ScoreActivity"
+            android:name="com.homesolution.app.ui.activity.ScoreActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver

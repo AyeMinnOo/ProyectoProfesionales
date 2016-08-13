@@ -39,6 +39,10 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+/*
+    This activity works with the Wizard Pager library.
+    It allows users to assign a rating to the selected professional.
+ */
 public class ScoreActivity extends AppCompatActivity implements
         PageFragmentCallbacks, ReviewFragment.Callbacks, ModelCallbacks {
 

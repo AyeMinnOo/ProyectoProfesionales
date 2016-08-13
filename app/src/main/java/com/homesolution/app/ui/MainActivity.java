@@ -18,6 +18,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.homesolution.app.Global;
 import com.homesolution.app.io.gcm.QuickstartPreferences;
 import com.homesolution.app.io.gcm.RegistrationIntentService;
+import com.homesolution.app.ui.activity.PanelActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {

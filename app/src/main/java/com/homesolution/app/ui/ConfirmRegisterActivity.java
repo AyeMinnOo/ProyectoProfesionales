@@ -16,7 +16,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.homesolution.app.Global;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
-import com.homesolution.app.io.responses.LoginResponse;
+import com.homesolution.app.io.response.LoginResponse;
+import com.homesolution.app.ui.activity.PanelActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.domain.UserAuthenticated;
 

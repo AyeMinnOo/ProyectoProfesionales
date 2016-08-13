@@ -12,9 +12,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.homesolution.app.ui.TalkActivity;
+import com.homesolution.app.ui.activity.TalkActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.homesolution.app.ui.MainActivity;
 
 public class MyGcmListenerService extends GcmListenerService {
 
