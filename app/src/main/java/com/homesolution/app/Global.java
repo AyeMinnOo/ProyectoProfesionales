@@ -92,6 +92,10 @@ public class Global extends Application {
         return country;
     }
 
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
 
     /*
     * Registration token (GCM Id)

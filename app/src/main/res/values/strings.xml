@@ -1,9 +1,22 @@
 <resources>
 
     <string name="app_name">Home Solution</string>
+    <string name="welcome_message">Bienvenido a Home Solution</string>
 
     <!-- Social login -->
     <string name="facebook_app_id">769495783106499</string>
+
+    <!-- Country dialog -->
+    <string name="country_dialog_title">Seleccione su país</string>
+    <string name="country_dialog_accept">Listo</string>
+
+    <!-- Countries by code -->
+    <string name="country_ar" translatable="false">Argentina</string>
+    <string name="country_cl" translatable="false">Chile</string>
+    <string name="country_uy" translatable="false">Uruguay</string>
+    <string name="country_ec" translatable="false">Ecuador</string>
+    <string name="country_co" translatable="false">Colombia</string>
+    <string name="country_pe" translatable="false">Perú</string>
 
     <!-- Field names -->
     <string name="field_name">Nombre</string>

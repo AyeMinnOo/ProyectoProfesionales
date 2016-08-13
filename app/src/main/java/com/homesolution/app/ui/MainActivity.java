@@ -11,9 +11,11 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -135,20 +137,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         global.loadUserAuthenticatedFromSharedPreferences();
         global.loadCountryFromSharedPreferences();
 
-        // There is a session active?
+        // There is a session active? Go to the main Panel
         if (global.isAuthenticated()) {
             Intent iPanel = new Intent(this, PanelActivity.class);
             startActivity(iPanel);
             return;
         }
 
-        // If not, read the default activity from SharedPreferences
+        // Show a dialog with countries when is needed
+        String country = global.getCountry();
+        if (country.isEmpty())
+            createRadioListDialog().show();
+        else goToDefaultActivity();
+
+    }
+
+    private void goToDefaultActivity() {
+        // Read the default first activity from SharedPreferences
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
 
         String defaultActivity = getResources().getString(R.string.first_activity_default);
         String firstActivity = sharedPref.getString(getString(R.string.first_activity), defaultActivity);
-
-        createRadioListDialog();
 
         // Start activity
         Intent intent = new Intent();
@@ -156,26 +165,76 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
+    private int getCountryIndex(String countryCode) {
+        switch (countryCode) {
+            case "ar": return 0;
+            case "cl": return 1;
+            case "uy": return 2;
+            case "ec": return 3;
+            case "co": return 4;
+            case "pe": return 5;
+            default: return 0; // ar
+        }
+    }
+
     public AlertDialog createRadioListDialog() {
+        // Pre-select a country according to the device
+        TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        String countryCode = tm.getSimCountryIso();
+        if (countryCode == null || countryCode.isEmpty())
+            countryCode = tm.getNetworkCountryIso();
+        final int preSelectIndex = getCountryIndex(countryCode);
+
+        // Start building the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         final CharSequence[] items = new CharSequence[6];
-        items[0] = "Argentina";
-        items[1] = "Chile";
-        items[2] = "Uruguay";
-        items[3] = "Ecuador";
-        items[4] = "Colombia";
-        items[5] = "Perú";
+        items[0] = getString(R.string.country_ar);
+        items[1] = getString(R.string.country_cl);
+        items[2] = getString(R.string.country_uy);
+        items[3] = getString(R.string.country_ec);
+        items[4] = getString(R.string.country_co);
+        items[5] = getString(R.string.country_pe);
 
-        builder.setTitle("Seleccione su país")
-                .setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.country_dialog_title)
+                .setSingleChoiceItems(items, preSelectIndex, null) // No listener for selection
+                .setPositiveButton(R.string.country_dialog_accept, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ListView lw = ((AlertDialog) dialog).getListView();
+                        saveSelectedCountry(lw.getCheckedItemPosition());
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(MainActivity.this, "Luego de iniciar sesión puede modifcar su selección", Toast.LENGTH_SHORT).show();
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        goToDefaultActivity();
                     }
                 });
 
         return builder.create();
+    }
+
+    private void saveSelectedCountry(int country) {
+        String countryCode = "";
+        switch (country) {
+            case 0: countryCode = "ar"; break;
+            case 1: countryCode = "cl"; break;
+            case 2: countryCode = "uy"; break;
+            case 3: countryCode = "ec"; break;
+            case 4: countryCode = "co"; break;
+            case 5: countryCode = "pe"; break;
+        }
+
+        // Save the selected country as global variable
+        final Global global = (Global) getApplicationContext();
+        global.setCountry(countryCode);
+
+        // And update the SharedPreferences
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.country_data), countryCode);
+        editor.apply();
+
+        Toast.makeText(MainActivity.this, "Luego de iniciar sesión puede modifcar su selección", Toast.LENGTH_SHORT).show();
     }
 
     @Override
