@@ -1,4 +1,4 @@
-package com.homesolution.app.io.deserializers;
+package com.homesolution.app.io.deserializer;
 
 import android.util.Log;
 
@@ -8,7 +8,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.homesolution.app.io.responses.LoginResponse;
+import com.homesolution.app.io.response.LoginResponse;
 import com.homesolution.app.domain.UserAuthenticated;
 
 import java.lang.reflect.Type;

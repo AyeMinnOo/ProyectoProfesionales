@@ -1,4 +1,4 @@
-package com.homesolution.app.ui;
+package com.homesolution.app.ui.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -41,11 +41,13 @@ import com.homesolution.app.domain.Category;
 import com.homesolution.app.domain.Message;
 import com.homesolution.app.domain.Talk;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
-import com.homesolution.app.io.responses.ChatResponse;
-import com.homesolution.app.io.responses.EnviarMsjeResponse;
-import com.homesolution.app.io.responses.SimpleResponse;
+import com.homesolution.app.io.response.ChatResponse;
+import com.homesolution.app.io.response.EnviarMsjeResponse;
+import com.homesolution.app.io.response.SimpleResponse;
+import com.homesolution.app.ui.ProfileActivity;
+import com.homesolution.app.ui.ScoreActivity;
 import com.homesolution.app.ui.adapter.MessageAdapter;
-import com.homesolution.app.ui.fragments.ChatsFragment;
+import com.homesolution.app.ui.fragment.ChatsFragment;
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 

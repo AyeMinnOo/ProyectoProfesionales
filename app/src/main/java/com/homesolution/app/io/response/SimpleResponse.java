@@ -1,8 +1,8 @@
-package com.homesolution.app.io.responses;
+package com.homesolution.app.io.response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RecuperarResponse {
+public class SimpleResponse {
 
     @SerializedName("status")
     private int status;

@@ -1,4 +1,4 @@
-package com.homesolution.app.ui.fragments;
+package com.homesolution.app.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import com.homesolution.app.domain.Chat;
 import com.homesolution.app.ui.adapter.CategoryAdapter;
 import com.homesolution.app.ui.adapter.ChatAdapter;
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.homesolution.app.io.responses.ChatsResponse;
+import com.homesolution.app.io.response.ChatsResponse;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.ui.PanelActivity;
 

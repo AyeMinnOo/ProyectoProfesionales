@@ -1,9 +1,8 @@
-package com.homesolution.app.io.responses;
+package com.homesolution.app.io.response;
 
 import com.google.gson.annotations.SerializedName;
-import com.homesolution.app.domain.WorkerProfile;
 
-public class PrestadorResponse {
+public class RegistroResponse {
 
     @SerializedName("status")
     private int status;
@@ -11,8 +10,8 @@ public class PrestadorResponse {
     @SerializedName("error")
     private String error;
 
-    @SerializedName("response")
-    private WorkerProfile response;
+    /*@SerializedName("response")
+    private UserRegistered response;*/
 
     public int getStatus() {
         return status;
@@ -22,8 +21,8 @@ public class PrestadorResponse {
         return error;
     }
 
-    public WorkerProfile getResponse() {
+    /*public UserRegistered getResponse() {
         return response;
-    }
+    }*/
 
 }

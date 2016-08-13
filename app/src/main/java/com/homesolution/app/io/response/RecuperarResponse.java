@@ -1,10 +1,8 @@
-package com.homesolution.app.io.responses;
+package com.homesolution.app.io.response;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
-public class ZonasResponse {
+public class RecuperarResponse {
 
     @SerializedName("status")
     private int status;
@@ -13,7 +11,7 @@ public class ZonasResponse {
     private String error;
 
     @SerializedName("response")
-    private ArrayList<String> response;
+    private Boolean response;
 
     public int getStatus() {
         return status;
@@ -23,7 +21,7 @@ public class ZonasResponse {
         return error;
     }
 
-    public ArrayList<String> getResponse() {
+    public Boolean getResponse() {
         return response;
     }
 

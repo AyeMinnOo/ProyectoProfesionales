@@ -1,11 +1,11 @@
-package com.homesolution.app.io.responses;
+package com.homesolution.app.io.response;
 
 import com.google.gson.annotations.SerializedName;
-import com.homesolution.app.domain.Category;
+import com.homesolution.app.domain.Worker;
 
 import java.util.ArrayList;
 
-public class CategoriasResponse {
+public class AgendaResponse {
 
     @SerializedName("status")
     private int status;
@@ -14,7 +14,7 @@ public class CategoriasResponse {
     private String error;
 
     @SerializedName("response")
-    private ArrayList<Category> response;
+    private ArrayList<Worker> response;
 
     public int getStatus() {
         return status;
@@ -24,7 +24,7 @@ public class CategoriasResponse {
         return error;
     }
 
-    public ArrayList<Category> getResponse() {
+    public ArrayList<Worker> getResponse() {
         return response;
     }
 

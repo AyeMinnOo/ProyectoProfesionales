@@ -1,4 +1,4 @@
-package com.homesolution.app.ui;
+package com.homesolution.app.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,14 +14,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.homesolution.app.io.responses.CategoriasResponse;
-import com.homesolution.app.ui.fragments.AgendaFragment;
-import com.homesolution.app.ui.fragments.ChatsFragment;
+import com.homesolution.app.io.response.CategoriasResponse;
+import com.homesolution.app.ui.fragment.AgendaFragment;
+import com.homesolution.app.ui.fragment.ChatsFragment;
 import com.homesolution.app.ui.settings.SettingsActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.domain.Category;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
-import com.homesolution.app.ui.fragments.BusquedaFragment;
+import com.homesolution.app.ui.fragment.BusquedaFragment;
 
 import java.util.ArrayList;
 

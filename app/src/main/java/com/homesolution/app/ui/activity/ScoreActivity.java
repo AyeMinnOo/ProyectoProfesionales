@@ -1,4 +1,4 @@
-package com.homesolution.app.ui;
+package com.homesolution.app.ui.activity;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -27,7 +27,7 @@ import com.tech.freak.wizardpager.ui.ReviewFragment;
 import com.tech.freak.wizardpager.ui.StepPagerStrip;
 import com.homesolution.app.Global;
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.homesolution.app.io.responses.CalificarResponse;
+import com.homesolution.app.io.response.CalificarResponse;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.ui.wizard.ScoreWizardModel;
 import com.homesolution.app.ui.wizard.pages.CustomerInfoPage;

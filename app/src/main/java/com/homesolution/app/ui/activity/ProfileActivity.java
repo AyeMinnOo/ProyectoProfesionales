@@ -1,4 +1,4 @@
-package com.homesolution.app.ui;
+package com.homesolution.app.ui.activity;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
@@ -21,19 +21,19 @@ import com.homesolution.app.domain.Certifications;
 import com.homesolution.app.domain.Rating;
 import com.homesolution.app.domain.Skill;
 import com.homesolution.app.domain.WorkerData;
-import com.homesolution.app.ui.fragments.AgendaFragment;
+import com.homesolution.app.ui.ScoreActivity;
+import com.homesolution.app.ui.fragment.AgendaFragment;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.domain.Category;
 import com.homesolution.app.domain.WorkerBasic;
 import com.homesolution.app.domain.WorkerProfile;
-import com.homesolution.app.io.responses.SimpleResponse;
+import com.homesolution.app.io.response.SimpleResponse;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
-import com.homesolution.app.io.responses.PrestadorResponse;
+import com.homesolution.app.io.response.PrestadorResponse;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import retrofit.Call;
 import retrofit.Callback;

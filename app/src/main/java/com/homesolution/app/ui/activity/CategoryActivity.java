@@ -1,4 +1,4 @@
-package com.homesolution.app.ui;
+package com.homesolution.app.ui.activity;
 
 import android.app.ProgressDialog;
 import android.support.v7.app.ActionBar;
@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.homesolution.app.Global;
 import com.homesolution.app.domain.Worker;
-import com.homesolution.app.io.responses.AgendaResponse;
+import com.homesolution.app.io.response.AgendaResponse;
 import com.homesolution.app.ui.adapter.WorkerAdapter;
 import com.squareup.picasso.Picasso;
 import com.youtube.sorcjc.proyectoprofesionales.R;
@@ -82,10 +82,11 @@ public class CategoryActivity extends AppCompatActivity {
     private void setUpActionBar() {
         // Custom action bar
         ActionBar mActionBar = getSupportActionBar();
-
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setDisplayShowCustomEnabled(true);
-        mActionBar.setDisplayShowTitleEnabled(false);
+        if (mActionBar != null) {
+            mActionBar.setDisplayShowHomeEnabled(false);
+            mActionBar.setDisplayShowCustomEnabled(true);
+            mActionBar.setDisplayShowTitleEnabled(false);
+        }
 
         LayoutInflater mInflater = LayoutInflater.from(this);
 

@@ -1,8 +1,9 @@
-package com.homesolution.app.io.responses;
+package com.homesolution.app.io.response;
 
 import com.google.gson.annotations.SerializedName;
+import com.homesolution.app.domain.Talk;
 
-public class SimpleResponse {
+public class ChatResponse {
 
     @SerializedName("status")
     private int status;
@@ -11,7 +12,7 @@ public class SimpleResponse {
     private String error;
 
     @SerializedName("response")
-    private Boolean response;
+    private Talk response;
 
     public int getStatus() {
         return status;
@@ -21,8 +22,12 @@ public class SimpleResponse {
         return error;
     }
 
-    public Boolean getResponse() {
+    public Talk getResponse() {
         return response;
+    }
+
+    public void setResponse(Talk response) {
+        this.response = response;
     }
 
 }

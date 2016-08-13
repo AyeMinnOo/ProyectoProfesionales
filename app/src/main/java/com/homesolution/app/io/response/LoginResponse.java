@@ -1,4 +1,4 @@
-package com.homesolution.app.io.responses;
+package com.homesolution.app.io.response;
 
 import com.google.gson.annotations.SerializedName;
 import com.homesolution.app.domain.UserAuthenticated;
