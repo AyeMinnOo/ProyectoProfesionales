@@ -6,11 +6,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.homesolution.app.io.service.TrackingService;
 import com.homesolution.app.ui.LoginActivity;
 import com.homesolution.app.Global;
 import com.homesolution.app.ui.activity.TalkActivity;
@@ -25,8 +28,11 @@ import retrofit.Retrofit;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, Callback<SimpleResponse> {
 
+    private static final String TAG = "DebugSettings";
+
     // Available options
     private TextView tvUpdateUserData;
+    private Switch switchGeoMode;
     private TextView tvTermsAndConditions;
     private TextView tvLogout;
 
@@ -43,11 +49,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // View references
         tvUpdateUserData = (TextView) findViewById(R.id.tvUpdateUserData);
         tvUpdateUserData.setOnClickListener(this);
+        switchGeoMode = (Switch) findViewById(R.id.switchGeoMode);
+        switchGeoMode.setOnClickListener(this);
         tvTermsAndConditions = (TextView) findViewById(R.id.tvTermsAndConditions);
         tvTermsAndConditions.setOnClickListener(this);
         tvLogout = (TextView) findViewById(R.id.tvLogout);
         tvLogout.setOnClickListener(this);
-
     }
 
     private Global getGlobal() {
@@ -61,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         ActionBar mActionBar = getSupportActionBar();
         if (mActionBar != null) {
             mActionBar.setDisplayHomeAsUpEnabled(true);
-            mActionBar.setTitle("Opciones");
+            mActionBar.setTitle(R.string.settings_title);
         }
     }
 
@@ -85,6 +92,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.tvUpdateUserData:
                 Intent iUpdateUser = new Intent(this, UpdateUserActivity.class);
                 startActivity(iUpdateUser);
+                break;
+
+            case R.id.switchGeoMode:
+                if (switchGeoMode.isChecked()) {
+                    startService(new Intent(this, TrackingService.class));
+                    Toast.makeText(SettingsActivity.this, "Activando geolocalización ...", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.tvTermsAndConditions:

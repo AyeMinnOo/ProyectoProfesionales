@@ -13,9 +13,31 @@
         android:layout_height="32dp"
         android:layout_margin="12dp"
         android:gravity="center_vertical"
-        android:text="Modificar datos"
+        android:text="@string/settings_user_data"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="19sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Switch
+            android:id="@+id/switchGeoMode"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_margin="12dp"
+            android:gravity="center_vertical"
+            android:text="@string/settings_geo_mode"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="19sp" />
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -28,7 +50,7 @@
         android:layout_height="32dp"
         android:layout_margin="12dp"
         android:gravity="center_vertical"
-        android:text="Ver términos y condiciones"
+        android:text="@string/settings_terms"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="19sp" />
 
@@ -43,7 +65,7 @@
         android:layout_height="32dp"
         android:layout_margin="12dp"
         android:gravity="center_vertical"
-        android:text="Cerrar sesión"
+        android:text="@string/settings_logout"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="19sp" />
 

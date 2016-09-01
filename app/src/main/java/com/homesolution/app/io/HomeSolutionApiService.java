@@ -106,4 +106,11 @@ public interface HomeSolutionApiService {
     @GET("buscar")
     Call<AgendaResponse> getBuscar(@Query("term") String term, @Query("tk") String token);
 
+    // http://dev.homesolution.net/api/setlatlng
+    @GET("setlatlng")
+    Call<SimpleResponse> getLatLng(@Query("tk") String token, @Query("lat") String lag, @Query("lng") String lng);
+
+    // http://dev.homesolution.net/api/setgeooff
+    @GET("setgeooff")
+    Call<SimpleResponse> getGeoOff(@Query("tk") String token);
 }
