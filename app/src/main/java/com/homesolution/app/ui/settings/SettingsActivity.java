@@ -49,12 +49,20 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         // View references
         tvUpdateUserData = (TextView) findViewById(R.id.tvUpdateUserData);
         tvUpdateUserData.setOnClickListener(this);
-        switchGeoMode = (Switch) findViewById(R.id.switchGeoMode);
-        switchGeoMode.setOnClickListener(this);
         tvTermsAndConditions = (TextView) findViewById(R.id.tvTermsAndConditions);
         tvTermsAndConditions.setOnClickListener(this);
         tvLogout = (TextView) findViewById(R.id.tvLogout);
         tvLogout.setOnClickListener(this);
+
+        // Geolocation (only for workers)
+        if (getGlobal().isPrestador()) {
+            switchGeoMode = (Switch) findViewById(R.id.switchGeoMode);
+            switchGeoMode.setOnClickListener(this);
+            switchGeoMode.setChecked(getGlobal().isGeoActive());
+        } else {
+            View layoutGeolocation = findViewById(R.id.layout_geo);
+            layoutGeolocation.setVisibility(View.GONE);
+        }
     }
 
     private Global getGlobal() {
@@ -97,8 +105,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.switchGeoMode:
                 if (switchGeoMode.isChecked()) {
                     startService(new Intent(this, TrackingService.class));
-                    Toast.makeText(SettingsActivity.this, "Activando geolocalización ...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingsActivity.this, R.string.settings_geo_activating, Toast.LENGTH_SHORT).show();
+                } else {
+                    requestGeolocationOff();
                 }
+                getGlobal().setGeoMode(switchGeoMode.isChecked());
                 break;
 
             case R.id.tvTermsAndConditions:
@@ -112,8 +123,28 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private void requestGeolocationOff() {
+        final String token = getGlobal().getToken();
+
+        Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                .getGeoOff(token);
+        call.enqueue(new Callback<SimpleResponse>() {
+            @Override
+            public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
+                if (response.body() != null && response.body().getStatus() == 1) {
+                    stopService(new Intent(SettingsActivity.this, TrackingService.class));
+                }
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(SettingsActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void requestLogout() {
-        // Global variables instance
         final String token = getGlobal().getToken();
 
         Call<SimpleResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
@@ -135,6 +166,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
             // Clear static variables
             TalkActivity.token = null;
+
+            // Stop tracking service
+            stopService(new Intent(this, TrackingService.class));
 
             // Back to LoginActivity
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

@@ -64,7 +64,7 @@ public class UpdateUserActivity extends AppCompatActivity implements View.OnClic
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("Actualizar datos");
+            actionBar.setTitle(R.string.update_user_title);
         }
 
         // Required to apply changes

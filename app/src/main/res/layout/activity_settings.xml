@@ -23,9 +23,10 @@
         android:background="@android:color/darker_gray" />
 
     <LinearLayout
+        android:id="@+id/layout_geo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <Switch
             android:id="@+id/switchGeoMode"
@@ -37,12 +38,12 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="19sp" />
 
-    </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvTermsAndConditions"

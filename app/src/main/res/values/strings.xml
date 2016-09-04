@@ -83,8 +83,13 @@
     <string name="settings_title">Opciones</string>
     <string name="settings_user_data">Modificar datos</string>
     <string name="settings_geo_mode">Geolocalizado</string>
+    <string name="settings_geo_activating">Activando geolocalización &#8230;</string>
+    <string name="settings_geo_activated">Se ha activado el modo geolocalizado</string>
     <string name="settings_terms">Ver términos y condiciones</string>
     <string name="settings_logout">Cerrar sesión</string>
+
+    <!-- UpdateUserActivity -->
+    <string name="update_user_title">Actualizar datos</string>
 
     <!-- Terms and conditions -->
     <string name="terms_conditions">Toda persona que quiera utilizar los servicios debe leer, entender y aceptar las condiciones establecidas en los Términos y Condiciones Generales y en las Políticas de Privacidad así como en los demás documentos incorporados a los mismos por referencia, previo a su registración como Usuario de Home Solution ™.\n\nLos Servicios sólo están disponibles para personas que tengan capacidad legal para contratar y capacidad legal para trabajar, según la normativa vigente a tales efectos en la República Argentina. No podrán utilizar los servicios las personas que no tengan esa capacidad, los menores de edad o Usuarios/Prestadores de Home Solution ™ que hayan sido suspendidos temporalmente o inhabilitados definitivamente. Si estás registrando un Usuario/Prestador como Empresa, debes contar con la representación necesaria otorgada por la entidad y, por carácter transitivo, obligar a la misma en los términos de este Acuerdo.</string>

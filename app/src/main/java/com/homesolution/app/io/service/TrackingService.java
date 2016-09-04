@@ -16,8 +16,7 @@ import android.widget.Toast;
 import com.homesolution.app.Global;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.io.response.SimpleResponse;
-
-import java.util.Date;
+import com.youtube.sorcjc.proyectoprofesionales.R;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -37,11 +36,28 @@ public class TrackingService extends Service {
     private LocationManager locationManager;
     private LocationListener locationListener;
 
-    HandlerThread handlerThread;
-    Looper looper;
+    private HandlerThread handlerThread;
+    private Looper looper;
+
+    private boolean alreadyRunning;
+
+    @Override
+    public void onCreate()
+    {
+        super.onCreate();
+        alreadyRunning = false;
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // To avoid run the following sentences several times
+        if (alreadyRunning) {
+            return super.onStartCommand(intent, flags, startId);
+        }
+
+        // When the service is started, the first time
+        alreadyRunning = true;
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLocationListener();
         Log.i(TAG, "onStartCommand => locationManager and locationListener created");
@@ -66,12 +82,12 @@ public class TrackingService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "onDestroy => removeUpdates");
+
         try {
             locationManager.removeUpdates(locationListener);
         } catch (SecurityException ex) {
             Log.e(TAG, ex.getMessage());
         }
-
     }
 
     @Override
@@ -86,7 +102,6 @@ public class TrackingService extends Service {
             final String latitude = String.valueOf(loc.getLatitude());
             final String longitude = String.valueOf(loc.getLongitude());
             Log.i(TAG, "locationListener onLocationChanged => " + latitude + " " + longitude);
-            Log.i(TAG, "onLocationChanged time => " + new Date());
 
             // Perform network I/O
             Global global = (Global) getApplicationContext();
@@ -99,7 +114,7 @@ public class TrackingService extends Service {
                 public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
                     boolean okResponse = response.body().getResponse();
                     if (okResponse)
-                        Toast.makeText(TrackingService.this, "Se ha activado el modo geolocalizado.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TrackingService.this, R.string.settings_geo_activated, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -109,16 +124,6 @@ public class TrackingService extends Service {
                 }
             });
 
-            /*
-            // Stop the location updates, the handlerThread and the service
-            try {
-                locationManager.removeUpdates(locationListener);
-            } catch (SecurityException ex) {
-                Log.i(TAG, ex.getMessage());
-            }
-            handlerThread.quit();
-            TrackingService.this.stopSelf();
-            */
         }
 
         @Override

@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -338,8 +337,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         String gcm_id = getGlobal().getGcmId();
-
-        Log.d("Test/Login", "Credentials => " + email + " / " + password);
+        // Log.d("Test/Login", "Credentials => " + email + " / " + password);
 
         Call<LoginResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry()).getLoginResponse(email, password, gcm_id);
         call.enqueue(this);
@@ -395,8 +393,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void goToActivity(Class activity) {
         Intent intent = new Intent(this, activity);
-        if (intent != null)
-            startActivity(intent);
+        startActivity(intent);
     }
 
     private void clearCredentials() {

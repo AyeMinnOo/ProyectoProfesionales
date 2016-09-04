@@ -16,11 +16,14 @@ public class User {
     @SerializedName("extras")
     private Extras extras;
 
+    @SerializedName("invitacionpendiente")
+    private boolean invitacionPendiente;
+
     @SerializedName("esprestador")
     private boolean esPrestador;
 
-    @SerializedName("invitacionpendiente")
-    private boolean invitacionPendiente;
+    @SerializedName("modogeo")
+    private boolean geolocation;
 
     @SerializedName("picture")
     private String picture;
@@ -55,6 +58,14 @@ public class User {
 
     public boolean hasInvitacionPendiente() {
         return invitacionPendiente;
+    }
+
+    public boolean isGeolocationActive() {
+        return geolocation;
+    }
+
+    public void setGeolocation(boolean active) {
+        this.geolocation = active;
     }
 
     public String getPicture() {

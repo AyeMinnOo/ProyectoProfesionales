@@ -81,6 +81,18 @@ public class Global extends Application {
         userAuthenticated.getUser().setUsername(username);
     }
 
+    public boolean isPrestador() {
+        return userAuthenticated.getUser().isPrestador();
+    }
+
+    public boolean isGeoActive() {
+        return userAuthenticated.getUser().isGeolocationActive();
+    }
+
+    public void setGeoMode(boolean active) {
+        userAuthenticated.getUser().setGeolocation(active);
+    }
+
     public void setUserAuthenticated(UserAuthenticated userAuthenticated) {
         this.userAuthenticated = userAuthenticated;
     }

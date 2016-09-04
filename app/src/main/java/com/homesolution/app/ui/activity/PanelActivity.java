@@ -1,6 +1,5 @@
 package com.homesolution.app.ui.activity;
 
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,14 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.homesolution.app.Global;
+import com.homesolution.app.domain.Category;
+import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.io.response.CategoriasResponse;
+import com.homesolution.app.io.service.TrackingService;
 import com.homesolution.app.ui.fragment.AgendaFragment;
+import com.homesolution.app.ui.fragment.BusquedaFragment;
 import com.homesolution.app.ui.fragment.ChatsFragment;
 import com.homesolution.app.ui.settings.SettingsActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
-import com.homesolution.app.domain.Category;
-import com.homesolution.app.io.HomeSolutionApiAdapter;
-import com.homesolution.app.ui.fragment.BusquedaFragment;
 
 import java.util.ArrayList;
 
@@ -74,6 +74,8 @@ public class PanelActivity extends AppCompatActivity {
 
         // Global variables instance
         global = getGlobal();
+        if (global.isGeoActive())
+            startTrackingService();
     }
 
     private Global getGlobal() {
@@ -81,6 +83,10 @@ public class PanelActivity extends AppCompatActivity {
             global = (Global) getApplicationContext();
 
         return global;
+    }
+
+    private void startTrackingService() {
+        startService(new Intent(this, TrackingService.class));
     }
 
     private void loadCategories() {
