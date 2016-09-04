@@ -49,6 +49,7 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
+            android:launchMode="singleTop"
             android:name="com.homesolution.app.ui.activity.PanelActivity"
             android:label="@string/title_activity_panel"
             android:theme="@style/AppTheme.NoActionBar" />

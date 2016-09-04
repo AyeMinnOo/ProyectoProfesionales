@@ -1,8 +1,12 @@
 package com.homesolution.app.ui.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,13 +37,13 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class ChatsFragment extends Fragment implements View.OnClickListener {
+public class ChatsFragment extends Fragment implements View.OnClickListener, Callback<ChatsResponse> {
 
     // Global variables
     private static Global global;
     private static String token;
 
-    // Views and controls in fragment_chats.xmll
+    // Views and controls in fragment_chats.xml
     private static LinearLayout layoutTop;
     private static RecyclerView recyclerView;
     private static LinearLayout layoutIrBusqueda;
@@ -66,8 +70,18 @@ public class ChatsFragment extends Fragment implements View.OnClickListener {
         categoryAdapter = new CategoryAdapter(getActivity());
 
         context = getActivity();
-        // Log.d("Test/Chats", "onCreate fired !");
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
+                new IntentFilter("reload-chats"));
     }
+
+    // This will be called whenever an Intent with an action name "reload-chats" is sent.
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            loadActiveChats();
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,7 +117,6 @@ public class ChatsFragment extends Fragment implements View.OnClickListener {
         ivIrBusqueda.setOnClickListener(this);
         ivBuscar.setOnClickListener(this);
 
-        // Log.d("Test/Chats", "onCreateView fired !");
         return rootView;
     }
 
@@ -117,8 +130,6 @@ public class ChatsFragment extends Fragment implements View.OnClickListener {
         // Use the ChatAdapter if there are messages
         // But use CategoriesAdapter if there aren't messages
         loadActiveChats();
-
-        // Log.d("Test/Chats", "onViewCreated fired !");
     }
 
     private Global getGlobal() {
@@ -129,33 +140,31 @@ public class ChatsFragment extends Fragment implements View.OnClickListener {
         return global;
     }
 
-    public static void loadActiveChats() {
-        Call<ChatsResponse> call = HomeSolutionApiAdapter.getApiService(global.getCountry())
+    public void loadActiveChats() {
+        Call<ChatsResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
                                                             .getChatsResponse(token);
+        call.enqueue(this);
+    }
 
-        call.enqueue(new Callback<ChatsResponse>() {
-            @Override
-            public void onResponse(Response<ChatsResponse> response, Retrofit retrofit) {
-                ArrayList<Chat> chats = response.body().getResponse();
+    @Override
+    public void onResponse(Response<ChatsResponse> response, Retrofit retrofit) {
+        ArrayList<Chat> chats = response.body().getResponse();
 
-                if (chats.size() > 0) {
-                    // Log.d("Test/Chat", "Active chats from WS => " + chats.size());
-                    showMessages(chats);
-                } else {
-                    showCategories();
-                }
+        if (chats.size() > 0) {
+            // Log.d("Test/Chat", "Active chats from WS => " + chats.size());
+            showMessages(chats);
+        } else {
+            showCategories();
+        }
 
-                PanelActivity.progressDialog.dismiss();
-            }
+        PanelActivity.progressDialog.dismiss();
+    }
 
-            @Override
-            public void onFailure(Throwable t) {
-                Toast.makeText(ChatsFragment.context, R.string.retrofit_failure, Toast.LENGTH_SHORT).show();
-                // Log.d("Test/Chat", "ChatsResponse onFailure => " + t.getLocalizedMessage());
-
-                PanelActivity.progressDialog.dismiss();
-            }
-        });
+    @Override
+    public void onFailure(Throwable t) {
+        Toast.makeText(ChatsFragment.context, R.string.retrofit_failure, Toast.LENGTH_SHORT).show();
+        // Log.d("Test/Chat", "ChatsResponse onFailure => " + t.getLocalizedMessage());
+        PanelActivity.progressDialog.dismiss();
     }
 
     public static void showMessages(ArrayList<Chat> chats) {
@@ -201,7 +210,6 @@ public class ChatsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-
-        // Log.d("Test/Chats", "onResume fired !");
     }
+
 }

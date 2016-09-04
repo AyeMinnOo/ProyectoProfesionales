@@ -50,15 +50,9 @@ public class PanelActivity extends AppCompatActivity {
     public static ArrayList<Category> categoryList;
     public static ProgressDialog progressDialog;
 
-    @TargetApi(16)
     @Override
     public void onBackPressed() {
-        final int currentApiVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentApiVersion >= 16) { // API 16
-            finishAffinity();
-        } else {
-            finish();
-        }
+        moveTaskToBack(true);
     }
 
     @Override

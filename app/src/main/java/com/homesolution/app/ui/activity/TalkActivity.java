@@ -112,7 +112,6 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
 
     // Location of the last photo taken
     private String currentPhotoPath;
-    private File photoFile;
 
     // To handle the push notifications about messages
     // This variable stores the toUid of the current chat
@@ -161,7 +160,6 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         isOpened = toUid;
     }
 
-    // Here we can handle the received Intents.
     // This will be called whenever an Intent with an action name "chat-message" is sent.
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -170,8 +168,10 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             String uidNewMessage = intent.getStringExtra("uid");
             if (toUid.equals(uidNewMessage))
                 loadMessages(false);
+            /*
             else
                 Log.d("Test/Receiver", "New message from another user ("+uidNewMessage+"). Current is "+toUid);
+            */
         }
     };
 
@@ -182,7 +182,9 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         isOpened = "";
 
         // Reload active chats
-        ChatsFragment.loadActiveChats();
+        Intent intent = new Intent("reload-chats");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        // ChatsFragment.loadActiveChats();
 
         super.onDestroy();
     }
@@ -250,18 +252,22 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private void setUpActionBar() {
         // Custom action bar
         ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setDisplayShowTitleEnabled(false);
-        LayoutInflater mInflater = LayoutInflater.from(this);
+        if (mActionBar != null) {
+            mActionBar.setDisplayShowHomeEnabled(false);
+            mActionBar.setDisplayShowTitleEnabled(false);
+        }
 
+        LayoutInflater mInflater = LayoutInflater.from(this);
         View mCustomView = mInflater.inflate(R.layout.actionbar_talk, null);
         tvName = (TextView) mCustomView.findViewById(R.id.tvName);
         ivPhoto = (ImageView) mCustomView.findViewById(R.id.ivPhoto);
         tvDescription = (TextView) mCustomView.findViewById(R.id.tvDescription);
 
-        mActionBar.setCustomView(mCustomView);
-        mActionBar.setDisplayShowCustomEnabled(true);
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        if (mActionBar != null) {
+            mActionBar.setCustomView(mCustomView);
+            mActionBar.setDisplayShowCustomEnabled(true);
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void setUpTabs(boolean esPrestador) {
