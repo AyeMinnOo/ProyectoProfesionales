@@ -32,14 +32,31 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvName"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="Roberto Prestador"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="17sp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tvImportant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="(!)"
+                    android:textSize="17sp"
+                    android:textColor="@color/colorAccent"/>
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="Worker Name"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="17sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvDescription"

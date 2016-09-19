@@ -41,6 +41,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         Chat chat = chats.get(position);
 
+        holder.setImportant(chat.isImportant());
         holder.setName(chat.getName());
         holder.setImage(chat.getUrlPhoto());
         holder.setDescription(chat.getCatstr());
@@ -60,7 +61,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         return chats.size();
     }
 
-    public void setAll(@NonNull ArrayList<Chat> chats) {
+    public void setAll(ArrayList<Chat> chats) {
         if (chats == null)
             throw new NullPointerException("The results cannot be null.");
 
@@ -70,6 +71,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
     public class MessageViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivPhoto;
+        private TextView tvImportant;
         private TextView tvName;
         private TextView tvDescription;
         private TextView tvDate;
@@ -80,11 +82,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
             super(itemView);
 
             ivPhoto = (ImageView) itemView.findViewById(R.id.ivPhoto);
+            tvImportant = (TextView) itemView.findViewById(R.id.tvImportant);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
             tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
 
             contact_info = (LinearLayout) itemView.findViewById(R.id.contact_info);
+        }
+
+        public void setImportant(boolean important) {
+            if (important)
+                tvImportant.setVisibility(View.VISIBLE);
+            else
+                tvImportant.setVisibility(View.GONE);
         }
 
         public void setName(String name){

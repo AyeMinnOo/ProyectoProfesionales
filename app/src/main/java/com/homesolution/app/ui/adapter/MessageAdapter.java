@@ -34,6 +34,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             itemView = LayoutInflater.from(context).inflate(R.layout.item_message_right, parent, false);
         else
             itemView = LayoutInflater.from(context).inflate(R.layout.item_message_left, parent, false);
+
         return new MessageViewHolder(itemView);
     }
 
@@ -106,7 +107,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                         .load(urlImage)
                         .placeholder(R.drawable.ic_category_default)
                         .into(ivImagen);
-
             } else {
                 // This is logically not necessary but fix a strange bug
                 ivImagen.setVisibility(View.GONE);

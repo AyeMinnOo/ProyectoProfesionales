@@ -14,7 +14,8 @@ public class Chat {
     "readed":"1",
     "msg":"Muchas gracias por la respuesta Leandro. En breve seguramente estaran llegando nuevas consultas. Puede adquirir el pack Nitro desde tu panel de control para mayor cantidad de consultas en menor tiempo. La version gratuita es limitada. Saludos!",
     "cdate":"2015-12-28 14:34:53",
-    "rdate":"2015-12-29 22:01:56"
+    "rdate":"2015-12-29 22:01:56",
+    "important": false
      */
 
     @SerializedName("uid")
@@ -44,11 +45,14 @@ public class Chat {
     @SerializedName("picture")
     private String picture;
 
+    @SerializedName("esprestador")
+    private boolean esPrestador;
+
     @SerializedName("prestador")
     private SimpleWorkerData prestador;
 
-    @SerializedName("esprestador")
-    private boolean esPrestador;
+    @SerializedName("important")
+    private boolean important;
 
     public String getUid() {
         return uid;
@@ -92,4 +96,9 @@ public class Chat {
     public boolean isEsPrestador() {
         return esPrestador;
     }
+
+    public boolean isImportant() {
+        return important;
+    }
+
 }
