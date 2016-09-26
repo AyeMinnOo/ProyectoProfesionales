@@ -62,6 +62,7 @@
     <!-- SharedPreferences keys -->
     <string name="user_data">UserData</string>
     <string name="country_data">CountryData</string>
+    <string name="geo_data">GeoData</string>
 
     <!-- ScoreActivity -->
     <string name="next">Siguiente</string>
@@ -99,7 +100,7 @@
     <string name="empty_category_description">Si no encontrás aún al profesional que buscas, te invitamos a que sigas ingresando.\nSi conoces algúno de confianza, lo podes invitar a formar parte desde tu cuenta.</string>
 
     <!-- Message for Retrofit onFailure -->
-    <string name="retrofit_failure">Ocurrió un error inesperado</string>
+    <string name="retrofit_failure">Ocurrió un error de conexión</string>
 
     <!-- Just for debug GCM -->
     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to

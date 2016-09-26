@@ -21,6 +21,7 @@ public class Global extends Application {
     */
     private UserAuthenticated userAuthenticated;
     private String country;
+    private float lastGeoUpdate;
 
     public boolean isAuthenticated() {
         return userAuthenticated != null;
@@ -49,8 +50,16 @@ public class Global extends Application {
         // SharedPreferences instance
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
 
-        // We also look for a country preference
+        // Look for a country preference
         country = sharedPref.getString(getString(R.string.country_data), "");
+    }
+
+    public void loadLastGeoUpdateFromSharedPreferences() {
+        // SharedPreferences instance
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+
+        // Look for the last geo update preference
+        lastGeoUpdate = sharedPref.getFloat(getString(R.string.geo_data), 0);
     }
 
     public String getUid() {
@@ -108,6 +117,16 @@ public class Global extends Application {
         this.country = country;
     }
 
+    public float getLastGeoUpdate() {
+        if (lastGeoUpdate == 0)
+            loadLastGeoUpdateFromSharedPreferences();
+
+        return lastGeoUpdate;
+    }
+
+    public void setLastGeoUpdate(float lastGeoUpdate) {
+        this.lastGeoUpdate = lastGeoUpdate;
+    }
 
     /*
     * Registration token (GCM Id)
