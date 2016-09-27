@@ -48,6 +48,10 @@
 
     <!-- TalkActivity -->
     <string name="loading_messages">Cargando mensajes &#8230;</string>
+    <string name="talk_accept_option">Aceptar</string>
+    <string name="talk_accept_message">Se ha aceptado el mensaje</string>
+    <string name="talk_reject_option">Rechazar</string>
+    <string name="talk_reject_message">Se ha rechazado el mensaje</string>
     <string name="picture_title">Enviar imagen !</string>
     <string name="picture_from_camera">Tomar una foto</string>
     <string name="picture_from_gallery">Escoger una imagen</string>

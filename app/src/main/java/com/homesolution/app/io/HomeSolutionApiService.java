@@ -113,4 +113,11 @@ public interface HomeSolutionApiService {
     // http://dev.homesolution.net/api/setgeooff
     @GET("setgeooff")
     Call<SimpleResponse> getGeoOff(@Query("tk") String token);
+
+    // Accept message
+    @GET("acceptmsg")
+    Call<ChatResponse> getAcceptMessage(@Query("tk") String token, @Query("touid") String toUid, @Query("mid") String mId);
+    // Reject message
+    @GET("rejectmsg")
+    Call<ChatsResponse> getRejectMessage(@Query("tk") String token, @Query("mid") String mId);
 }

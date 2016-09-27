@@ -74,14 +74,16 @@
 
         <!-- To send a message -->
         <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/layoutWriteMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/cement"
             android:orientation="horizontal"
             android:paddingBottom="8dp"
-            android:paddingEnd="12dp"
+            android:paddingEnd="10dp"
             android:paddingLeft="2dp"
-            android:paddingRight="12dp"
+            android:paddingRight="10dp"
             android:paddingStart="2dp"
             android:paddingTop="8dp">
 
@@ -125,6 +127,37 @@
                     android:src="@drawable/send" />
 
             </RelativeLayout>
+
+        </LinearLayout>
+
+        <!-- To accept or reject a message -->
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/layoutAcceptReject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="?android:attr/buttonBarStyle">
+
+            <Button
+                android:id="@+id/btnAcceptTalk"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:textColor="#fff"
+                style="?android:attr/buttonBarButtonStyle"
+                android:text="@string/talk_accept_option"/>
+
+            <Button
+                android:id="@+id/btnRejectTalk"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="#fff"
+                style="?android:attr/buttonBarButtonStyle"
+                android:text="@string/talk_reject_option"/>
 
         </LinearLayout>
 

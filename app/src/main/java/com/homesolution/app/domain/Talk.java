@@ -21,6 +21,12 @@ public class Talk {
     @SerializedName("chat")
     private ArrayList<Message> chat;
 
+    @SerializedName("rechazable")
+    private boolean rechazable;
+
+    @SerializedName("rechazablemid")
+    private String rechazableMid;
+
     public boolean isPrestador() {
         return esPrestador;
     }
@@ -43,5 +49,21 @@ public class Talk {
 
     public ArrayList<Message> getChat() {
         return chat;
+    }
+
+    public boolean isRechazable() {
+        return rechazable;
+    }
+
+    public void setRechazable(boolean rechazable) {
+        this.rechazable = rechazable;
+    }
+
+    public String getRechazableMid() {
+        return rechazableMid;
+    }
+
+    public void setRechazableMid(String rechazableMid) {
+        this.rechazableMid = rechazableMid;
     }
 }

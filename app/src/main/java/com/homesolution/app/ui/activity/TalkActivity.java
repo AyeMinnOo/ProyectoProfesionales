@@ -24,6 +24,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +43,7 @@ import com.homesolution.app.domain.Message;
 import com.homesolution.app.domain.Talk;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.io.response.ChatResponse;
+import com.homesolution.app.io.response.ChatsResponse;
 import com.homesolution.app.io.response.EnviarMsjeResponse;
 import com.homesolution.app.io.response.SimpleResponse;
 import com.homesolution.app.ui.adapter.MessageAdapter;
@@ -84,12 +86,19 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
     private MessageAdapter adapter;
     private ProgressDialog progressDialog;
 
+    // Layout: Message & Image
+    private View layoutWriteMessage;
     // To send a message
     private ImageView btnSend;
     private EditText etMessage;
-
-    // To send a picture
+    // To send an image
     private ImageView btnImage;
+
+    // To accept or reject this chat
+    private View layoutAcceptReject;
+    private Button btnAcceptTalk;
+    private Button btnRejecttTalk;
+    private String rechazableMid;
 
     // User destination data
     private String toUid;
@@ -133,20 +142,28 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         // Setup the action bar
         setUpActionBar();
 
-        // Get references to the views and controls
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         // Setting the recycler view
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         recyclerView.addOnLayoutChangeListener(this);
 
+        // Controls to send messages
+        layoutWriteMessage = findViewById(R.id.layoutWriteMessage);
         etMessage = (EditText) findViewById(R.id.etMessage);
         btnSend = (ImageView) findViewById(R.id.btnSend);
         btnSend.setOnClickListener(this);
-
+        // Button to send an image
         btnImage = (ImageView) findViewById(R.id.btnImage);
         btnImage.setOnClickListener(this);
+
+        // Controls to accept or reject the current chat
+        layoutAcceptReject = findViewById(R.id.layoutAcceptReject);
+        btnAcceptTalk = (Button) layoutAcceptReject.findViewById(R.id.btnAcceptTalk);
+        btnAcceptTalk.setOnClickListener(this);
+        btnRejecttTalk = (Button) layoutAcceptReject.findViewById(R.id.btnRejectTalk);
+        btnRejecttTalk.setOnClickListener(this);
 
         // Load the user data
         loadAuthenticatedUser();
@@ -325,9 +342,15 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnSend:
                 postMessage();
                 break;
-
             case R.id.btnImage:
                 selectPicture();
+                break;
+
+            case R.id.btnAcceptTalk:
+                acceptTalk();
+                break;
+            case R.id.btnRejectTalk:
+                rejectTalk();
                 break;
         }
     }
@@ -514,7 +537,7 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    /* Just for testing purpouses
+    /* Just for testing purposes
     private void loadDummyMessages() {
         ArrayList<Message> examples = new ArrayList<>();
         examples.add(new Message("Hola, cómo estás?", "4.30 PM", false));
@@ -572,13 +595,23 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
                                 .load(talk.getPicture())
                                 .placeholder(R.drawable.avatar_default)
                                 .into(ivPhoto);
+
+                        // Is it reject-able?
+                        if (talk.isRechazable()) {
+                            layoutAcceptReject.setVisibility(View.VISIBLE);
+                            layoutWriteMessage.setVisibility(View.GONE);
+                            rechazableMid = talk.getRechazableMid();
+                        } else {
+                            layoutWriteMessage.setVisibility(View.VISIBLE);
+                            layoutAcceptReject.setVisibility(View.GONE);
+                        }
                     }
 
                     // We always reload the messages and scroll to the end
                     adapter.setAll(talk.getChat());
                     scrollLastMessage();
 
-                    Log.d("Test/Talk", "Messages loaded in chat => " + talk.getChat().size());
+                    // Log.d("Test/Talk", "Messages loaded in chat => " + talk.getChat().size());
                 }
 
                 progressDialog.dismiss();
@@ -626,4 +659,56 @@ public class TalkActivity extends AppCompatActivity implements View.OnClickListe
         return Base64.encodeToString(byteFormat, Base64.NO_WRAP);
     }
 
+    public void acceptTalk() {
+        Call<ChatResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                .getAcceptMessage(token, toUid, rechazableMid);
+
+        call.enqueue(new Callback<ChatResponse>() {
+             @Override
+             public void onResponse(Response<ChatResponse> response, Retrofit retrofit) {
+                 if (response.body() == null)
+                     return;
+
+                 if (response.body().getStatus() == 0) {
+                     Toast.makeText(TalkActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
+                 } else {
+                     Toast.makeText(TalkActivity.this, R.string.talk_accept_message, Toast.LENGTH_SHORT).show();
+                     layoutAcceptReject.setVisibility(View.GONE);
+                     layoutWriteMessage.setVisibility(View.VISIBLE);
+                 }
+             }
+
+             @Override
+             public void onFailure(Throwable t) {
+                 Toast.makeText(TalkActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+             }
+         });
+    }
+
+    public void rejectTalk() {
+        Call<ChatsResponse> call = HomeSolutionApiAdapter.getApiService(getGlobal().getCountry())
+                .getRejectMessage(token, rechazableMid);
+
+        call.enqueue(new Callback<ChatsResponse>() {
+            @Override
+            public void onResponse(Response<ChatsResponse> response, Retrofit retrofit) {
+                if (response.body() == null)
+                    return;
+
+                if (response.body().getStatus() == 0) {
+                    Toast.makeText(TalkActivity.this, response.body().getError(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(TalkActivity.this, R.string.talk_reject_message, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(TalkActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
 }
