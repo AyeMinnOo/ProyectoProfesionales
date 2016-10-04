@@ -48,7 +48,7 @@
 
     <!-- TalkActivity -->
     <string name="loading_messages">Cargando mensajes &#8230;</string>
-    <string name="talk_accept_option">Aceptar</string>
+    <string name="talk_accept_option">Aceptar mensaje</string>
     <string name="talk_accept_message">Se ha aceptado el mensaje</string>
     <string name="talk_reject_option">Rechazar</string>
     <string name="talk_reject_message">Se ha rechazado el mensaje</string>
