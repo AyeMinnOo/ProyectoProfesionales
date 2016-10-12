@@ -42,7 +42,7 @@ public class HomeSolutionApiAdapter {
     }
 
     private static String getUrlByCountry(String country) {
-        /*switch (country) {
+        switch (country) {
             case "cl":
                 return "http://cl.homesolution.net/";
             case "uy":
@@ -55,8 +55,8 @@ public class HomeSolutionApiAdapter {
                 return "http://pe.homesolution.net/";
             default: // ar
                 return "http://homesolution.com.ar/";
-        }*/
-        return "http://dev.homesolution.net/";
+        }
+        // return "http://dev.homesolution.net/";
     }
 
     private static GsonConverterFactory buildGsonConverter() {

@@ -90,6 +90,7 @@
     <string name="settings_geo_mode">Geolocalizado</string>
     <string name="settings_geo_activating">Activando geolocalización &#8230;</string>
     <string name="settings_geo_activated">Se ha activado el modo geolocalizado</string>
+    <string name="settings_geo_exception_activating">Error inesperado al activar el servicio GPS</string>
     <string name="settings_terms">Ver términos y condiciones</string>
     <string name="settings_logout">Cerrar sesión</string>
 
@@ -106,10 +107,13 @@
     <!-- Message for Retrofit onFailure -->
     <string name="retrofit_failure">Ocurrió un error de conexión</string>
 
+    <!-- When the token is invalid, clear session -->
+    <string name="invalid_token">Su sesión ha caducado</string>
+
     <!-- Just for debug GCM -->
     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
         send downstream messages to this app.</string>
-    <string name="registering_message">Generating InstanceID token...</string>
+    <string name="registering_message">Generating InstanceID token&#8230;</string>
     <string name="token_error_message">An error occurred while either fetching the InstanceID token,
         sending the fetched token to the server or subscribing to the PubSub topic. Please try
         running the sample again.</string>

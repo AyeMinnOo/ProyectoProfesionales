@@ -29,6 +29,7 @@ import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.io.response.CategoriasResponse;
 import com.homesolution.app.io.response.SimpleResponse;
 import com.homesolution.app.io.service.TrackingService;
+import com.homesolution.app.ui.LoginActivity;
 import com.homesolution.app.ui.fragment.AgendaFragment;
 import com.homesolution.app.ui.fragment.BusquedaFragment;
 import com.homesolution.app.ui.fragment.ChatsFragment;
@@ -121,7 +122,7 @@ public class PanelActivity extends AppCompatActivity implements GoogleApiClient.
 
     private boolean thirtyMinutesHasPassed() {
         float lastUpdate = getGlobal().getLastGeoUpdate();
-        if (new Date().getTime() - lastUpdate > 3 * 60 * 1000)
+        if (new Date().getTime() - lastUpdate > 30 * 60 * 1000)
             return true;
         return false;
     }
@@ -161,10 +162,16 @@ public class PanelActivity extends AppCompatActivity implements GoogleApiClient.
         call.enqueue(new Callback<SimpleResponse>() {
             @Override
             public void onResponse(Response<SimpleResponse> response, Retrofit retrofit) {
-                boolean okResponse = response.body().getResponse();
-                if (okResponse) {
-                    Log.d("GeneralGeo", "Coordenadas reportadas");
-                    updateGeoSharedPreferences();
+                SimpleResponse bodyResponse = response.body();
+                if (bodyResponse != null) {
+                    final boolean okResponse = bodyResponse.getResponse();
+                    if (okResponse) {
+                        updateGeoSharedPreferences();
+                        // Log.d("GeneralGeo", "Coordenadas reportadas");
+                    }
+                } else {
+                    Toast.makeText(PanelActivity.this, R.string.invalid_token, Toast.LENGTH_SHORT).show();
+                    logoutWhenInvalidToken();
                 }
             }
 
@@ -173,6 +180,28 @@ public class PanelActivity extends AppCompatActivity implements GoogleApiClient.
                 Toast.makeText(PanelActivity.this, R.string.retrofit_failure, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void logoutWhenInvalidToken() {
+        // Clear session from global variable
+        getGlobal().setUserAuthenticated(null);
+
+        // Clear session from SharedPreferences
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.user_data), "");
+        editor.apply();
+
+        // Clear static variables
+        TalkActivity.token = null;
+
+        // Stop tracking service
+        stopService(new Intent(this, TrackingService.class));
+
+        // Back to LoginActivity
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void updateGeoSharedPreferences() {
@@ -213,7 +242,7 @@ public class PanelActivity extends AppCompatActivity implements GoogleApiClient.
 
             @Override
             public void onFailure(Throwable t) {
-                Log.e("Test/Panel", t.getLocalizedMessage());
+                // Log.e("Test/Panel", t.getLocalizedMessage());
             }
         });
 
@@ -277,7 +306,7 @@ public class PanelActivity extends AppCompatActivity implements GoogleApiClient.
         private ArrayList<String> tabTitles;
         private ArrayList<Fragment> fragments;
 
-        public PagerAdapter(FragmentManager fm, ArrayList<Fragment> fragments, ArrayList<String> tabTitles) {
+        PagerAdapter(FragmentManager fm, ArrayList<Fragment> fragments, ArrayList<String> tabTitles) {
             super(fm);
             this.fragments = fragments;
             this.tabTitles = tabTitles;

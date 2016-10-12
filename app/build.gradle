@@ -12,8 +12,8 @@ android {
         applicationId "com.homesolution.app"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.1"
+        versionCode 5
+        versionName "1.2"
         multiDexEnabled false
     }
     buildTypes {

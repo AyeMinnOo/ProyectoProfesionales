@@ -35,7 +35,7 @@ public class TrackingService extends Service {
 
     private static final int MILLISECONDS_PER_SECOND = 1000;
 
-    public static final int UPDATE_INTERVAL_IN_SECONDS = 20;
+    public static final int UPDATE_INTERVAL_IN_SECONDS = 30 * 60; // 30 minutes
     private static final long UPDATE_INTERVAL =
             MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
 
@@ -87,7 +87,7 @@ public class TrackingService extends Service {
             if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER))
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, UPDATE_INTERVAL, 0, locationListener, looper);
         } catch (SecurityException ex) {
-            Toast.makeText(TrackingService.this, "Error inesperado al reportar su ubicación", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TrackingService.this, R.string.settings_geo_exception_activating, Toast.LENGTH_SHORT).show();
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -116,7 +116,7 @@ public class TrackingService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy => removeUpdates");
+        // Log.i(TAG, "onDestroy => removeUpdates");
 
         try {
             locationManager.removeUpdates(locationListener);
@@ -145,7 +145,7 @@ public class TrackingService extends Service {
 
             final String latitude = String.valueOf(loc.getLatitude());
             final String longitude = String.valueOf(loc.getLongitude());
-            Log.i(TAG, "locationListener onLocationChanged => " + latitude + " " + longitude);
+            // Log.i(TAG, "locationListener onLocationChanged => " + latitude + " " + longitude);
 
             // Perform network I/O
             Global global = (Global) getApplicationContext();
@@ -163,8 +163,8 @@ public class TrackingService extends Service {
 
                 @Override
                 public void onFailure(Throwable t) {
-                    // Toast.makeText(ChatsFragment.context, R.string.retrofit_failure, Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "trackingService onFailure => " + t.getLocalizedMessage());
+                    Toast.makeText(TrackingService.this, R.string.retrofit_failure, Toast.LENGTH_SHORT).show();
+                    // Log.e(TAG, "trackingService onFailure => " + t.getLocalizedMessage());
                 }
             });
 

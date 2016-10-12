@@ -1,6 +1,9 @@
 package com.homesolution.app.ui.activity;
 
+import android.app.Activity;
+import android.app.Application;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -47,14 +50,16 @@ public class ScoreActivity extends AppCompatActivity implements
         PageFragmentCallbacks, ReviewFragment.Callbacks, ModelCallbacks {
 
     // Global variables
-    private Global global;
+    private static Global global;
+    private static Activity scoreActivity;
 
     private ViewPager mPager;
     private MyPagerAdapter mPagerAdapter;
 
     private boolean mEditingAfterReview;
 
-    private AbstractWizardModel mWizardModel = new ScoreWizardModel(this);
+    private static AbstractWizardModel mWizardModel;
+    private static Context context;
 
     private boolean mConsumePageSelectedEvent;
 
@@ -65,16 +70,16 @@ public class ScoreActivity extends AppCompatActivity implements
     private StepPagerStrip mStepPagerStrip;
 
     // Selected worker to qualify
-    private String pid;
+    private static String pid;
     private String name;
 
     // User authenticated data
     private static String token;
 
-    private int getScorePoints(String quality) {
-        final String very_good = getString(R.string.score_very_good);
-        final String good = getString(R.string.score_good);
-        final String bad = getString(R.string.score_bad);
+    private static int getScorePoints(String quality) {
+        final String very_good = scoreActivity.getString(R.string.score_very_good);
+        final String good = scoreActivity.getString(R.string.score_good);
+        final String bad = scoreActivity.getString(R.string.score_bad);
         // final String very_bad = getString(R.string.score_very_bad);
 
         if (quality.equals(very_good)) return 4;
@@ -83,7 +88,7 @@ public class ScoreActivity extends AppCompatActivity implements
         else return 1;
     }
 
-    private int getCommendPoints(String commend) {
+    private static int getCommendPoints(String commend) {
         if (commend.equals("Sí")) {
             return 3;
         } else if (commend.equals("No sé")) {
@@ -93,13 +98,18 @@ public class ScoreActivity extends AppCompatActivity implements
         }
     }
 
-    private String getCategoryId(String categoryName) {
+    private static String getCategoryId(String categoryName) {
         return getGlobal().getCategoryId(categoryName);
     }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
+
+        // Static
+        scoreActivity = this;
+        context = getApplicationContext();
+        mWizardModel = new ScoreWizardModel(this);
 
         // Bundle parameters from previous activity
         if (pid == null) {
@@ -161,15 +171,7 @@ public class ScoreActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 if (mPager.getCurrentItem() == mCurrentPageSequence.size()) {
-                    DialogFragment dg = new DialogFragment() {
-                        @Override
-                        public Dialog onCreateDialog(Bundle savedInstanceState) {
-                            return new AlertDialog.Builder(getActivity())
-                                    .setMessage(R.string.submit_confirm_message)
-                                    .setPositiveButton(R.string.submit_confirm_button, new confirmButtonHandler())
-                                    .setNegativeButton(android.R.string.cancel, null).create();
-                        }
-                    };
+                    DialogFragment dg = new ConfirmDialogFragment();
                     dg.show(getSupportFragmentManager(), "place_order_dialog");
                 } else {
                     if (mEditingAfterReview) {
@@ -192,9 +194,9 @@ public class ScoreActivity extends AppCompatActivity implements
         updateBottomBar();
     }
 
-    private Global getGlobal() {
+    private static Global getGlobal() {
         if (global == null)
-            global = (Global) getApplicationContext();
+            global = (Global) context;
 
         return global;
     }
@@ -203,7 +205,21 @@ public class ScoreActivity extends AppCompatActivity implements
         token = getGlobal().getToken();
     }
 
-    class confirmButtonHandler implements DialogInterface.OnClickListener, Callback<CalificarResponse> {
+    public static class ConfirmDialogFragment extends DialogFragment {
+
+        public ConfirmDialogFragment() {}
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new AlertDialog.Builder(getActivity())
+                    .setMessage(R.string.submit_confirm_message)
+                    .setPositiveButton(R.string.submit_confirm_button, new confirmButtonHandler())
+                    .setNegativeButton(android.R.string.cancel, null).create();
+        }
+
+    }
+
+    public static class confirmButtonHandler implements DialogInterface.OnClickListener, Callback<CalificarResponse> {
 
         public void onClick(DialogInterface dialog, int id) {
             // Score from 1 to 4 points
@@ -234,7 +250,7 @@ public class ScoreActivity extends AppCompatActivity implements
                                                                     .getCalificar(token, pid, puntualidad, profesionalismo, cumplimiento, commend, precio, categoryId, comments);
             call.enqueue(this);
 
-            finish();
+            scoreActivity.finish();
         }
 
         @Override
@@ -243,14 +259,14 @@ public class ScoreActivity extends AppCompatActivity implements
                 return;
 
             if (response.body().getStatus() == 0)
-                Toast.makeText(getBaseContext(), response.body().getError(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(scoreActivity, response.body().getError(), Toast.LENGTH_SHORT).show();
             else
-                Toast.makeText(getBaseContext(), getString(R.string.score_saved), Toast.LENGTH_SHORT).show();
+                Toast.makeText(scoreActivity, scoreActivity.getString(R.string.score_saved), Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onFailure(Throwable t) {
-            Toast.makeText(getBaseContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(scoreActivity, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
