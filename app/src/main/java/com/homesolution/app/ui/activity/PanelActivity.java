@@ -86,13 +86,16 @@ public class PanelActivity extends AppCompatActivity implements GoogleApiClient.
         if (toolbar != null)
             setSupportActionBar(toolbar);
 
-        // Global variables instance
+        // Global instance
         global = getGlobal();
-        if (global.isGeoActive()) // If is worker and have the geo mode ON
+
+        // If the current user is worker
+        if (global.isGeoActive()) // and have the geo mode ON
             startTrackingService();
 
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
+        // Create an instance of GoogleAPIClient
+        // just for non-workers
+        if (! global.isPrestador() && mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -115,8 +118,11 @@ public class PanelActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onStart() {
         super.onStart();
 
-        // Use the google api client for no-workers and workers with geo mode OFF
-        if (! getGlobal().isGeoActive() && thirtyMinutesHasPassed())
+        // Avoid google api client for workers
+        if (getGlobal().isPrestador()) return;
+
+        // Use the google api client for no-workers
+        if (thirtyMinutesHasPassed())
             mGoogleApiClient.connect();
     }
 
