@@ -120,6 +120,8 @@ public class TrackingService extends Service {
 
         try {
             locationManager.removeUpdates(locationListener);
+            looper.quit();
+            handlerThread.quit();
         } catch (SecurityException ex) {
             Log.e(TAG, ex.getMessage());
         }
