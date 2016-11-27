@@ -34,6 +34,7 @@ import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.io.response.LoginResponse;
 import com.homesolution.app.io.response.RecuperarResponse;
 import com.homesolution.app.ui.activity.PanelActivity;
+import com.homesolution.app.ui.activity.RegisterActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 
 import org.json.JSONObject;

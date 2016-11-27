@@ -24,82 +24,89 @@ public class Global extends Application {
     private float lastGeoUpdate;
 
     public boolean isAuthenticated() {
-        return userAuthenticated != null;
+        // the getter tries to read the user data from shared preferences, but
+        // if it is still null, there is no a session active
+        return getUserAuthenticated() != null;
     }
 
     public String getToken() {
-        if (userAuthenticated == null) {
-            loadUserAuthenticatedFromSharedPreferences();
-        }
+        return getUserAuthenticated().getToken();
+    }
 
-        return userAuthenticated.getToken();
+    private String readStringFromPreferences(String key) {
+        // SharedPreferences instance
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+        // Read the requested data (return an empty string by default)
+        return sharedPref.getString(key, "");
+    }
+    private float readFloatFromPreferences(String key) {
+        // SharedPreferences instance
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+        // Read the requested data (return 0 when no results)
+        return sharedPref.getFloat(key, 0);
     }
 
     public void loadUserAuthenticatedFromSharedPreferences() {
-        // SharedPreferences instance
-        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
-
-        // Read the user authentication data from SharedPreferences
-        String userData = sharedPref.getString(getString(R.string.user_data), "");
+        // Read the user authenticated data
+        String userData = readStringFromPreferences(getString(R.string.user_data));
 
         if (! userData.equals(""))
             setUserAuthenticated(new Gson().fromJson(userData, UserAuthenticated.class));
     }
-
     public void loadCountryFromSharedPreferences() {
-        // SharedPreferences instance
-        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
-
-        // Look for a country preference
-        country = sharedPref.getString(getString(R.string.country_data), "");
+        // Read the country preference
+        country = readStringFromPreferences(getString(R.string.country_data));
     }
-
     public void loadLastGeoUpdateFromSharedPreferences() {
-        // SharedPreferences instance
-        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
-
-        // Look for the last geo update preference
-        lastGeoUpdate = sharedPref.getFloat(getString(R.string.geo_data), 0);
+        // Read the last geo update preference
+        lastGeoUpdate = readFloatFromPreferences(getString(R.string.geo_data));
     }
 
     public String getUid() {
-        return userAuthenticated.getUser().getUid();
+        return getUserAuthenticated().getUser().getUid();
     }
 
     public String getArea() {
-        return userAuthenticated.getUser().getExtras().getArea();
+        return getUserAuthenticated().getUser().getExtras().getArea();
     }
 
     public void setArea(String area) {
-        userAuthenticated.getUser().getExtras().setArea(area);
+        getUserAuthenticated().getUser().getExtras().setArea(area);
     }
 
     public String getEmail() {
-        return userAuthenticated.getUser().getEmail();
+        return getUserAuthenticated().getUser().getEmail();
     }
 
     public void setEmail(String email) {
-        userAuthenticated.getUser().setEmail(email);
+        getUserAuthenticated().getUser().setEmail(email);
     }
 
     public String getUsername() {
-        return userAuthenticated.getUser().getUsername();
+        return getUserAuthenticated().getUser().getUsername();
     }
 
     public void setUsername(String username) {
-        userAuthenticated.getUser().setUsername(username);
+        getUserAuthenticated().getUser().setUsername(username);
     }
 
     public boolean isPrestador() {
-        return userAuthenticated.getUser().isPrestador();
+        return getUserAuthenticated().getUser().isPrestador();
     }
 
     public boolean isGeoActive() {
-        return userAuthenticated.getUser().isGeolocationActive();
+        return getUserAuthenticated().getUser().isGeolocationActive();
     }
 
     public void setGeoMode(boolean active) {
-        userAuthenticated.getUser().setGeolocation(active);
+        getUserAuthenticated().getUser().setGeolocation(active);
+    }
+
+    public UserAuthenticated getUserAuthenticated() {
+        if (userAuthenticated == null)
+            loadUserAuthenticatedFromSharedPreferences();
+
+        return userAuthenticated;
     }
 
     public void setUserAuthenticated(UserAuthenticated userAuthenticated) {
@@ -112,7 +119,6 @@ public class Global extends Application {
 
         return country;
     }
-
     public void setCountry(String country) {
         this.country = country;
     }
@@ -123,7 +129,6 @@ public class Global extends Application {
 
         return lastGeoUpdate;
     }
-
     public void setLastGeoUpdate(float lastGeoUpdate) {
         this.lastGeoUpdate = lastGeoUpdate;
     }

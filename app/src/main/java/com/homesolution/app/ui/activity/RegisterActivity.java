@@ -1,11 +1,10 @@
-package com.homesolution.app.ui;
+package com.homesolution.app.ui.activity;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +36,7 @@ import com.homesolution.app.Global;
 import com.homesolution.app.io.HomeSolutionApiAdapter;
 import com.homesolution.app.io.response.LoginResponse;
 import com.homesolution.app.io.response.ZonasResponse;
-import com.homesolution.app.ui.activity.PanelActivity;
+import com.homesolution.app.ui.LoginActivity;
 import com.youtube.sorcjc.proyectoprofesionales.R;
 import com.homesolution.app.domain.UserAuthenticated;
 

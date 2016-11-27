@@ -61,7 +61,10 @@
     <!-- Define the first screen when the app starts -->
     <string name="preference_file">Preferences</string>
     <string name="first_activity">FirstActivity</string>
-    <string name="first_activity_default">.ui.RegisterActivity</string>
+    <string name="first_activity_default">.ui.activity.RegisterActivity</string>
+
+    <!-- MainActivity -->
+    <string name="message_country_selected">Luego de iniciar sesión puede modifcar su selección</string>
 
     <!-- SharedPreferences keys -->
     <string name="user_data">UserData</string>

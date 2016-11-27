@@ -1,4 +1,4 @@
-package com.homesolution.app.ui;
+package com.homesolution.app.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;

@@ -134,8 +134,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final Global global = (Global) getApplicationContext();
 
         // Load info from SharedPreferences
-        global.loadUserAuthenticatedFromSharedPreferences();
-        global.loadCountryFromSharedPreferences();
+        // now it is unnecessary
+        // global.loadUserAuthenticatedFromSharedPreferences();
+        // global.loadCountryFromSharedPreferences();
 
         // There is a session active? Go to the main Panel
         if (global.isAuthenticated()) {
@@ -149,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (country.isEmpty())
             createRadioListDialog().show();
         else goToDefaultActivity();
-
     }
 
     private void goToDefaultActivity() {
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.putString(getString(R.string.country_data), countryCode);
         editor.apply();
 
-        Toast.makeText(MainActivity.this, "Luego de iniciar sesión puede modifcar su selección", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, R.string.message_country_selected, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -39,9 +39,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.homesolution.app.ui.RegisterActivity"
+        <activity android:name="com.homesolution.app.ui.activity.RegisterActivity"
             android:windowSoftInputMode="stateHidden"/>
-        <activity android:name="com.homesolution.app.ui.ConfirmRegisterActivity" />
+        <activity android:name="com.homesolution.app.ui.activity.ConfirmRegisterActivity" />
         <activity android:name="com.homesolution.app.ui.LoginActivity" />
         <activity
             android:name="com.facebook.FacebookActivity"
